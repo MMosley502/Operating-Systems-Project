@@ -2,4 +2,4 @@
 2019Summer CSCI 4210 Operating Systems Group Project
 
 Project: CPU Scheduling Simulation\
-Collaborator: @abbylululu
+Collaborator: [@abbylululu](https://github.com/abbylululu)
