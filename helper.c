@@ -22,4 +22,6 @@ struct Process* initilizer_Process() {
     newOne->waitTime = 0;
     newOne->blockTime = 0;
     newOne->numCPU = -1;
+    newOne->cpuBurstTime = NULL;
+    newOne->ioBurstTime = NULL;
 }

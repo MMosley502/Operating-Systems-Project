@@ -39,15 +39,6 @@ struct Process {
     double* ioBurstTime;//Actual I/O burst time
 };
 
-// Seal all return value from each algo
-struct Algo {
-    double aveCPUBurst; // average CPU burst time
-    double aveWait;// average wait time
-    double aveTurnAround;// average turnaround time
-    int numCS;// total number of context switches
-    int numPreemption;// total number of preemptions
-};
-
 // Function prototype
 // helper.c
 struct Process* initilizer_Process();

@@ -38,34 +38,34 @@ int main(int argc, char** argv) {
             i--;
             continue;
         }
-        newOne->ID = i + 1;
+        newOne->ID = i + 1;// ID start from 1 and later for matching with A-Z
         newOne->arrivalTime = floor(x);
         newOne->numCPU = (int) floor(x * 100) + 1;
 
-        // I don't know how to get CPU burst time and IO time here?
-        //initialize CPU burst time and I/O burst time
+        // Initialize CPU burst time and I/O burst time
         newOne->cpuBurstTime[newOne->numCPU];
         newOne->ioBurstTime[newOne->numCPU];
-        for(int j=0;j<newOne->numCPU;j++){
+        // Random for CPU burst
+        for (int j = 0; j < newOne->numCPU; j++) {
             r = drand48();// uniform dist [0.00,1.00)
             x = -log(r) / LAMBDA;
             if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
                 j--;
                 continue;
             }
-            newOne->cpuTime+=x;
-            newOne->cpuBurstTime[j]=floor(x);
+            newOne->cpuTime += x;
+            newOne->cpuBurstTime[j] = floor(x);
         }
-        for(int j=0;j<newOne->numCPU;j++){
+        // Random for IO burst
+        for (int j = 0; j < newOne->numCPU; j++) {
             r = drand48();// uniform dist [0.00,1.00)
             x = -log(r) / LAMBDA;
             if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
                 j--;
                 continue;
             }
-            newOne->ioBurstTime[j]=floor(x);
+            newOne->ioBurstTime[j] = floor(x);
         }
-
         processList[i] = newOne;
     }
 
