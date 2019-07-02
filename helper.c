@@ -18,7 +18,7 @@ struct Process* initilizer_Process() {
     newOne->Type = (enum Process_Type) READY;
     newOne->state = (enum Process_Status) CPU_BOUND;
     newOne->arrivalTime = -1;
-    newOne->burstTime = -1;
+    newOne->cpuTime = -1;
     newOne->waitTime = 0;
     newOne->blockTime = 0;
     newOne->numCPU = -1;
