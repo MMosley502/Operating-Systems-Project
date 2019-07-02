@@ -31,10 +31,12 @@ struct Process {
     enum Process_Type Type;
     enum Process_Status state;
     int arrivalTime;
-    int burstTime;// Actual CPU burst time
-    int waitTime;// wait time counter
-    int blockTime;// block time counter
+    double cpuTime;// total CPU burst time
+    double waitTime;// wait time counter
+    double blockTime;// block time counter
     int numCPU;// number of CPU bursts
+    double* cpuBurstTime;// Actual CPU burst time
+    double* ioBurstTime;//Actual I/O burst time
 };
 
 // Seal all return value from each algo
