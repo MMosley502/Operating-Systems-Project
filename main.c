@@ -29,6 +29,21 @@ int main(int argc, char** argv) {
     srand48(time(&SEED));
 
     // Generate processes array
+    struct Process* processList[NUM_PROCESSES];// Array stores all processes for simulation
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        struct Process* newOne = initilizer_Process();
+        double r = drand48();// uniform dist [0.00,1.00)
+        double x = -log(r) / LAMBDA;
+        if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
+            i--;
+            continue;
+        }
+        newOne->ID = i + 1;
+        newOne->arrivalTime = floor(x);
+        newOne->numCPU = (int) floor(x * 100) + 1;
+        // I don't know how to get CPU burst time and IO time here?
+        processList[i] = newOne;
+    }
 
     // FCFS Algo
 

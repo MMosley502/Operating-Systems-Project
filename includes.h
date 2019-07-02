@@ -18,6 +18,8 @@
 #include <time.h>
 
 // Enumeration
+enum Process_ID {A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q,
+                R, S, T, U, V, W, X, Y, Z};
 enum Process_Status {READY, RUNNING, BLOCKED, PREEMPYED, TERMINATED};
 enum Process_Type {CPU_BOUND, IO_BOUND};
 
@@ -25,13 +27,14 @@ enum Process_Type {CPU_BOUND, IO_BOUND};
 // Structures
 // Process
 struct Process {
-    int ID;
+    int ID;// from 1 to 26
     enum Process_Type Type;
     enum Process_Status state;
-    int burstTime;
-    int waitTime;
-    int blockTime;
-    int burstCount;// burst how many times --> preemption times
+    int arrivalTime;
+    int burstTime;// Actual CPU burst time
+    int waitTime;// wait time counter
+    int blockTime;// block time counter
+    int numCPU;// number of CPU bursts
 };
 
 // Seal all return value from each algo
@@ -44,5 +47,15 @@ struct Algo {
 };
 
 // Function prototype
+// helper.c
+struct Process* initilizer_Process();
+
+// SJF.c
+
+// SRT.c
+
+// RR.c
+
+// output.c
 
 #endif //OPERATING_SYSTEMS_PROJECT_INCLUDES_H
