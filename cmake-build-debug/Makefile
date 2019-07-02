@@ -123,6 +123,114 @@ Operating-Systems-Project/fast:
 	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/build
 .PHONY : Operating-Systems-Project/fast
 
+RR.o: RR.c.o
+
+.PHONY : RR.o
+
+# target to build an object file
+RR.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/RR.c.o
+.PHONY : RR.c.o
+
+RR.i: RR.c.i
+
+.PHONY : RR.i
+
+# target to preprocess a source file
+RR.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/RR.c.i
+.PHONY : RR.c.i
+
+RR.s: RR.c.s
+
+.PHONY : RR.s
+
+# target to generate assembly for a file
+RR.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/RR.c.s
+.PHONY : RR.c.s
+
+SJF.o: SJF.c.o
+
+.PHONY : SJF.o
+
+# target to build an object file
+SJF.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/SJF.c.o
+.PHONY : SJF.c.o
+
+SJF.i: SJF.c.i
+
+.PHONY : SJF.i
+
+# target to preprocess a source file
+SJF.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/SJF.c.i
+.PHONY : SJF.c.i
+
+SJF.s: SJF.c.s
+
+.PHONY : SJF.s
+
+# target to generate assembly for a file
+SJF.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/SJF.c.s
+.PHONY : SJF.c.s
+
+SRT.o: SRT.c.o
+
+.PHONY : SRT.o
+
+# target to build an object file
+SRT.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/SRT.c.o
+.PHONY : SRT.c.o
+
+SRT.i: SRT.c.i
+
+.PHONY : SRT.i
+
+# target to preprocess a source file
+SRT.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/SRT.c.i
+.PHONY : SRT.c.i
+
+SRT.s: SRT.c.s
+
+.PHONY : SRT.s
+
+# target to generate assembly for a file
+SRT.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/SRT.c.s
+.PHONY : SRT.c.s
+
+helper.o: helper.c.o
+
+.PHONY : helper.o
+
+# target to build an object file
+helper.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/helper.c.o
+.PHONY : helper.c.o
+
+helper.i: helper.c.i
+
+.PHONY : helper.i
+
+# target to preprocess a source file
+helper.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/helper.c.i
+.PHONY : helper.c.i
+
+helper.s: helper.c.s
+
+.PHONY : helper.s
+
+# target to generate assembly for a file
+helper.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/helper.c.s
+.PHONY : helper.c.s
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -150,6 +258,33 @@ main.c.s:
 	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/main.c.s
 .PHONY : main.c.s
 
+output.o: output.c.o
+
+.PHONY : output.o
+
+# target to build an object file
+output.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/output.c.o
+.PHONY : output.c.o
+
+output.i: output.c.i
+
+.PHONY : output.i
+
+# target to preprocess a source file
+output.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/output.c.i
+.PHONY : output.c.i
+
+output.s: output.c.s
+
+.PHONY : output.s
+
+# target to generate assembly for a file
+output.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/output.c.s
+.PHONY : output.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -159,9 +294,24 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Operating-Systems-Project"
 	@echo "... edit_cache"
+	@echo "... RR.o"
+	@echo "... RR.i"
+	@echo "... RR.s"
+	@echo "... SJF.o"
+	@echo "... SJF.i"
+	@echo "... SJF.s"
+	@echo "... SRT.o"
+	@echo "... SRT.i"
+	@echo "... SRT.s"
+	@echo "... helper.o"
+	@echo "... helper.i"
+	@echo "... helper.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... output.o"
+	@echo "... output.i"
+	@echo "... output.s"
 .PHONY : help
 
 

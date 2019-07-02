@@ -1,0 +1,22 @@
+Project Plan
+
+// includes.h
+写入所有include header, constants 以及function prototype
+写入struct (To be determined: struct for what?)
+							  ^^^^^^
+							  One possible choice: Process {type, state ...}
+							  One possible choice: a struct store all information in an algo calculation
+
+// main.c
+写入input processing
+写入implement 4 algos
+
+// SJF.c
+
+// SRT.c
+
+// RR.c
+(FCFS作为inifinite slice包括进RR中)
+
+// output.c
+写入output functions

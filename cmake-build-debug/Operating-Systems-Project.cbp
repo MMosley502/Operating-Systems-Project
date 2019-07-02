@@ -78,10 +78,25 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/RR.c">
+			<Option target="Operating-Systems-Project"/>
+		</Unit>
+		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/SJF.c">
+			<Option target="Operating-Systems-Project"/>
+		</Unit>
+		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/SRT.c">
+			<Option target="Operating-Systems-Project"/>
+		</Unit>
+		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/helper.c">
+			<Option target="Operating-Systems-Project"/>
+		</Unit>
 		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/includes.h">
 			<Option target="Operating-Systems-Project"/>
 		</Unit>
 		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/main.c">
+			<Option target="Operating-Systems-Project"/>
+		</Unit>
+		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/output.c">
 			<Option target="Operating-Systems-Project"/>
 		</Unit>
 		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/CMakeLists.txt">

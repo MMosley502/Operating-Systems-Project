@@ -1,5 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Operating-Systems-Project.dir/main.c.o"
+  "CMakeFiles/Operating-Systems-Project.dir/RR.c.o"
+  "CMakeFiles/Operating-Systems-Project.dir/SJF.c.o"
+  "CMakeFiles/Operating-Systems-Project.dir/SRT.c.o"
+  "CMakeFiles/Operating-Systems-Project.dir/output.c.o"
+  "CMakeFiles/Operating-Systems-Project.dir/helper.c.o"
   "Operating-Systems-Project.pdb"
   "Operating-Systems-Project"
 )
