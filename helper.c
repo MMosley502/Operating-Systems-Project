@@ -75,9 +75,10 @@ void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Q
 /*
  * Function to indicate all the process done with their bursts
  */
-bool allDone(struct Process* processList, int NUM_PROCESSES){
+bool allDone(struct Process* processList[], int NUM_PROCESSES){
     for(int i=0;i<NUM_PROCESSES;i++){
-        if(processList[i].doneCPU!=processList[i].numCPU) return false;
+        if(processList[i]->doneCPU!=processList[i]->numCPU ||
+        processList[i]->state!=TERMINATED) return false;
     }
     return true;
 }

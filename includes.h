@@ -65,7 +65,7 @@ struct Process* initilizer_Process();
 double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 void estimateTime(struct Process* newOne, double ALPHA);
 void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue);
-bool allDone(struct Process* processList, int NUM_PROCESSES);
+bool allDone(struct Process* processList[], int NUM_PROCESSES);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
@@ -89,7 +89,8 @@ struct Process* getRear(struct Queue* Q);
 void printQueue(struct Queue* Q);
 
 // output.c
-
+int compareArrival(const void * a, const void * b);
+void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
 
 
 
