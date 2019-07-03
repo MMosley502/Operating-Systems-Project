@@ -25,8 +25,17 @@ void outEachProcess(struct Process* processList[], int NUM_PROCESSES){
     memcpy(processListCopy, processList, sizeof(processListCopy));
     //sort process by its arrival time
     qsort(processListCopy, NUM_PROCESSES, sizeof(struct process*), compareArrival);
-    for(int i=0;i<NUM_PROCESSES;i++){
-        printf("Process %d [NEW] (arrival time %d ms) %d CPU bursts\n",
-               processListCopy[i]->Type,processListCopy[i]->arrivalTime,processListCopy[i]->numCPU);
+    for(int i = 0;i < NUM_PROCESSES; i++){
+        printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts\n",
+               getProcessID(processListCopy[i]->ID), processListCopy[i]->arrivalTime, processListCopy[i]->numCPU);
     }
+}
+
+/*
+ * Converting the Process ID from number to alpabetic
+ */
+char* getProcessID(int numberID) {
+    char* Alphabetic[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+                            "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    return Alphabetic[numberID - 1];
 }

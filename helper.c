@@ -15,8 +15,8 @@ struct Process* initilizer_Process() {
     struct Process* newOne = calloc(1, sizeof(struct Process));
 
     newOne->ID = -1;
-    newOne->Type = (enum Process_Type) NOT_ENTERED;
-    newOne->state = (enum Process_Status) CPU_BOUND;
+//    newOne->Type = (enum Process_Type) CPU_BOUND;
+    newOne->state = (enum Process_Status) NOT_ENTERED;
     newOne->arrivalTime = -1;
     newOne->maxCPUTime = 0.0;// total CPU burst time
     newOne->maxIOTime = 0.0;
@@ -55,12 +55,11 @@ double randomTime(double* Time, int numCPU, int MAX, double LAMBDA) {
  * Function for estimate the CPU burst time by alpha
  * For SJF & SRT
  */
-void estimateTime(struct Process* newOne, double ALPHA) {
-    for (int i = 0; i < newOne->numCPU - 1; i++) {
-        newOne->estCPUBurst[i + 1] = ALPHA * newOne->cpuBurstTime[i] +
-                                    (1 - ALPHA) * newOne->estCPUBurst[i];
+void estimateTime(struct Process* newOne, double ALPHA, int pos) {
+    newOne->estCPUBurst[pos] = ALPHA * newOne->cpuBurstTime[pos - 1] +
+                (1 - ALPHA) * newOne->estCPUBurst[pos - 1];
 
-    }
+
 }
 
 /*

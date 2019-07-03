@@ -123,6 +123,33 @@ Operating-Systems-Project/fast:
 	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/build
 .PHONY : Operating-Systems-Project/fast
 
+FCFS.o: FCFS.c.o
+
+.PHONY : FCFS.o
+
+# target to build an object file
+FCFS.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/FCFS.c.o
+.PHONY : FCFS.c.o
+
+FCFS.i: FCFS.c.i
+
+.PHONY : FCFS.i
+
+# target to preprocess a source file
+FCFS.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/FCFS.c.i
+.PHONY : FCFS.c.i
+
+FCFS.s: FCFS.c.s
+
+.PHONY : FCFS.s
+
+# target to generate assembly for a file
+FCFS.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/FCFS.c.s
+.PHONY : FCFS.c.s
+
 Queue.o: Queue.c.o
 
 .PHONY : Queue.o
@@ -321,6 +348,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Operating-Systems-Project"
 	@echo "... edit_cache"
+	@echo "... FCFS.o"
+	@echo "... FCFS.i"
+	@echo "... FCFS.s"
 	@echo "... Queue.o"
 	@echo "... Queue.i"
 	@echo "... Queue.s"

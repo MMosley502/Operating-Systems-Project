@@ -78,6 +78,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/FCFS.c">
+			<Option target="Operating-Systems-Project"/>
+		</Unit>
 		<Unit filename="/mnt/d/RPI/2019Summer/Operating-Systems-Project/Queue.c">
 			<Option target="Operating-Systems-Project"/>
 		</Unit>
