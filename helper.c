@@ -63,15 +63,10 @@ void estimateTime(struct Process* newOne, double ALPHA) {
 }
 
 /*
- * Helper function for comparing the length of CPU burst time of each process
- * Apply to qsort() to sort array by CPU burst time
- * qsort(array, size of array, sizeof(struct process*), compareTime);
- * Reference: http://www.cplusplus.com/reference/cstdlib/qsort/
+ * Function for transforming the sorted array to readyQueue
  */
-int compareTime(const void * a, const void * b) {
-    struct Process left = *(struct Process*)a;
-    struct Process right = *(struct Process*)b;
-    if (left.maxCPUTime < right.maxCPUTime) return -1;
-    if (left.maxCPUTime == right.maxCPUTime) return 0;
-    if (left.maxCPUTime > right.maxCPUTime) return 1;
+void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        pushQueue(readyQueue, processListCopy[i]);
+    }
 }

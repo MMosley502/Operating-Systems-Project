@@ -4,6 +4,7 @@
 
 #ifndef OPERATING_SYSTEMS_PROJECT_INCLUDES_H
 #define OPERATING_SYSTEMS_PROJECT_INCLUDES_H
+#define MAXPROCESS 26
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -24,7 +25,7 @@ enum Process_ID {A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q,
 enum Process_Status {READY, RUNNING, BLOCKED, PREEMPYED, TERMINATED};
 enum Process_Type {CPU_BOUND, IO_BOUND};
 
-
+//================================================================
 // Structures
 // Process
 struct Process {
@@ -55,16 +56,17 @@ struct Queue {
     unsigned int capacity;
     struct Process** array;
 };
-
+//================================================================
 // Function prototype
 // helper.c
 struct Process* initilizer_Process();
 double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 void estimateTime(struct Process* newOne, double ALPHA);
-int compareTime(const void * a, const void * b);
+void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
+int compareTime(const void * a, const void * b);
 
 // SRT.c
 

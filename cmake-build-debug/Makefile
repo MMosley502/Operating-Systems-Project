@@ -123,6 +123,33 @@ Operating-Systems-Project/fast:
 	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/build
 .PHONY : Operating-Systems-Project/fast
 
+Queue.o: Queue.c.o
+
+.PHONY : Queue.o
+
+# target to build an object file
+Queue.c.o:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/Queue.c.o
+.PHONY : Queue.c.o
+
+Queue.i: Queue.c.i
+
+.PHONY : Queue.i
+
+# target to preprocess a source file
+Queue.c.i:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/Queue.c.i
+.PHONY : Queue.c.i
+
+Queue.s: Queue.c.s
+
+.PHONY : Queue.s
+
+# target to generate assembly for a file
+Queue.c.s:
+	$(MAKE) -f CMakeFiles/Operating-Systems-Project.dir/build.make CMakeFiles/Operating-Systems-Project.dir/Queue.c.s
+.PHONY : Queue.c.s
+
 RR.o: RR.c.o
 
 .PHONY : RR.o
@@ -294,6 +321,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Operating-Systems-Project"
 	@echo "... edit_cache"
+	@echo "... Queue.o"
+	@echo "... Queue.i"
+	@echo "... Queue.s"
 	@echo "... RR.o"
 	@echo "... RR.i"
 	@echo "... RR.s"
