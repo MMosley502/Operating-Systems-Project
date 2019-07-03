@@ -28,15 +28,21 @@ enum Process_Type {CPU_BOUND, IO_BOUND};
 // Structures
 // Process
 struct Process {
+    // Variables
     int ID;// from 1 to 26
     enum Process_Type Type;
     enum Process_Status state;
     int arrivalTime;
     double maxCPUTime;// total CPU burst time
     double maxIOTime;
+    int numCPU;// number of CPU bursts
+
+    // Estimates
+    double* estCPUBurst;
+
+    // Counters
     double waitTime;// wait time counter
     double blockTime;// block time counter
-    int numCPU;// number of CPU bursts
     double* cpuBurstTime;// Actual CPU burst time
     double* ioBurstTime;//Actual I/O burst time
 };
@@ -54,9 +60,11 @@ struct Queue {
 // helper.c
 struct Process* initilizer_Process();
 double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
+void estimateTime(struct Process* newOne, double ALPHA);
+int compareTime(const void * a, const void * b);
 
 // SJF.c
-void SJF(struct Process* processList, int CS_TIME, double ALPHA);
+void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
 
 // SRT.c
 
@@ -72,5 +80,8 @@ struct Process* getFront(struct Queue* Q);
 struct Process* getRear(struct Queue* Q);
 
 // output.c
+
+
+
 
 #endif //OPERATING_SYSTEMS_PROJECT_INCLUDES_H

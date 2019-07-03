@@ -23,6 +23,7 @@ struct Process* initilizer_Process() {
     newOne->waitTime = 0.0;
     newOne->blockTime = 0.0;
     newOne->numCPU = -1;
+    newOne->estCPUBurst = NULL;
     newOne->cpuBurstTime = NULL;
     newOne->ioBurstTime = NULL;
 }
@@ -48,4 +49,29 @@ double randomTime(double* Time, int numCPU, int MAX, double LAMBDA) {
         Time[j] = floor(x);
     }
     return counter;
+}
+/*
+ * Function for estimate the CPU burst time by alpha
+ * For SJF & SRT
+ */
+void estimateTime(struct Process* newOne, double ALPHA) {
+    for (int i = 0; i < newOne->numCPU - 1; i++) {
+        newOne->estCPUBurst[i + 1] = ALPHA * newOne->cpuBurstTime[i] +
+                                    (1 - ALPHA) * newOne->estCPUBurst[i];
+
+    }
+}
+
+/*
+ * Helper function for comparing the length of CPU burst time of each process
+ * Apply to qsort() to sort array by CPU burst time
+ * qsort(array, size of array, sizeof(struct process*), compareTime);
+ * Reference: http://www.cplusplus.com/reference/cstdlib/qsort/
+ */
+int compareTime(const void * a, const void * b) {
+    struct Process left = *(struct Process*)a;
+    struct Process right = *(struct Process*)b;
+    if (left.maxCPUTime < right.maxCPUTime) return -1;
+    if (left.maxCPUTime == right.maxCPUTime) return 0;
+    if (left.maxCPUTime > right.maxCPUTime) return 1;
 }

@@ -39,10 +39,11 @@ int main(int argc, char** argv) {
             continue;
         }
         newOne->ID = i + 1;// ID start from 1 and later for matching with A-Z
-        newOne->arrivalTime = floor(x);
+        newOne->arrivalTime = (int) floor(x);
         newOne->numCPU = (int) floor(x * 100) + 1;
 
         // Initialize CPU burst time and I/O burst time
+        newOne->estCPUBurst[newOne->numCPU];
         newOne->cpuBurstTime[newOne->numCPU];
         newOne->ioBurstTime[newOne->numCPU];
         // Random for CPU burst time
@@ -51,12 +52,17 @@ int main(int argc, char** argv) {
         newOne->maxIOTime = randomTime(newOne->ioBurstTime, newOne->numCPU, MAX, LAMBDA);
         newOne->ioBurstTime[newOne->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
 
+        //Estimate CPU burst time for SJF & SRT
+        newOne->estCPUBurst[0] = ceil(1 / LAMBDA);
+        estimateTime(newOne, ALPHA);
+
         processList[i] = newOne;
     }
 
     // FCFS Algo
 
     // SJF Algo
+    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // SRT Algo
 
