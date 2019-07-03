@@ -31,7 +31,8 @@ struct Process {
     enum Process_Type Type;
     enum Process_Status state;
     int arrivalTime;
-    double cpuTime;// total CPU burst time
+    double maxCPUTime;// total CPU burst time
+    double maxIOTime;
     double waitTime;// wait time counter
     double blockTime;// block time counter
     int numCPU;// number of CPU bursts
@@ -42,6 +43,7 @@ struct Process {
 // Function prototype
 // helper.c
 struct Process* initilizer_Process();
+double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 
 // SJF.c
 

@@ -45,27 +45,12 @@ int main(int argc, char** argv) {
         // Initialize CPU burst time and I/O burst time
         newOne->cpuBurstTime[newOne->numCPU];
         newOne->ioBurstTime[newOne->numCPU];
-        // Random for CPU burst
-        for (int j = 0; j < newOne->numCPU; j++) {
-            r = drand48();// uniform dist [0.00,1.00)
-            x = -log(r) / LAMBDA;
-            if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
-                j--;
-                continue;
-            }
-            newOne->cpuTime += x;
-            newOne->cpuBurstTime[j] = floor(x);
-        }
-        // Random for IO burst
-        for (int j = 0; j < newOne->numCPU; j++) {
-            r = drand48();// uniform dist [0.00,1.00)
-            x = -log(r) / LAMBDA;
-            if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
-                j--;
-                continue;
-            }
-            newOne->ioBurstTime[j] = floor(x);
-        }
+        // Random for CPU burst time
+        newOne->maxCPUTime = randomTime(newOne->cpuBurstTime, newOne->numCPU, MAX, LAMBDA);
+        // Random for IO burst time
+        newOne->maxIOTime = randomTime(newOne->ioBurstTime, newOne->numCPU, MAX, LAMBDA);
+        newOne->ioBurstTime[newOne->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
+
         processList[i] = newOne;
     }
 
