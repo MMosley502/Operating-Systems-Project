@@ -15,7 +15,7 @@ struct Process* initilizer_Process() {
     struct Process* newOne = calloc(1, sizeof(struct Process));
 
     newOne->ID = -1;
-    newOne->Type = (enum Process_Type) READY;
+    newOne->Type = (enum Process_Type) NOT_ENTERED;
     newOne->state = (enum Process_Status) CPU_BOUND;
     newOne->arrivalTime = -1;
     newOne->maxCPUTime = 0.0;// total CPU burst time
@@ -23,6 +23,7 @@ struct Process* initilizer_Process() {
     newOne->waitTime = 0.0;
     newOne->blockTime = 0.0;
     newOne->numCPU = -1;
+    newOne->doneCPU = 0;
     newOne->estCPUBurst = NULL;
     newOne->cpuBurstTime = NULL;
     newOne->ioBurstTime = NULL;
@@ -69,4 +70,14 @@ void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Q
     for (int i = 0; i < NUM_PROCESSES; i++) {
         pushQueue(readyQueue, processListCopy[i]);
     }
+}
+
+/*
+ * Function to indicate all the process done with their bursts
+ */
+bool allDone(struct Process* processList, int NUM_PROCESSES){
+    for(int i=0;i<NUM_PROCESSES;i++){
+        if(processList[i].doneCPU!=processList[i].numCPU) return false;
+    }
+    return true;
 }
