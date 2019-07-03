@@ -54,7 +54,6 @@ int main(int argc, char** argv) {
 
         //Estimate CPU burst time for SJF & SRT
         newOne->estCPUBurst[0] = ceil(1 / LAMBDA);
-        estimateTime(newOne, ALPHA);
 
         processList[i] = newOne;
     }

@@ -21,6 +21,8 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     struct Process* blockList[MAXPROCESS];
     int terminatedProcess = 0;
     int totalTime = 0;
+    printf("time %dms: Simulator started for SJF", totalTime);
+    printQueue(readyQueue);// Empty Queue
     //================================================================
     // Sort the process and construct the readyQueue
     qsort(processListCopy, NUM_PROCESSES, sizeof(struct process*), compareTime);
@@ -38,7 +40,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
 int compareTime(const void * a, const void * b) {
     struct Process left = *(struct Process*)a;
     struct Process right = *(struct Process*)b;
-    if (left.maxCPUTime < right.maxCPUTime) return -1;
-    if (left.maxCPUTime == right.maxCPUTime) return 0;
-    if (left.maxCPUTime > right.maxCPUTime) return 1;
+    if (left.estCPUBurst[0] < right.estCPUBurst[0]) return -1;
+    if (left.estCPUBurst[0] == right.estCPUBurst[0]) return 0;
+    if (left.estCPUBurst[0] > right.estCPUBurst[0]) return 1;
 }
