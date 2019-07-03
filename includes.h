@@ -16,6 +16,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <time.h>
+#include <limits.h>
 
 // Enumeration
 enum Process_ID {A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q,
@@ -40,16 +41,35 @@ struct Process {
     double* ioBurstTime;//Actual I/O burst time
 };
 
+// Queue
+struct Queue {
+    int front;
+    int rear;
+    int size;
+    unsigned int capacity;
+    struct Process** array;
+};
+
 // Function prototype
 // helper.c
 struct Process* initilizer_Process();
 double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 
 // SJF.c
+void SJF(struct Process* processList, int CS_TIME, double ALPHA);
 
 // SRT.c
 
 // RR.c
+
+// Queue.c
+struct Queue* initizlizeQueue(unsigned int capacity);
+bool isEmpty(struct Queue* Q);
+bool isFull(struct Queue* Q);
+void pushQueue(struct Queue* Q, struct Process* item);
+struct Process* popQueue(struct Queue* Q);
+struct Process* getFront(struct Queue* Q);
+struct Process* getRear(struct Queue* Q);
 
 // output.c
 
