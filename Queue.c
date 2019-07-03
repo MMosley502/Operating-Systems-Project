@@ -85,3 +85,18 @@ struct Process* getRear(struct Queue* Q) {
     return Q->array[Q->rear];
 }
 
+/*
+ * Print out the queue
+ */
+void printQueue(struct Queue* Q){
+    if (isEmpty(Q)){
+        printf("[Q <empty>]\n");
+    }
+    else{
+        printf("[Q ");
+        for(int i=0;i<Q->capacity;i++){
+            printf("%d ",Q->array[i]->ID);
+        }
+        printf("]\n");
+    }
+}

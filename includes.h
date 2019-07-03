@@ -22,7 +22,7 @@
 // Enumeration
 enum Process_ID {A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q,
                 R, S, T, U, V, W, X, Y, Z};
-enum Process_Status {READY, RUNNING, BLOCKED, PREEMPYED, TERMINATED};
+enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPYED, TERMINATED};
 enum Process_Type {CPU_BOUND, IO_BOUND};
 
 //================================================================
@@ -37,6 +37,8 @@ struct Process {
     double maxCPUTime;// total CPU burst time
     double maxIOTime;
     int numCPU;// number of CPU bursts
+    int doneCPU;// number of CPU bursts done executing
+    double nextInterest;//time point for next interesting event
 
     // Estimates
     double* estCPUBurst;
@@ -63,12 +65,16 @@ struct Process* initilizer_Process();
 double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 void estimateTime(struct Process* newOne, double ALPHA);
 void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue);
+bool allDone(struct Process* processList, int NUM_PROCESSES);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
 int compareTime(const void * a, const void * b);
 
 // SRT.c
+
+//FCFS.c
+void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME);
 
 // RR.c
 
@@ -80,6 +86,7 @@ void pushQueue(struct Queue* Q, struct Process* item);
 struct Process* popQueue(struct Queue* Q);
 struct Process* getFront(struct Queue* Q);
 struct Process* getRear(struct Queue* Q);
+void printQueue(struct Queue* Q);
 
 // output.c
 

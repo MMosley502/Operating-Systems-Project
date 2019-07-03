@@ -60,6 +60,7 @@ int main(int argc, char** argv) {
     }
 
     // FCFS Algo
+    FCFS(processList,NUM_PROCESSES,CS_TIME);
 
     // SJF Algo
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
