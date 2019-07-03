@@ -7,8 +7,8 @@ Collaborator: [@abbylululu](https://github.com/abbylululu)
 **Project Log:**\
 2019.7.1
 1. Initilizing the framework of project
-2. Input processing\
-\
+2. Input processing
+
 2019.7.2
 1. Determine the CPU Burst Time and IO Burst Time
 2. Lu - FCFS & RR\
