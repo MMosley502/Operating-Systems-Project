@@ -12,4 +12,5 @@ Collaborator: [@abbylululu](https://github.com/abbylululu)
 2019.7.2
 1. Determine the CPU Burst Time and IO Burst Time
 2. Lu - FCFS & RR\
-   Wang - SJF & SRT
+   Wang - SJF & SRT\
+3. Handmade Data Structure Queue in C
