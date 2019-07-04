@@ -39,10 +39,12 @@ struct Process {
 
     // Estimates
     double* estCPUBurst;
+    double nextEstBurst;
 
     // Counters
-    double waitTime;// wait time counter
-    double blockTime;// block time counter
+    double waitTimer;// wait time counter
+    double blockTimer;// block time counter
+    double burstTimer;// burst time counter
     double* cpuBurstTime;// Actual CPU burst time
     double* ioBurstTime;//Actual I/O burst time
 };
@@ -66,6 +68,7 @@ bool allDone(struct Process* processList[], int NUM_PROCESSES);
 int compareTime(const void * a, const void * b);
 bool isArrivalSame(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES);
 int whichFirst(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES);
+void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
@@ -86,6 +89,8 @@ struct Process* popQueue(struct Queue* Q);
 struct Process* getFront(struct Queue* Q);
 struct Process* getRear(struct Queue* Q);
 void printQueue(struct Queue* Q);
+void sortQueue(struct Queue* Q);
+bool isRight(struct Process* temp[], int length);
 
 // output.c
 int compareArrival(const void * a, const void * b);

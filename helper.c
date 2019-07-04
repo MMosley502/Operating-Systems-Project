@@ -21,8 +21,10 @@ struct Process* initilizer_Process() {
     newOne->doneCPU = 0;// number of CPU bursts done executing
     newOne->nextInterest = 0.0;//time point for next interesting event
     newOne->estCPUBurst = NULL;
-    newOne->waitTime = 0.0;// wait time counter
-    newOne->blockTime = 0.0;// block time counter
+    newOne->nextEstBurst = 0.0;
+    newOne->waitTimer = 0.0;// wait time counter
+    newOne->blockTimer = 0.0;// block time counter
+    newOne->burstTimer = 0.0;
     newOne->cpuBurstTime = NULL;// Actual CPU burst time
     newOne->ioBurstTime = NULL;//Actual I/O burst time
 
@@ -93,9 +95,9 @@ bool allDone(struct Process* processList[], int NUM_PROCESSES){
 int compareTime(const void * a, const void * b) {
     struct Process left = *(struct Process*)a;
     struct Process right = *(struct Process*)b;
-    if (left.estCPUBurst[0] < right.estCPUBurst[0]) return -1;
-    if (left.estCPUBurst[0] == right.estCPUBurst[0]) return 0;
-    if (left.estCPUBurst[0] > right.estCPUBurst[0]) return 1;
+    if (left.nextEstBurst < right.nextEstBurst) return -1;
+    if (left.nextEstBurst == right.nextEstBurst) return 0;
+    if (left.nextEstBurst > right.nextEstBurst) return 1;
 }
 
 /*
@@ -125,4 +127,15 @@ int whichFirst(struct Process* checkProcess, struct Process* processListCopy[], 
         }
     }
     return result;
+}
+
+/*
+ * Free the dynamic memeory of Process List
+ */
+void freeProcessList(struct Process* processList[], int NUM_PROCESSES) {
+    for (int i = 0 ; i < NUM_PROCESSES; i++) {
+        if (processList[i]) {
+            free(processList[i]);
+        }
+    }
 }

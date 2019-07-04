@@ -68,6 +68,6 @@ int main(int argc, char** argv) {
 
     // RR Algo
 
-
+    freeProcessList(processList, NUM_PROCESSES);
     return EXIT_SUCCESS;
 }

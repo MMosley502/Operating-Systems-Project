@@ -46,3 +46,12 @@ char* getProcessID(int numberID) {
                             "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     return Alphabetic[numberID - 1];
 }
+
+
+void printAnalysis(struct Process* processList[], int NUM_PROCESSES) {
+//    -- average CPU burst time:  ms
+//    -- average wait time:  ms
+//    -- average turnaround time:  ms
+//    -- total number of context switches:
+//        -- total number of preemptions:
+}
