@@ -69,6 +69,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     double finiIO=processList[i]->nextInterest+ioTime;// time when the process finishing IO
                     printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
                            time,getProcessID(processList[i]->ID),leftCPU);
+                    printQueue(readyQueue);
                     printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
                            time,getProcessID(processList[i]->ID),finiIO);
                     //print out ready queue

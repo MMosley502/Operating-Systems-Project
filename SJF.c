@@ -14,15 +14,11 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     if (!processList || CS_TIME < 0 || ALPHA < 0) {
         return;
     }
-    outEachProcess(processList, NUM_PROCESSES);
+    outEPS(processList, NUM_PROCESSES);
     //================================================================
     struct Process* processListCopy[NUM_PROCESSES];// Copy the process array, avoid any change to processlist
     memcpy(processListCopy, processList, sizeof(processListCopy));
     struct Queue* readyQueue = initizlizeQueue(MAXPROCESS);
-    struct Queue* waitQueue = initizlizeQueue(MAXPROCESS);
-    struct Queue* terminatedQueue = initizlizeQueue(MAXPROCESS);
-    int terminatedProcess = 0;
-    int burstCounter = 0;
     int time = 0;
     printf("time %dms: Simulator started for SJF", time);
     printQueue(readyQueue);// Empty Queue
@@ -34,10 +30,6 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     while (1) {
         //if all process done with their CPU bursts, break out of the loop
         if(allDone(processListCopy, NUM_PROCESSES)){
-            //restore the count of done CPU
-            for(int i = 0;i < NUM_PROCESSES; i++){
-                processListCopy[i]->doneCPU = 0;
-            }
             //break out of the loop and finishes SJF
             printf("time %dms: Simulator ended for SJF ", time);
             printQueue(readyQueue);
@@ -47,37 +39,78 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
         for (int i = 0; i < NUM_PROCESSES; i++) {
             // Constructing readyQueue
             // ProcessListCopy is an ascending array
-            // if arriving at the same time, comparing the estburst time
-            // Assuming at most 2 processes arrive at the same time
+            // Considering the 1st estimate time is same, no preemption during running
+            // Implement as FCFS
             if (processListCopy[i]->state == NOT_ENTERED && time == processListCopy[i]->arrivalTime) {
-                if (isArrivalSame(processListCopy[i], processListCopy, NUM_PROCESSES)) {// another process arrives at the same time
-                    int index = whichFirst(processListCopy[i], processListCopy, NUM_PROCESSES);
-                    if (index != -1) {
-                        pushQueue(readyQueue, processListCopy[index]);
-                        printf("time %dms: Process %s (tau %fms) arrived; added to ready queue ",
-                               time,getProcessID(processListCopy[index]->ID), processListCopy[index]->estCPUBurst[0]);
-                        printQueue(readyQueue);
-                        processListCopy[index]->nextInterest += CS_TIME / 2;
-                        processListCopy[index]->state = READY;
-                    }
-                }
                 pushQueue(readyQueue, processListCopy[i]);
                 printf("time %dms: Process %s (tau %fms) arrived; added to ready queue ",
                        time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[0]);
                 printQueue(readyQueue);
-                processListCopy[i]->nextInterest += CS_TIME / 2;
+                processListCopy[i]->nextInterest = time + CS_TIME / 2;// Entering CPU time
                 processListCopy[i]->state = READY;
             }
 
             // CPU burst
-
+            if (processListCopy[i]->state == READY && time == processListCopy[i]->nextInterest) {
+                int idx = processListCopy[i]->doneCPU;
+                double burstTime = processListCopy[i]->cpuBurstTime[idx];
+                printf("time %dms: Process %s (tau %fms) started using the CPU for %fms burst ",
+                       time,getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx], burstTime);
+                popQueue(readyQueue);
+                printQueue(readyQueue);
+                processListCopy[i]->state = RUNNING;
+                processListCopy[i]->nextInterest += burstTime;
+            }
 
             // I/O
-            // If CPU burst finished, storing the actual burst time and estimating the next CPU burst time
+            // If CPU burst finished, estimating the next CPU burst time
+            if (processListCopy[i]->state == RUNNING && time == processListCopy[i]->nextInterest) {
+                int idx = processListCopy[i]->doneCPU;
+                // Check the status
+                if (idx + 1 == processListCopy[i]->numCPU) {
+                    processListCopy[i]->state = TERMINATED;
+                    processListCopy[i]->doneCPU++;
+
+                } else {
+                    double ioTime = processListCopy[i]->ioBurstTime[idx];
+                    int leftCPU = processListCopy[i]->numCPU - processListCopy[i]->doneCPU;// #of CPU left undone
+                    double finiIO = processListCopy[i]->nextInterest + ioTime;// time when the process finishing IO
+                    printf("time %dms: Process %s (tau %fms) completed a CPU burst; %d bursts to go ",
+                           time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx], leftCPU);
+                    printQueue(readyQueue);
+                    double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
+                    printf("time %dms: Recalculated tau = %fms for process %s ", time, nextEstimate, getProcessID(processListCopy[i]->ID));
+                    printQueue(readyQueue);
+                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
+                           time, getProcessID(processListCopy[i]->ID), finiIO);
+                    printQueue(readyQueue);
+                    //update status
+                    processListCopy[i]->state = BLOCKED;
+                    processListCopy[i]->nextInterest += ioTime;
+                    processListCopy[i]->doneCPU++;
+                }
+
+            }
+
+            // Finish I/O
+            if (processListCopy[i]->state == BLOCKED && time == processListCopy[i]->nextInterest) {
+                int idx = processListCopy[i]->doneCPU;
+                // After finished I/O, re-entering readyQueue
+                pushQueue(readyQueue, processListCopy[i]);
+                printf("time %dms: Process %s (tau %fms) completed I/O; added to ready queue ",
+                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx]);
+                printQueue(readyQueue);
+
+                processListCopy[i]->state = READY;
+                processListCopy[i]->nextInterest += CS_TIME / 2;
+            }
 
             // Termination
-
-
+            if (processListCopy[i]->state == TERMINATED && time == processListCopy[i]->nextInterest) {
+                printf("time %dms: Process %s terminated ",
+                       time, getProcessID(processListCopy[i]->ID));
+                printQueue(readyQueue);
+            }
         }
 
 

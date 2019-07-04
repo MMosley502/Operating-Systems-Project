@@ -27,6 +27,17 @@ void outEachProcess(struct Process* processList[], int NUM_PROCESSES) {
     }
 }
 
+//output each process in the process list for SJF and SRT
+// Print extra estimate time
+// Print as the ascending order of process ID
+void outEPS(struct Process* processList[], int NUM_PROCESSES) {
+    for(int i = 0;i < NUM_PROCESSES; i++) {
+        printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %fms)\n",
+               getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
+               processList[i]->estCPUBurst[0]);
+    }
+}
+
 /*
  * Converting the Process ID from number to alpabetic
  */
