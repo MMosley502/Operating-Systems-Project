@@ -20,7 +20,7 @@
 #include <limits.h>
 
 // Enumeration
-enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPYED, TERMINATED};
+enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPTIVE, TERMINATED};
 //enum Process_Type {CPU_BOUND, IO_BOUND};
 
 //================================================================
@@ -64,10 +64,12 @@ double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 void estimateTime(struct Process* newOne, double ALPHA, int pos);
 void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue);
 bool allDone(struct Process* processList[], int NUM_PROCESSES);
+int compareTime(const void * a, const void * b);
+bool isArrivalSame(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES);
+int whichFirst(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
-int compareTime(const void * a, const void * b);
 
 // SRT.c
 
