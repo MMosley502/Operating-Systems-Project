@@ -36,8 +36,10 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 //print out ready queue
                 printQueue(readyQueue);
                 //update the next interesting event time for the process
-                processList[i]->nextInterest=time+CS_TIME/2;
+                processList[i]->nextInterest=time+CS_TIME/2.0;
                 processList[i]->state=READY;
+                //count wait time
+                processList[i]->waitTime=time;
             }
             //process is doing CPU burst
             if(processList[i]->state==READY && time==processList[i]->nextInterest && processList[i]==getFront(readyQueue)){
@@ -50,18 +52,31 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 popQueue(readyQueue);
                 //print out ready queue
                 printQueue(readyQueue);
+                //when ready queue is not empty, update the next process interesting time
+                if(!isEmpty(readyQueue)){
+                    struct Process* nextProcess=getFront(readyQueue);
+                    nextProcess->nextInterest=time+burstTime+CS_TIME/2.0+1;
+                }
                 //update
                 processList[i]->state=RUNNING;
                 processList[i]->nextInterest=time+burstTime;
+                processList[i]->numCS++;
+                //count wait time
+                processList[i]->sumWait+=time-processList[i]->waitTime-CS_TIME/2.0;
             }
             //process is finising CPU burst
             if(processList[i]->state==RUNNING && time==processList[i]->nextInterest){
                 //get the actual I/O burst time for the current process
                 int idx=processList[i]->doneCPU;
-                //when the process is already done with all of its CPU bursts
+                //process is terminating
                 if(idx+1==processList[i]->numCPU){
                     processList[i]->state=TERMINATED;
                     processList[i]->doneCPU++;
+                    processList[i]->numCS++;
+                    printf("time %dms: Process %d terminated ",
+                           time,processList[i]->Type);
+                    //print out ready queue
+                    printQueue(readyQueue);
                 }
                 else{
                     double ioTime=processList[i]->ioBurstTime[idx];
@@ -75,8 +90,9 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     printQueue(readyQueue);
                     //update
                     processList[i]->state=BLOCKED;
-                    processList[i]->nextInterest=time+ioTime;
+                    processList[i]->nextInterest=time+CS_TIME/2.0+ioTime;
                     processList[i]->doneCPU++;
+                    processList[i]->numCS++;
                 }
             }
             //process is finishing I/O
@@ -89,14 +105,9 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 printQueue(readyQueue);
                 //update
                 processList[i]->state=READY;
-                processList[i]->nextInterest=time+CS_TIME/2;
-            }
-            //process is terminating
-            if(processList[i]->state==TERMINATED || processList[i]->doneCPU==processList[i]->numCPU){
-                printf("time %dms: Process %d terminated ",
-                        time,processList[i]->Type);
-                //print out ready queue
-                printQueue(readyQueue);
+                processList[i]->nextInterest=time+CS_TIME/2.0;
+                //count wait time
+                processList[i]->waitTime=time;
             }
 
         }
@@ -106,5 +117,22 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
 
     }
 
+    //time counting
+    //counting total turnaround time
+    for(int i=0;i<NUM_PROCESSES;i++){
+        struct Process* curProcess=processList[i];
+        for(int j=0;j<curProcess->numCPU;j++){
+            curProcess->sumTurn+=CS_TIME+curProcess->cpuBurstTime[j];
+        }
+    }
+    //output time
+    outTime(processList,NUM_PROCESSES,"FCFS");
+    //restore
+    for(int i=0;i<NUM_PROCESSES;i++){
+        struct Process* curProcess=processList[i];
+        curProcess->waitTime=0;
+        curProcess->sumTurn=0;
+        curProcess->sumWait=0;
+    }
 }
 

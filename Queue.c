@@ -59,6 +59,21 @@ void pushQueue(struct Queue* Q, struct Process* item) {
 }
 
 /*
+ * Add a process to the front of queue
+ */
+void pushFrontQueue(struct Queue* Q, struct Process* item){
+    if (isFull(Q)) return;
+    //shift all elements in array
+    for(int i=Q->size-1;i>0;i++){
+        Q->array[i]=Q->array[i-1];
+    }
+    //update
+    Q->front=0;
+    Q->array[Q->front]=item;
+    Q->size++;
+}
+
+/*
  * Remove a process from the head of queue
  */
 struct Process* popQueue(struct Queue* Q) {

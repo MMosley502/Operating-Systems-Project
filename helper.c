@@ -27,6 +27,10 @@ struct Process* initilizer_Process() {
     newOne->estCPUBurst = NULL;
     newOne->cpuBurstTime = NULL;
     newOne->ioBurstTime = NULL;
+    newOne->numCS=0;
+    newOne->numPre=0;
+    newOne->sumWait=0.0;
+    newOne->sumTurn=0.0;
 }
 
 /*

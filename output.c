@@ -30,3 +30,16 @@ void outEachProcess(struct Process* processList[], int NUM_PROCESSES){
                processListCopy[i]->Type,processListCopy[i]->arrivalTime,processListCopy[i]->numCPU);
     }
 }
+
+//output time counting for each process
+void outTime(struct Process* processList[], int NUM_PROCESSES, char* algo){
+    printf("Algorithm %s\n",algo);
+    for(int i=0;i<NUM_PROCESSES;i++){
+        struct Process* curProcess=processList[i];
+        printf("-- average CPU burst time: %lf ms\n",curProcess->maxCPUTime/curProcess->numCPU);
+        printf("-- average wait time: %lf ms\n",curProcess->sumWait/curProcess->numCPU);
+        printf("-- average turnaround time: %lf ms\n",curProcess->sumTurn/curProcess->numCPU);
+        printf("-- total number of context switches: %d\n",curProcess->numCS);
+        printf("-- total number of preemptions: %d\n",curProcess->numPre);
+    }
+}
