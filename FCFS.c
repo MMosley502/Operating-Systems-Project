@@ -36,11 +36,11 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 //print out ready queue
                 printQueue(readyQueue);
                 //update the next interesting event time for the process
-                processList[i]->nextInterest+=CS_TIME/2;
+                processList[i]->nextInterest=time+CS_TIME/2;
                 processList[i]->state=READY;
             }
             //process is doing CPU burst
-            if(processList[i]->state==READY && time==processList[i]->nextInterest){
+            if(processList[i]->state==READY && time==processList[i]->nextInterest && processList[i]==getFront(readyQueue)){
                 //get the actual CPU burst time for the current process
                 int idx=processList[i]->doneCPU;
                 double burstTime=processList[i]->cpuBurstTime[idx];
@@ -52,7 +52,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 printQueue(readyQueue);
                 //update
                 processList[i]->state=RUNNING;
-                processList[i]->nextInterest+=burstTime;
+                processList[i]->nextInterest=time+burstTime;
             }
             //process is finising CPU burst
             if(processList[i]->state==RUNNING && time==processList[i]->nextInterest){
@@ -75,7 +75,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     printQueue(readyQueue);
                     //update
                     processList[i]->state=BLOCKED;
-                    processList[i]->nextInterest+=ioTime;
+                    processList[i]->nextInterest=time+ioTime;
                     processList[i]->doneCPU++;
                 }
             }
@@ -89,7 +89,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 printQueue(readyQueue);
                 //update
                 processList[i]->state=READY;
-                processList[i]->nextInterest+=CS_TIME/2;
+                processList[i]->nextInterest=time+CS_TIME/2;
             }
             //process is terminating
             if(processList[i]->state==TERMINATED || processList[i]->doneCPU==processList[i]->numCPU){
