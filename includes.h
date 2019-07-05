@@ -29,7 +29,7 @@ enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPTIVE, TERMINATE
 struct Process {
     // Variables
     int ID;// from 1 to 26
-//    enum Process_Type Type;
+    // enum Process_Type Type;
     enum Process_Status state;
     int arrivalTime;
     int numCPU;// number of CPU bursts
@@ -37,8 +37,6 @@ struct Process {
     double nextInterest;//time point for next interesting event
   
     // Change to int would be better? time is int
-    int numCS;// number of context switches
-    int numPre;// number of preemption
 
     // Estimates
     double* estCPUBurst;
@@ -50,8 +48,11 @@ struct Process {
     double waitTimer;// wait time counter
     double blockTimer;// block time counter
     double burstTimer;// burst time counter
+    double maxCPUTime;// sum of all CPU burst time
     double sumWait;// sum of wait time
     double sumTurn;// sum of turnaround time
+    int numCS;// number of context switches
+    int numPre;// number of preemption
   
     double* cpuBurstTime;// Actual CPU burst time
     double* ioBurstTime;//Actual I/O burst time
@@ -103,7 +104,7 @@ bool isRight(struct Process* temp[], int length);
 
 // output.c
 int compareArrival(const void * a, const void * b);
-void outEachProcess(struct Process* processList[], int NUM_PROCESSES, char* algo);
+void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
 void outEPS(struct Process* processList[], int NUM_PROCESSES);
 char* getProcessID(int numberID);
 void printAnalysis(struct Process* processList[], int NUM_PROCESSES, char* algo);

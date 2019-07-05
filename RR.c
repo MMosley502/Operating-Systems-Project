@@ -36,12 +36,12 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
             if(processListCopy[i]->state==NOT_ENTERED && time==processListCopy[i]->arrivalTime){
                 //add the arriving process into ready queue
                 pushQueue(readyQueue,processListCopy[i]);
-                printf("time %dms: Process %d arrived; added to ready queue ",
-                       time,processListCopy[i]->Type);
+                printf("time %dms: Process %s arrived; added to ready queue ",
+                       time,getProcessID(processList[i]->ID));
                 //print out ready queue
                 printQueue(readyQueue);
                 //update the next interesting event time for the process
-                processListCopy[i]->nextInterest=time+CS_TIME/2;
+                processListCopy[i]->nextInterest=time+CS_TIME/2.0;
                 processListCopy[i]->state=READY;
                 //count wait time
                 processListCopy[i]->waitTimer=time;
@@ -53,12 +53,12 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 double burstTime=processListCopy[i]->cpuBurstTime[idx];
                 //when the process is not preempted in the ready queue
                 if(burstTime==processList[i]->cpuBurstTime[idx]){
-                    printf("time %dms: Process %d started using the CPU for %lfms burst ",
-                           time,processListCopy[i]->Type,burstTime);
+                    printf("time %dms: Process %s started using the CPU for %lfms burst ",
+                           time,getProcessID(processList[i]->ID),burstTime);
                 }
                 else{
-                    printf("time %dms: Process %d started using the CPU with %lfms burst remaining ",
-                            time,processListCopy[i]->Type,burstTime);
+                    printf("time %dms: Process %s started using the CPU with %lfms burst remaining ",
+                            time,getProcessID(processList[i]->ID),burstTime);
                 }
                 //move the process out of the ready queue
                 popQueue(readyQueue);
@@ -71,7 +71,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 if(!isEmpty(readyQueue) && burstTime>TIME_SLICE){
                     //update
                     processListCopy[i]->nextInterest=time+TIME_SLICE;
-                    processListCopy[i]->state=PREEMPTED;
+                    processListCopy[i]->state=PREEMPTIVE;
                     processListCopy[i]->cpuBurstTime[idx]=burstTime-TIME_SLICE;
                     //when ready queue is not empty, update the next process interesting time
                     if(!isEmpty(readyQueue)){
@@ -91,7 +91,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processListCopy[i]->sumWait+=time-processListCopy[i]->waitTimer-CS_TIME/2.0;
             }
             //the current running process is preempted
-            if(processListCopy[i]->state==PREEMPTED && time==processListCopy[i]->nextInterest){
+            if(processListCopy[i]->state==PREEMPTIVE && time==processListCopy[i]->nextInterest){
                 //add to the ready queue
                 if(strcmp(RR_ADD,"BEGINNING")==0) pushFrontQueue(readyQueue,processListCopy[i]);
                 else if(strcmp(RR_ADD,"END")==0) pushQueue(readyQueue,processListCopy[i]);
@@ -101,8 +101,8 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processListCopy[i]->numPre++;
                 //output
                 int idx=processListCopy[i]->doneCPU;
-                printf("time %dms: Time slice expired; process %d preempted with %lfms to go ",
-                       time,processListCopy[i]->Type,processListCopy[i]->cpuBurstTime[idx]);
+                printf("time %dms: Time slice expired; process %s preempted with %lfms to go ",
+                       time,getProcessID(processList[i]->ID),processListCopy[i]->cpuBurstTime[idx]);
                 printQueue(readyQueue);
                 //count wait time
                 processListCopy[i]->waitTimer=time;
@@ -116,8 +116,8 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     processListCopy[i]->state=TERMINATED;
                     processListCopy[i]->doneCPU++;
                     processListCopy[i]->numCS++;
-                    printf("time %dms: Process %d terminated ",
-                           time,processListCopy[i]->Type);
+                    printf("time %dms: Process %s terminated ",
+                           time,getProcessID(processList[i]->ID));
                     //print out ready queue
                     printQueue(readyQueue);
                 }
@@ -125,10 +125,10 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     double ioTime=processListCopy[i]->ioBurstTime[idx];
                     int leftCPU=processListCopy[i]->numCPU-processListCopy[i]->doneCPU;// #of CPU left undone
                     double finiIO=processListCopy[i]->nextInterest+ioTime;// time when the process finishing IO
-                    printf("time %dms: Process %d completed a CPU burst; %d bursts to go ",
-                           time,processListCopy[i]->Type,leftCPU);
-                    printf("time %dms: Process %d switching out of CPU; will block on I/O until time %lfms ",
-                           time,processListCopy[i]->Type,finiIO);
+                    printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
+                           time,getProcessID(processList[i]->ID),leftCPU);
+                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
+                           time,getProcessID(processList[i]->ID),finiIO);
                     //print out ready queue
                     printQueue(readyQueue);
                     //update
@@ -142,8 +142,8 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
             if(processListCopy[i]->state==BLOCKED && time==processListCopy[i]->nextInterest){
                 //add the current process into ready queue
                 pushQueue(readyQueue,processListCopy[i]);
-                printf("time %dms: Process %d completed I/O; added to ready queue ",
-                       time,processListCopy[i]->Type);
+                printf("time %dms: Process %s completed I/O; added to ready queue ",
+                       time,getProcessID(processList[i]->ID));
                 //print out ready queue
                 printQueue(readyQueue);
                 //update

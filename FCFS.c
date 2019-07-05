@@ -73,8 +73,8 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     processList[i]->state=TERMINATED;
                     processList[i]->doneCPU++;
                     processList[i]->numCS++;
-                    printf("time %dms: Process %d terminated ",
-                           time,processList[i]->Type);
+                    printf("time %dms: Process %s terminated ",
+                           time,getProcessID(processList[i]->ID));
                     //print out ready queue
                     printQueue(readyQueue);
                 }
