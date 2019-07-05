@@ -3,6 +3,7 @@
 // Ming Lu (lum8) & Yujue Wang (wangy66)
 
 #include "includes.h"
+
 /*
  * @Arg: The array includes all processes
  * @Arg: Context switch time
@@ -20,6 +21,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     memcpy(processListCopy, processList, sizeof(processListCopy));
     struct Queue* readyQueue = initizlizeQueue(MAXPROCESS);
     int time = 0;
+    int CSCounter = 0;
     bool CPU_Flag = false;// flag the status of CPU. false is available, true is occupied
     printf("time %dms: Simulator started for SJF", time);
     printQueue(readyQueue);// Empty Queue
@@ -37,6 +39,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
             //break out of the loop and finishes SJF
             printf("time %dms: Simulator ended for SJF ", time);
             printQueue(readyQueue);
+            printAnalysis(processListCopy, NUM_PROCESSES, CSCounter, 0, CS_TIME);
             break;
         }
 
@@ -51,6 +54,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 printQueue(readyQueue);
                 processListCopy[i]->nextInterest = time + CS_TIME / 2;// Entering CPU time
                 processListCopy[i]->state = READY;
+                CSCounter++;
             }
 
             // CPU burst
@@ -67,8 +71,9 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 printQueue(readyQueue);
                 CPU_Flag = true;
                 processListCopy[i]->state = RUNNING;
-                processListCopy[i]->nextInterest += (waitTime + burstTime);
+                processListCopy[i]->nextInterest = time + burstTime;
                 processListCopy[i]->waitTimer += waitTime;
+                processListCopy[i]->burstTimer += burstTime;
             }
 
             // I/O
@@ -96,7 +101,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     printQueue(readyQueue);
                     //update status
                     processListCopy[i]->state = BLOCKED;
-                    processListCopy[i]->nextInterest += ioTime;
+                    processListCopy[i]->nextInterest = time + ioTime;
                     processListCopy[i]->doneCPU++;
                 }
                 CPU_Flag = false;// Release the CPU
@@ -113,7 +118,8 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 printQueue(readyQueue);
 
                 processListCopy[i]->state = READY;
-                processListCopy[i]->nextInterest += CS_TIME / 2;
+                processListCopy[i]->nextInterest = time + CS_TIME / 2;
+                CSCounter++;
             }
 
             // Termination
@@ -129,3 +135,48 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     free(readyQueue);
 }
 
+/*
+ * Function for general printing of analysis
+ * If any argument is not applied to a specific algo
+ * Just give 0
+ * add #include <fcntl.h>
+ */
+void printAnalysis(struct Process* processList[], int NUM_PROCESSES, int CSCounter, int preemptionCounter, int CS_TIME) {
+    char* name = "simout.txt";
+    int fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0660);
+    if ( fd == -1 ) {
+        perror( "open() failed" );
+        return;
+    }
+
+//    -- average CPU burst time:  ms
+//    -- average wait time:  ms
+//    -- average turnaround time:  ms
+//    -- total number of context switches:
+//        -- total number of preemptions:
+}
+
+double computeAveWait(struct Process* processList[], int NUM_PROCESSES) {
+    double sum = 0;
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        sum += processList[i]->waitTimer;
+    }
+    return sum / NUM_PROCESSES;
+}
+double computeAveBurst(struct Process* processList[], int NUM_PROCESSES) {
+    double sum = 0;
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        sum += processList[i]->burstTimer;
+    }
+    return sum / NUM_PROCESSES;
+}
+
+double computeAveTurnAround(struct Process* processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
+    double sum = 0;
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        sum += processList[i]->waitTimer;
+        sum += processList[i]->burstTimer;
+    }
+    sum += (((double) CSCounter / 2) * CS_TIME);// Total turnaround time
+    return sum / NUM_PROCESSES;
+}
