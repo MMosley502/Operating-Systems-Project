@@ -22,6 +22,8 @@ struct Process* initilizer_Process() {
     newOne->nextInterest = 0.0;//time point for next interesting event
     newOne->estCPUBurst = NULL;
     newOne->nextEstBurst = 0.0;
+    newOne->nextActualBurst = 0.0;
+    newOne->burstStart = 0.0;
     newOne->waitTimer = 0.0;// wait time counter
     newOne->blockTimer = 0.0;// block time counter
     newOne->burstTimer = 0.0;
@@ -64,14 +66,6 @@ double estimateTime(struct Process* newOne, double ALPHA, int pos) {
 
 }
 
-/*
- * Function for transforming the sorted array to readyQueue
- */
-void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue) {
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        pushQueue(readyQueue, processListCopy[i]);
-    }
-}
 
 /*
  * Function to indicate all the process done with their bursts
@@ -100,34 +94,6 @@ int compareTime(const void * a, const void * b) {
     if (left.nextEstBurst > right.nextEstBurst) return 1;
 }
 
-/*
- * Check any process arrives at the same time
- * If arrives at the same time, comparing the estburst time
- */
-bool isArrivalSame(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES) {
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        if (processListCopy[i] != checkProcess && checkProcess->arrivalTime == processListCopy[i]->arrivalTime) {
-            return true;
-        }
-    }
-}
-
-/*
- * @Return: the index of shortest estBurst time job with the arrival time
- */
-int whichFirst(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES) {
-    int result = -1;
-    struct Process* flag = checkProcess;
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        if (processListCopy[i] != flag && flag->arrivalTime == processListCopy[i]->arrivalTime) {
-            if (processListCopy[i]->estCPUBurst[0] < flag->estCPUBurst[0]) {
-                result = i;// a shorter process
-                flag = processListCopy[i];
-            }
-        }
-    }
-    return result;
-}
 
 /*
  * Free the dynamic memeory of Process List
@@ -138,4 +104,22 @@ void freeProcessList(struct Process* processList[], int NUM_PROCESSES) {
             free(processList[i]);
         }
     }
+}
+
+/*
+ * Function for comparing the current running process and the first process at the readyQueue
+ * Deciding which one has the shorter burst time and has the priority to use CPU
+ * @Return: True if will be preemptive
+ */
+bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time) {
+    if (currentRunningPos == -1) {// No running process
+        return false;
+    }
+    struct Process* current = processListCopy[currentRunningPos];
+    struct Process* first = getFront(readyQueue);
+    double remainingTime = current->nextActualBurst - (time - current->burstStart);
+    if (remainingTime > first->nextEstBurst) {
+        return true;// New process is shorter
+    }
+    return false;
 }

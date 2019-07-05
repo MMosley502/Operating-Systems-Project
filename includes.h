@@ -40,8 +40,10 @@ struct Process {
     // Estimates
     double* estCPUBurst;
     double nextEstBurst;
+    double nextActualBurst;
 
     // Counters
+    double burstStart;
     double waitTimer;// wait time counter
     double blockTimer;// block time counter
     double burstTimer;// burst time counter
@@ -63,17 +65,16 @@ struct Queue {
 struct Process* initilizer_Process();
 double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
 double estimateTime(struct Process* newOne, double ALPHA, int pos);
-void arrayToQueue(struct Process* processListCopy[], int NUM_PROCESSES, struct Queue* readyQueue);
 bool allDone(struct Process* processList[], int NUM_PROCESSES);
 int compareTime(const void * a, const void * b);
-bool isArrivalSame(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES);
-int whichFirst(struct Process* checkProcess, struct Process* processListCopy[], int NUM_PROCESSES);
 void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
+bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
 
 // SRT.c
+void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
 
 //FCFS.c
 void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME);

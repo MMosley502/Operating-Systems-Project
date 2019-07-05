@@ -65,6 +65,7 @@ int main(int argc, char** argv) {
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // SRT Algo
+    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // RR Algo
 

@@ -57,7 +57,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
             // Make sure only the first one in the readyQueue can enter the CPU burst
             // Make sure the CPU is available
             if (processListCopy[i]->state == READY && time >= processListCopy[i]->nextInterest
-                && processListCopy[i] == getFront(readyQueue) && !CPU_Flag) {
+                && processListCopy[i]->ID == getFront(readyQueue)->ID && !CPU_Flag) {
                 double waitTime = time - processListCopy[i]->nextInterest;
                 int idx = processListCopy[i]->doneCPU;
                 double burstTime = processListCopy[i]->cpuBurstTime[idx];
