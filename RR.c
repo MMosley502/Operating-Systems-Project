@@ -44,7 +44,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processListCopy[i]->nextInterest=time+CS_TIME/2;
                 processListCopy[i]->state=READY;
                 //count wait time
-                processListCopy[i]->waitTime=time;
+                processListCopy[i]->waitTimer=time;
             }
             //process is doing CPU burst
             if(processListCopy[i]->state==READY && time==processListCopy[i]->nextInterest && processListCopy[i]==getFront(readyQueue)){
@@ -88,7 +88,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     }
                 }
                 //count wait time
-                processListCopy[i]->sumWait+=time-processListCopy[i]->waitTime-CS_TIME/2.0;
+                processListCopy[i]->sumWait+=time-processListCopy[i]->waitTimer-CS_TIME/2.0;
             }
             //the current running process is preempted
             if(processListCopy[i]->state==PREEMPTED && time==processListCopy[i]->nextInterest){
@@ -105,7 +105,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                        time,processListCopy[i]->Type,processListCopy[i]->cpuBurstTime[idx]);
                 printQueue(readyQueue);
                 //count wait time
-                processListCopy[i]->waitTime=time;
+                processListCopy[i]->waitTimer=time;
             }
             //process is finising CPU burst
             if(processListCopy[i]->state==RUNNING && time==processListCopy[i]->nextInterest){
@@ -150,7 +150,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processListCopy[i]->state=READY;
                 processListCopy[i]->nextInterest=time+CS_TIME/2.0;
                 //count wait time
-                processListCopy[i]->waitTime=time;
+                processListCopy[i]->waitTimer=time;
             }
         }
 
@@ -169,11 +169,11 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
         curProcess->sumTurn+=curProcess->numCS*(CS_TIME/2.0);
     }
     //output time
-    outTime(processListCopy,NUM_PROCESSES,"RR");
+    printAnalysis(processListCopy,NUM_PROCESSES,"RR");
     //restore
     for(int i=0;i<NUM_PROCESSES;i++){
         struct Process* curProcess=processListCopy[i];
-        curProcess->waitTime=0;
+        curProcess->waitTimer=0;
         curProcess->sumTurn=0;
         curProcess->sumWait=0;
     }

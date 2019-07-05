@@ -48,7 +48,7 @@ char* getProcessID(int numberID) {
 }
 
 
-void printAnalysis(struct Process* processList[], int NUM_PROCESSES) {
+void printAnalysis(struct Process* processList[], int NUM_PROCESSES, char* algo) {
 //    -- average CPU burst time:  ms
 //    -- average wait time:  ms
 //    -- average turnaround time:  ms

@@ -103,10 +103,10 @@ bool isRight(struct Process* temp[], int length);
 
 // output.c
 int compareArrival(const void * a, const void * b);
-void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
+void outEachProcess(struct Process* processList[], int NUM_PROCESSES, char* algo);
 void outEPS(struct Process* processList[], int NUM_PROCESSES);
 char* getProcessID(int numberID);
-void outTime(struct Process* processList[], int NUM_PROCESSES, char* algo);
+void printAnalysis(struct Process* processList[], int NUM_PROCESSES, char* algo);
 
 
 
