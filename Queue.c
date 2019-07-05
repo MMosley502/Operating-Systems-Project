@@ -15,7 +15,7 @@ struct Queue {
     int rear;
     int size;
     unsigned int capacity;
-    struct Process* array;
+    struct Process** array;
 };
 */
 
@@ -110,8 +110,57 @@ void printQueue(struct Queue* Q){
     else{
         printf("[Q ");
         for(int i=0;i<Q->capacity;i++){
-            printf("%d ",Q->array[i]->ID);
+            printf("%s ",getProcessID(Q->array[i]->ID));
         }
         printf("]\n");
+    }
+}
+
+/*
+ * Operating after every push
+ * sort the Queue by estBurstTime, if the estBurstTime are same, sort by ID number
+ */
+void sortQueue(struct Queue* Q) {
+    if (Q->size == 1 || Q->size == 0) return;
+
+    int start = Q->front;
+    int end = Q->rear;
+    struct Process* temp[Q->size];
+    int temp_pos = 0;
+    for (int i = start; i <= end; i++) {
+        temp[temp_pos] = Q->array[i];
+        temp_pos++;
+    }
+    // Sort by estBurst time
+    qsort(temp, Q->size, sizeof(struct Process*), compareTime);
+    struct Process* change;
+    while (1) {
+        for (int i = 0; i < Q->size - 1; i++) {
+            if ((temp[i]->nextEstBurst == temp[i + 1]->nextEstBurst) && (temp[i]->ID > temp[i + 1]->ID)) {
+                change = temp[i];
+                temp[i] = temp[i + 1];
+                temp[i + 1] = change;
+            }
+        }
+        if (isRight(temp, Q->size)) {
+            break;
+        }
+    }
+    temp_pos = 0;
+    for (int i = start; i <= end; i++) {
+        Q->array[i] = temp[temp_pos];
+        temp_pos++;
+    }
+}
+
+/*
+ * Check whether the readyQueue in right order
+ */
+bool isRight(struct Process* temp[], int length) {
+    for (int i = 0; i < length - 1; i++) {
+        if ((temp[i]->nextEstBurst > temp[i + 1]->nextEstBurst) ||
+        ((temp[i]->nextEstBurst == temp[i + 1]->nextEstBurst) && (temp[i]->ID > temp[i + 1]->ID))) {
+            return false;
+        }
     }
 }

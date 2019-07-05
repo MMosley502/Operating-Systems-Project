@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/mnt/d/RPI/2019Summer/Operating-Systems-Project/FCFS.c" "/mnt/d/RPI/2019Summer/Operating-Systems-Project/cmake-build-debug/CMakeFiles/Operating-Systems-Project.dir/FCFS.c.o"
   "/mnt/d/RPI/2019Summer/Operating-Systems-Project/Queue.c" "/mnt/d/RPI/2019Summer/Operating-Systems-Project/cmake-build-debug/CMakeFiles/Operating-Systems-Project.dir/Queue.c.o"
   "/mnt/d/RPI/2019Summer/Operating-Systems-Project/RR.c" "/mnt/d/RPI/2019Summer/Operating-Systems-Project/cmake-build-debug/CMakeFiles/Operating-Systems-Project.dir/RR.c.o"
   "/mnt/d/RPI/2019Summer/Operating-Systems-Project/SJF.c" "/mnt/d/RPI/2019Summer/Operating-Systems-Project/cmake-build-debug/CMakeFiles/Operating-Systems-Project.dir/SJF.c.o"

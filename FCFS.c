@@ -31,8 +31,8 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
             if(processList[i]->state==NOT_ENTERED && time==processList[i]->arrivalTime){
                 //add the arriving process into ready queue
                 pushQueue(readyQueue,processList[i]);
-                printf("time %dms: Process %d arrived; added to ready queue ",
-                        time,processList[i]->Type);
+                printf("time %dms: Process %s arrived; added to ready queue ",
+                        time,getProcessID(processList[i]->ID));
                 //print out ready queue
                 printQueue(readyQueue);
                 //update the next interesting event time for the process
@@ -46,8 +46,8 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 //get the actual CPU burst time for the current process
                 int idx=processList[i]->doneCPU;
                 double burstTime=processList[i]->cpuBurstTime[idx];
-                printf("time %dms: Process %d started using the CPU for %lfms burst ",
-                        time,processList[i]->Type,burstTime);
+                printf("time %dms: Process %s started using the CPU for %lfms burst ",
+                        time,getProcessID(processList[i]->ID),burstTime);
                 //move the process out of the ready queue
                 popQueue(readyQueue);
                 //print out ready queue
@@ -82,10 +82,11 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     double ioTime=processList[i]->ioBurstTime[idx];
                     int leftCPU=processList[i]->numCPU-processList[i]->doneCPU;// #of CPU left undone
                     double finiIO=processList[i]->nextInterest+ioTime;// time when the process finishing IO
-                    printf("time %dms: Process %d completed a CPU burst; %d bursts to go ",
-                           time,processList[i]->Type,leftCPU);
-                    printf("time %dms: Process %d switching out of CPU; will block on I/O until time %lfms ",
-                           time,processList[i]->Type,finiIO);
+                    printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
+                           time,getProcessID(processList[i]->ID),leftCPU);
+                    printQueue(readyQueue);
+                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
+                           time,getProcessID(processList[i]->ID),finiIO);
                     //print out ready queue
                     printQueue(readyQueue);
                     //update
@@ -99,8 +100,8 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
             if(processList[i]->state==BLOCKED && time==processList[i]->nextInterest){
                 //add the current process into ready queue
                 pushQueue(readyQueue,processList[i]);
-                printf("time %dms: Process %d completed I/O; added to ready queue ",
-                        time,processList[i]->Type);
+                printf("time %dms: Process %s completed I/O; added to ready queue ",
+                        time,getProcessID(processList[i]->ID));
                 //print out ready queue
                 printQueue(readyQueue);
                 //update

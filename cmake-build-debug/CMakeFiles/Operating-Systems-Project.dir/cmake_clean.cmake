@@ -6,6 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Operating-Systems-Project.dir/output.c.o"
   "CMakeFiles/Operating-Systems-Project.dir/helper.c.o"
   "CMakeFiles/Operating-Systems-Project.dir/Queue.c.o"
+  "CMakeFiles/Operating-Systems-Project.dir/FCFS.c.o"
   "Operating-Systems-Project.pdb"
   "Operating-Systems-Project"
 )

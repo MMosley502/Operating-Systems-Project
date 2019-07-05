@@ -10,7 +10,7 @@
  * qsort(array, size of array, sizeof(struct process*), compareTime);
  * Reference: http://www.cplusplus.com/reference/cstdlib/qsort/
  */
-int compareArrival(const void * a, const void * b){
+int compareArrival(const void * a, const void * b) {
     struct Process left = *(struct Process*)a;
     struct Process right = *(struct Process*)b;
     if (left.arrivalTime < right.arrivalTime) return -1;
@@ -19,20 +19,41 @@ int compareArrival(const void * a, const void * b){
 }
 
 //output each process in the process list
-void outEachProcess(struct Process* processList[], int NUM_PROCESSES){
-    //copy the original process list for sorting
-    struct Process* processListCopy[NUM_PROCESSES];
-    memcpy(processListCopy, processList, sizeof(processListCopy));
-    //sort process by its arrival time
-    qsort(processListCopy, NUM_PROCESSES, sizeof(struct process*), compareArrival);
-    for(int i=0;i<NUM_PROCESSES;i++){
-        printf("Process %d [NEW] (arrival time %d ms) %d CPU bursts\n",
-               processListCopy[i]->Type,processListCopy[i]->arrivalTime,processListCopy[i]->numCPU);
+// Print as the ascending order of process ID
+void outEachProcess(struct Process* processList[], int NUM_PROCESSES) {
+    for(int i = 0;i < NUM_PROCESSES; i++) {
+        printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts\n",
+               getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU);
     }
 }
 
-//output time counting for each process
-void outTime(struct Process* processList[], int NUM_PROCESSES, char* algo){
+//output each process in the process list for SJF and SRT
+// Print extra estimate time
+// Print as the ascending order of process ID
+void outEPS(struct Process* processList[], int NUM_PROCESSES) {
+    for(int i = 0;i < NUM_PROCESSES; i++) {
+        printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %fms)\n",
+               getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
+               processList[i]->estCPUBurst[0]);
+    }
+}
+
+/*
+ * Converting the Process ID from number to alpabetic
+ */
+char* getProcessID(int numberID) {
+    char* Alphabetic[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+                            "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+    return Alphabetic[numberID - 1];
+}
+
+
+void printAnalysis(struct Process* processList[], int NUM_PROCESSES) {
+//    -- average CPU burst time:  ms
+//    -- average wait time:  ms
+//    -- average turnaround time:  ms
+//    -- total number of context switches:
+//        -- total number of preemptions:
     printf("Algorithm %s\n",algo);
     for(int i=0;i<NUM_PROCESSES;i++){
         struct Process* curProcess=processList[i];
@@ -41,5 +62,4 @@ void outTime(struct Process* processList[], int NUM_PROCESSES, char* algo){
         printf("-- average turnaround time: %lf ms\n",curProcess->sumTurn/curProcess->numCPU);
         printf("-- total number of context switches: %d\n",curProcess->numCS);
         printf("-- total number of preemptions: %d\n",curProcess->numPre);
-    }
 }
