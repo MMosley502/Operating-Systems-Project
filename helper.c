@@ -29,7 +29,10 @@ struct Process* initilizer_Process() {
     newOne->burstTimer = 0.0;
     newOne->cpuBurstTime = NULL;// Actual CPU burst time
     newOne->ioBurstTime = NULL;//Actual I/O burst time
-
+    newOne->numCS=0;
+    newOne->numPre=0;
+    newOne->sumWait=0.0;
+    newOne->sumTurn=0.0;
 }
 
 /*

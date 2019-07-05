@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     int CS_TIME = atoi(argv[5]);
     double ALPHA = atof(argv[6]);
     double TIME_SLICE = atof(argv[7]);
-    int RR_ADD = atoi(argv[8]);
+    char* RR_ADD = argv[8];
 
     // Seed the random generator
     srand48(time(&SEED));
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
     SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // RR Algo
+    RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
 
-    freeProcessList(processList, NUM_PROCESSES);
     return EXIT_SUCCESS;
 }

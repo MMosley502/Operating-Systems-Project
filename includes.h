@@ -35,7 +35,10 @@ struct Process {
     int numCPU;// number of CPU bursts
     int doneCPU;// number of CPU bursts done executing
     double nextInterest;//time point for next interesting event
+  
     // Change to int would be better? time is int
+    int numCS;// number of context switches
+    int numPre;// number of preemption
 
     // Estimates
     double* estCPUBurst;
@@ -47,6 +50,9 @@ struct Process {
     double waitTimer;// wait time counter
     double blockTimer;// block time counter
     double burstTimer;// burst time counter
+    double sumWait;// sum of wait time
+    double sumTurn;// sum of turnaround time
+  
     double* cpuBurstTime;// Actual CPU burst time
     double* ioBurstTime;//Actual I/O burst time
 };
@@ -80,12 +86,14 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
 void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME);
 
 // RR.c
+void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char* RR_ADD);
 
 // Queue.c
 struct Queue* initizlizeQueue(unsigned int capacity);
 bool isEmpty(struct Queue* Q);
 bool isFull(struct Queue* Q);
 void pushQueue(struct Queue* Q, struct Process* item);
+void pushFrontQueue(struct Queue* Q, struct Process* item);
 struct Process* popQueue(struct Queue* Q);
 struct Process* getFront(struct Queue* Q);
 struct Process* getRear(struct Queue* Q);
@@ -98,6 +106,7 @@ int compareArrival(const void * a, const void * b);
 void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
 void outEPS(struct Process* processList[], int NUM_PROCESSES);
 char* getProcessID(int numberID);
+void outTime(struct Process* processList[], int NUM_PROCESSES, char* algo);
 
 
 
