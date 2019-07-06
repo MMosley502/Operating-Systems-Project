@@ -33,6 +33,8 @@ struct Process* initilizer_Process() {
     newOne->numPre=0;
     newOne->sumWait=0.0;
     newOne->sumTurn=0.0;
+
+    return newOne;
 }
 
 /*

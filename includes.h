@@ -43,6 +43,7 @@ struct Process {
     double burstStart;
     double waitTimer;// wait time counter
     double burstTimer;// burst time counter
+    double blockTimer;
     double maxCPUTime;// sum of all CPU burst time
     double sumWait;// sum of wait time
     double sumTurn;// sum of turnaround time

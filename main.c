@@ -31,23 +31,31 @@ int main(int argc, char** argv) {
     // Generate processes array
     struct Process* processList[NUM_PROCESSES];// Array stores all processes for simulation
     for (int i = 0; i < NUM_PROCESSES; i++) {
+
         struct Process* newOne = initilizer_Process();
+
         double r = drand48();// uniform dist [0.00,1.00)
         double x = -log(r) / LAMBDA;
         if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
             i--;
             continue;
         }
+
         newOne->ID = i + 1;// ID start from 1 and later for matching with A-Z
         newOne->arrivalTime = (int) floor(x);
         newOne->numCPU = (int) floor(r * 100) + 1;
 
         // Initialize CPU burst time and I/O burst time
-        newOne->estCPUBurst[newOne->numCPU];
-        newOne->cpuBurstTime[newOne->numCPU];
-        newOne->ioBurstTime[newOne->numCPU];
+        double tmp1[newOne->numCPU];
+        newOne->estCPUBurst=tmp1;
+        double tmp2[newOne->numCPU];
+        newOne->cpuBurstTime=tmp2;
+        double tmp3[newOne->numCPU];
+        newOne->ioBurstTime=tmp3;
+
         // Random for CPU burst time
         newOne->maxCPUTime = randomTime(newOne->cpuBurstTime, newOne->numCPU, MAX, LAMBDA);
+
         // Random for IO burst time
         randomTime(newOne->ioBurstTime, newOne->numCPU, MAX, LAMBDA);
         newOne->ioBurstTime[newOne->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
@@ -58,6 +66,7 @@ int main(int argc, char** argv) {
         processList[i] = newOne;
     }
 
+#if 0
     // FCFS Algo
     FCFS(processList,NUM_PROCESSES,CS_TIME);
 
@@ -71,5 +80,7 @@ int main(int argc, char** argv) {
     RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
 
     freeProcessList(processList, NUM_PROCESSES);
+#endif
+
     return EXIT_SUCCESS;
 }
