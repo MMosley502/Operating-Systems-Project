@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
         }
         newOne->ID = i + 1;// ID start from 1 and later for matching with A-Z
         newOne->arrivalTime = (int) floor(x);
-        newOne->numCPU = (int) floor(x * 100) + 1;
+        newOne->numCPU = (int) floor(r * 100) + 1;
 
         // Initialize CPU burst time and I/O burst time
         newOne->estCPUBurst[newOne->numCPU];
