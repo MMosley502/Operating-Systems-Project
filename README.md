@@ -41,5 +41,5 @@ File Structure:
 2019.7.5
 1. RR demo
 2. Add pushFront() to Queue
-3. Add analysis data recorders (counter for wait time and burst time)
+3. Add analysis data print
 4. Revision for FCFS, SJF, SRT

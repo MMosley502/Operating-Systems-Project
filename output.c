@@ -48,19 +48,47 @@ char* getProcessID(int numberID) {
 }
 
 
-void printAnalysis(struct Process* processList[], int NUM_PROCESSES, char* algo) {
-//    -- average CPU burst time:  ms
-//    -- average wait time:  ms
-//    -- average turnaround time:  ms
-//    -- total number of context switches:
-//        -- total number of preemptions:
-    printf("Algorithm %s\n",algo);
-    for(int i=0;i<NUM_PROCESSES;i++) {
-        struct Process *curProcess = processList[i];
-        printf("-- average CPU burst time: %lf ms\n", curProcess->maxCPUTime / curProcess->numCPU);
-        printf("-- average wait time: %lf ms\n", curProcess->sumWait / curProcess->numCPU);
-        printf("-- average turnaround time: %lf ms\n", curProcess->sumTurn / curProcess->numCPU);
-        printf("-- total number of context switches: %d\n", curProcess->numCS);
-        printf("-- total number of preemptions: %d\n", curProcess->numPre);
+/*
+ * Function for general printing of analysis
+ * If any argument is not applied to a specific algo
+ * Just give 0
+ */
+void printAnalysis(char* algo, struct Process* processList[], int NUM_PROCESSES, int CSCounter,
+                   int preemptionCounter, int CS_TIME) {
+    double aveBurst = computeAveBurst(processList, NUM_PROCESSES);
+    double aveWait = computeAveWait(processList, NUM_PROCESSES);
+    double aveTurnAround = computeAveTurnAround(processList, CSCounter, NUM_PROCESSES, CS_TIME);
+    printf("Algorithm %s\n", algo);
+    printf("-- average CPU burst time: %lf ms\n", aveBurst);
+    printf("-- average wait time: %lf ms\n", aveWait);
+    printf("-- average turnaround time: %lf ms\n", aveTurnAround);
+    printf("-- total number of context switches: %d\n", CSCounter);
+    printf("-- total number of preemptions: %d\n", preemptionCounter);
+}
+
+double computeAveWait(struct Process* processList[], int NUM_PROCESSES) {
+    double sum = 0;
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        sum += processList[i]->waitTimer;
     }
+    return sum / NUM_PROCESSES;
+}
+
+
+double computeAveBurst(struct Process* processList[], int NUM_PROCESSES) {
+    double sum = 0;
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        sum += processList[i]->maxCPUTime;
+    }
+    return sum / NUM_PROCESSES;
+}
+
+double computeAveTurnAround(struct Process* processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
+    double sum = 0;
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        sum += processList[i]->waitTimer;
+        sum += processList[i]->maxCPUTime;
+    }
+    sum += (CSCounter * (CS_TIME / 2));// Total turnaround time
+    return sum / NUM_PROCESSES;
 }

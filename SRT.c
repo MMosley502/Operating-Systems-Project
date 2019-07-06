@@ -35,7 +35,6 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
             //break out of the loop and finishes SJF
             printf("time %dms: Simulator ended for SRT ", time);
             printQueue(readyQueue);
-            printAnalysis(processListCopy, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
             break;
         }
 
@@ -48,7 +47,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 printf("time %dms: Process %s (tau %fms) arrived; added to ready queue ",
                        time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[0]);
                 printQueue(readyQueue);
-                processListCopy[i]->nextInterest = time + CS_TIME / 2;// Entering CPU time
+                processListCopy[i]->nextInterest = time + CS_TIME / 2.0;// Entering CPU time
                 processListCopy[i]->state = READY;
                 CSCounter++;
             }
@@ -144,7 +143,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     CSCounter += 2;
 
                     processListCopy[i]->state = READY;
-                    processListCopy[i]->nextInterest = time + CS_TIME / 2;
+                    processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
                     printf("time %dms: Process %s (tau %fms) completed I/O; preempting %s ",
                             time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx],
                             getProcessID(processListCopy[currentRunningPos]->ID));
@@ -157,7 +156,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx]);
                     printQueue(readyQueue);
                     processListCopy[i]->state = READY;
-                    processListCopy[i]->nextInterest = time + CS_TIME / 2;
+                    processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
                     CSCounter++;
                 }
             }
@@ -171,6 +170,6 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
         }
         time++;
     }
-
+    printAnalysis("SRT", processListCopy, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
     free(readyQueue);
 }

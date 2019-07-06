@@ -159,17 +159,18 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
 
     }
 
-    //time counting
-    //counting total turnaround time
-    for(int i=0;i<NUM_PROCESSES;i++){
-        struct Process* curProcess=processListCopy[i];
-        for(int j=0;j<curProcess->numCPU;j++){
-            curProcess->sumTurn+=curProcess->cpuBurstTime[j];
-        }
-        curProcess->sumTurn+=curProcess->numCS*(CS_TIME/2.0);
+    // Calculate the sum of CS times
+    int CSCounter = 0;
+    for(int i = 0; i < NUM_PROCESSES; i++){
+        CSCounter += processList[i]->numCS;
     }
-    //output time
-    printAnalysis(processListCopy,NUM_PROCESSES,"RR");
+    // Calculate the sum of preemption times
+    int preemptionCounter = 0;
+    for(int i = 0; i < NUM_PROCESSES; i++){
+        preemptionCounter += processList[i]->numPre;
+    }
+    printAnalysis("RR", processList, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
+
     //restore
     for(int i=0;i<NUM_PROCESSES;i++){
         struct Process* curProcess=processListCopy[i];
@@ -177,7 +178,6 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
         curProcess->sumTurn=0;
         curProcess->sumWait=0;
     }
-
-
+    free(readyQueue);
 }
 

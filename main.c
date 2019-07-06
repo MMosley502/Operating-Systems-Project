@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
         newOne->cpuBurstTime[newOne->numCPU];
         newOne->ioBurstTime[newOne->numCPU];
         // Random for CPU burst time
-        randomTime(newOne->cpuBurstTime, newOne->numCPU, MAX, LAMBDA);
+        newOne->maxCPUTime = randomTime(newOne->cpuBurstTime, newOne->numCPU, MAX, LAMBDA);
         // Random for IO burst time
         randomTime(newOne->ioBurstTime, newOne->numCPU, MAX, LAMBDA);
         newOne->ioBurstTime[newOne->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
@@ -70,5 +70,6 @@ int main(int argc, char** argv) {
     // RR Algo
     RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
 
+    freeProcessList(processList, NUM_PROCESSES);
     return EXIT_SUCCESS;
 }

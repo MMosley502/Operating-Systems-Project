@@ -39,7 +39,6 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
             //break out of the loop and finishes SJF
             printf("time %dms: Simulator ended for SJF ", time);
             printQueue(readyQueue);
-            printAnalysis(processListCopy, NUM_PROCESSES, CSCounter, 0, CS_TIME);
             break;
         }
 
@@ -52,7 +51,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 printf("time %dms: Process %s (tau %fms) arrived; added to ready queue ",
                        time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[0]);
                 printQueue(readyQueue);
-                processListCopy[i]->nextInterest = time + CS_TIME / 2;// Entering CPU time
+                processListCopy[i]->nextInterest = time + CS_TIME / 2.0;// Entering CPU time
                 processListCopy[i]->state = READY;
                 CSCounter++;
             }
@@ -118,7 +117,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 printQueue(readyQueue);
 
                 processListCopy[i]->state = READY;
-                processListCopy[i]->nextInterest = time + CS_TIME / 2;
+                processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
                 CSCounter++;
             }
 
@@ -131,52 +130,6 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
         }
         time++;
     }
-
+    printAnalysis("SJF", processListCopy, NUM_PROCESSES, CSCounter, 0, CS_TIME);
     free(readyQueue);
-}
-
-/*
- * Function for general printing of analysis
- * If any argument is not applied to a specific algo
- * Just give 0
- * add #include <fcntl.h>
- */
-void printAnalysis(struct Process* processList[], int NUM_PROCESSES, int CSCounter, int preemptionCounter, int CS_TIME) {
-    char* name = "simout.txt";
-    int fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0660);
-    if ( fd == -1 ) {
-        perror( "open() failed" );
-        return;
-    }
-
-//    -- average CPU burst time:  ms
-//    -- average wait time:  ms
-//    -- average turnaround time:  ms
-//    -- total number of context switches:
-//        -- total number of preemptions:
-}
-
-double computeAveWait(struct Process* processList[], int NUM_PROCESSES) {
-    double sum = 0;
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->waitTimer;
-    }
-    return sum / NUM_PROCESSES;
-}
-double computeAveBurst(struct Process* processList[], int NUM_PROCESSES) {
-    double sum = 0;
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->burstTimer;
-    }
-    return sum / NUM_PROCESSES;
-}
-
-double computeAveTurnAround(struct Process* processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
-    double sum = 0;
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->waitTimer;
-        sum += processList[i]->burstTimer;
-    }
-    sum += (((double) CSCounter / 2) * CS_TIME);// Total turnaround time
-    return sum / NUM_PROCESSES;
 }

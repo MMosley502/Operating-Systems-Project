@@ -21,7 +21,6 @@
 
 // Enumeration
 enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPTIVE, TERMINATED};
-//enum Process_Type {CPU_BOUND, IO_BOUND};
 
 //================================================================
 // Structures
@@ -29,14 +28,11 @@ enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPTIVE, TERMINATE
 struct Process {
     // Variables
     int ID;// from 1 to 26
-    // enum Process_Type Type;
     enum Process_Status state;
     int arrivalTime;
     int numCPU;// number of CPU bursts
     int doneCPU;// number of CPU bursts done executing
     double nextInterest;//time point for next interesting event
-  
-    // Change to int would be better? time is int
 
     // Estimates
     double* estCPUBurst;
@@ -46,7 +42,6 @@ struct Process {
     // Counters
     double burstStart;
     double waitTimer;// wait time counter
-    double blockTimer;// block time counter
     double burstTimer;// burst time counter
     double maxCPUTime;// sum of all CPU burst time
     double sumWait;// sum of wait time
@@ -107,8 +102,11 @@ int compareArrival(const void * a, const void * b);
 void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
 void outEPS(struct Process* processList[], int NUM_PROCESSES);
 char* getProcessID(int numberID);
-void printAnalysis(struct Process* processList[], int NUM_PROCESSES, char* algo);
-
+void printAnalysis(char* algo, struct Process* processList[], int NUM_PROCESSES, int CSCounter,
+                   int preemptionCounter, int CS_TIME);
+double computeAveBurst(struct Process* processList[], int NUM_PROCESSES);
+double computeAveWait(struct Process* processList[], int NUM_PROCESSES);
+double computeAveTurnAround(struct Process* processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME);
 
 
 #endif //OPERATING_SYSTEMS_PROJECT_INCLUDES_H

@@ -117,17 +117,14 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
         time++;
 
     }
-
-    //time counting
-    //counting total turnaround time
-    for(int i=0;i<NUM_PROCESSES;i++){
-        struct Process* curProcess=processList[i];
-        for(int j=0;j<curProcess->numCPU;j++){
-            curProcess->sumTurn+=CS_TIME+curProcess->cpuBurstTime[j];
-        }
+    // Calculate the sum of CS times
+    int CSCounter = 0;
+    for(int i = 0; i < NUM_PROCESSES; i++){
+        CSCounter += processList[i]->numCS;
     }
-    //output time
-    printAnalysis(processList,NUM_PROCESSES,"FCFS");
+    // No preemption in FCFS, just set as 0
+    printAnalysis("FCFS", processList, NUM_PROCESSES, CSCounter, 0, CS_TIME);
+
     //restore
     for(int i=0;i<NUM_PROCESSES;i++){
         struct Process* curProcess=processList[i];
@@ -135,5 +132,6 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
         curProcess->sumTurn=0;
         curProcess->sumWait=0;
     }
+    free(readyQueue);
 }
 
