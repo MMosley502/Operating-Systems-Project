@@ -162,14 +162,14 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
     // Calculate the sum of CS times
     int CSCounter = 0;
     for(int i = 0; i < NUM_PROCESSES; i++){
-        CSCounter += processList[i]->numCS;
+        CSCounter += processListCopy[i]->numCS;
     }
     // Calculate the sum of preemption times
     int preemptionCounter = 0;
     for(int i = 0; i < NUM_PROCESSES; i++){
-        preemptionCounter += processList[i]->numPre;
+        preemptionCounter += processListCopy[i]->numPre;
     }
-    printAnalysis("RR", processList, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
+    printAnalysis("RR", processListCopy, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
 
     //restore
     for(int i=0;i<NUM_PROCESSES;i++){
