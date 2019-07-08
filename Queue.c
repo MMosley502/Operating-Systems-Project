@@ -108,9 +108,9 @@ void printQueue(struct Queue* Q){
         printf("[Q <empty>]\n");
     }
     else{
-        printf("[Q ");
-        for(int i=0;i<Q->capacity;i++){
-            printf("%s ",getProcessID(Q->array[i]->ID));
+        printf("[Q");
+        for(int i = 0; i < Q->size; i++){
+            printf(" %s", getProcessID(Q->array[i]->ID));
         }
         printf("]\n");
     }

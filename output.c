@@ -34,7 +34,7 @@ void outEPS(struct Process* processList[], int NUM_PROCESSES) {
     for(int i = 0;i < NUM_PROCESSES; i++) {
         printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %fms)\n",
                getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
-               processList[i]->estCPUBurst[0]);
+               processList[i]->nextEstBurst);
     }
 }
 

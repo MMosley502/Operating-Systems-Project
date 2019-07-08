@@ -34,9 +34,6 @@ int main(int argc, char** argv) {
 
         processList[i] = initilizer_Process();
 
-        //DEBUG
-        printf("%p\n",processList[i]);
-
         double r = drand48();// uniform dist [0.00,1.00)
         double x = -log(r) / LAMBDA;
         if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
@@ -50,9 +47,9 @@ int main(int argc, char** argv) {
 
 #if 0
         //DEBUG
-        printf("%d\n",processList[i]->ID);
-        printf("%d\n",processList[i]->arrivalTime);
-        printf("%d\n",processList[i]->numCPU);
+        printf("ID is %d\n",processList[i]->ID);
+        printf("Arrival time is %d\n",processList[i]->arrivalTime);
+        printf("num of CPU is %d\n",processList[i]->numCPU);
 #endif
 
         // Random for CPU burst time
@@ -63,7 +60,7 @@ int main(int argc, char** argv) {
         processList[i]->ioBurstTime[processList[i]->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
 
         //Estimate CPU burst time for SJF & SRT
-        processList[i]->estCPUBurst[0] = ceil(1 / LAMBDA);
+        processList[i]->nextEstBurst = ceil(1 / LAMBDA);
 
         //processList[i] = processList[i];
 
@@ -74,7 +71,7 @@ int main(int argc, char** argv) {
         }
 #endif
 
-#if 1
+#if 0
         //DEBUG
         for(int j=0;j<processList[0]->numCPU;j++){
             printf("%lf\n",processList[0]->cpuBurstTime[j]);
@@ -83,27 +80,30 @@ int main(int argc, char** argv) {
 
     }
 
-#if 1
+#if 0
     //DEBUG
     printf("???\n");
     //DEBUG
     printf("%p\n",processList[0]);
     for(int i=0;i<processList[0]->numCPU;i++){
-        printf("%lf\n",processList[0]->cpuBurstTime[i]);
+        printf("%d CPU burst time is %lf\n",i, processList[0]->cpuBurstTime[i]);
     }
 #endif
 
-#if 1
+#if 0
     //DEBUG
-    printf("%d\n",processList[0]->ID);
-    printf("%d\n",processList[0]->arrivalTime);
-    printf("%d\n",processList[0]->numCPU);
+    printf("ID is %d\n",processList[0]->ID);
+    printf("Arrival time is %d\n",processList[0]->arrivalTime);
+    printf("number of CPU bursts is %d\n",processList[0]->numCPU);
 #endif
 
+//    // SJF Algo
+//    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+
+#if 0
     // FCFS Algo
     FCFS(processList,NUM_PROCESSES,CS_TIME);
 
-#if 0
     // SJF Algo
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 

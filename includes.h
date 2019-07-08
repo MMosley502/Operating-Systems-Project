@@ -35,7 +35,7 @@ struct Process {
     double nextInterest;//time point for next interesting event
 
     // Estimates
-    double estCPUBurst[101];
+//    double estCPUBurst[101];
     double nextEstBurst;
     double nextActualBurst;
 
@@ -43,7 +43,6 @@ struct Process {
     double burstStart;
     double waitTimer;// wait time counter
     double burstTimer;// burst time counter
-    double blockTimer;
     double maxCPUTime;// sum of all CPU burst time
     double sumWait;// sum of wait time
     int numCS;// number of context switches
@@ -65,7 +64,7 @@ struct Queue {
 // Function prototype
 // helper.c
 struct Process* initilizer_Process();
-double randomTime(double* Time, int numCPU, int MAX, double LAMBDA);
+double randomTime(double Time[], int numCPU, int MAX, double LAMBDA);
 double estimateTime(struct Process* newOne, double ALPHA, int pos);
 bool allDone(struct Process* processList[], int NUM_PROCESSES);
 int compareTime(const void * a, const void * b);

@@ -24,7 +24,6 @@ struct Process* initilizer_Process() {
     newOne->nextActualBurst = 0.0;
     newOne->burstStart = 0.0;
     newOne->waitTimer = 0.0;// wait time counter
-    newOne->blockTimer = 0.0;// block time counter
     newOne->burstTimer = 0.0;
     newOne->numCS=0;
     newOne->numPre=0;
@@ -41,7 +40,7 @@ struct Process* initilizer_Process() {
  * Calculating the CPU or IO burst time based on the random number
  * @Return: The total burst time(Sum of each part)
  */
-double randomTime(double* Time, int numCPU, int MAX, double LAMBDA) {
+double randomTime(double Time[], int numCPU, int MAX, double LAMBDA) {
     double r = 0.0, x = 0.0, counter = 0.0;
     for (int j = 0; j < numCPU; j++) {
         r = drand48();// uniform dist [0.00,1.00)
@@ -50,19 +49,19 @@ double randomTime(double* Time, int numCPU, int MAX, double LAMBDA) {
             j--;
             continue;
         }
-        counter += x;
+        counter += floor(x);
         Time[j] = floor(x);
     }
     return counter;
 }
-/*
- * Function for estimate the CPU burst time by alpha
- * For SJF & SRT
- */
+///*
+// * Function for estimate the CPU burst time by alpha
+// * For SJF & SRT
+// */
 double estimateTime(struct Process* newOne, double ALPHA, int pos) {
     // Current estimate time and actual time to calculate the next estimate time
     double result = ALPHA * newOne->cpuBurstTime[pos] +
-                    (1 - ALPHA) * newOne->estCPUBurst[pos];
+                    (1 - ALPHA) * newOne->nextEstBurst;
     return result;
 
 }

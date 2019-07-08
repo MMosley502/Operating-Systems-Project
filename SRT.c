@@ -45,7 +45,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
                 printf("time %dms: Process %s (tau %fms) arrived; added to ready queue ",
-                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[0]);
+                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst);
                 printQueue(readyQueue);
                 processListCopy[i]->nextInterest = time + CS_TIME / 2.0;// Entering CPU time
                 processListCopy[i]->state = READY;
@@ -59,7 +59,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 int idx = processListCopy[i]->doneCPU;
                 double burstTime = processListCopy[i]->nextActualBurst;// get the actual running time
                 printf("time %dms: Process %s (tau %fms) started using the CPU with %fms burst remaining ",
-                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx], burstTime);
+                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst, burstTime);
                 popQueue(readyQueue);
                 printQueue(readyQueue);
                 CPU_Flag = true;
@@ -82,7 +82,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 double burstTime = processListCopy[i]->cpuBurstTime[idx];// get the actual running time
                 processListCopy[i]->nextActualBurst = burstTime;
                 printf("time %dms: Process %s (tau %fms) started using the CPU with %fms burst remaining ",
-                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx], burstTime);
+                       time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst, burstTime);
                 popQueue(readyQueue);
                 printQueue(readyQueue);
                 CPU_Flag = true;
@@ -107,7 +107,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     int leftCPU = processListCopy[i]->numCPU - processListCopy[i]->doneCPU;// #of CPU left undone
                     double finiIO = processListCopy[i]->nextInterest + ioTime;// time when the process finishing IO
                     printf("time %dms: Process %s (tau %fms) completed a CPU burst; %d bursts to go ",
-                           time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx], leftCPU);
+                           time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst, leftCPU);
                     printQueue(readyQueue);
                     double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
                     processListCopy[i]->nextEstBurst = nextEstimate;
@@ -145,7 +145,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     processListCopy[i]->state = READY;
                     processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
                     printf("time %dms: Process %s (tau %fms) completed I/O; preempting %s ",
-                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx],
+                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst,
                             getProcessID(processListCopy[currentRunningPos]->ID));
                     printQueue(readyQueue);
                     preemptionCounter++;
@@ -153,7 +153,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
 
                 } else {
                     printf("time %dms: Process %s (tau %fms) completed I/O; added to ready queue ",
-                           time, getProcessID(processListCopy[i]->ID), processListCopy[i]->estCPUBurst[idx]);
+                           time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst);
                     printQueue(readyQueue);
                     processListCopy[i]->state = READY;
                     processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
