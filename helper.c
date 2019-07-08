@@ -20,19 +20,15 @@ struct Process* initilizer_Process() {
     newOne->numCPU = 0;// number of CPU bursts
     newOne->doneCPU = 0;// number of CPU bursts done executing
     newOne->nextInterest = 0.0;//time point for next interesting event
-    newOne->estCPUBurst = NULL;
     newOne->nextEstBurst = 0.0;
     newOne->nextActualBurst = 0.0;
     newOne->burstStart = 0.0;
     newOne->waitTimer = 0.0;// wait time counter
     newOne->blockTimer = 0.0;// block time counter
     newOne->burstTimer = 0.0;
-    newOne->cpuBurstTime = NULL;// Actual CPU burst time
-    newOne->ioBurstTime = NULL;//Actual I/O burst time
     newOne->numCS=0;
     newOne->numPre=0;
     newOne->sumWait=0.0;
-    newOne->sumTurn=0.0;
 
     return newOne;
 }

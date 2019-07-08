@@ -35,7 +35,7 @@ struct Process {
     double nextInterest;//time point for next interesting event
 
     // Estimates
-    double* estCPUBurst;
+    double estCPUBurst[101];
     double nextEstBurst;
     double nextActualBurst;
 
@@ -46,12 +46,11 @@ struct Process {
     double blockTimer;
     double maxCPUTime;// sum of all CPU burst time
     double sumWait;// sum of wait time
-    double sumTurn;// sum of turnaround time
     int numCS;// number of context switches
     int numPre;// number of preemption
   
-    double* cpuBurstTime;// Actual CPU burst time
-    double* ioBurstTime;//Actual I/O burst time
+    double cpuBurstTime[101];// Actual CPU burst time
+    double ioBurstTime[101];//Actual I/O burst time
 };
 
 // Queue

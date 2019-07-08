@@ -175,7 +175,6 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
     for(int i=0;i<NUM_PROCESSES;i++){
         struct Process* curProcess=processListCopy[i];
         curProcess->waitTimer=0;
-        curProcess->sumTurn=0;
         curProcess->sumWait=0;
     }
     free(readyQueue);

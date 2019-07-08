@@ -32,7 +32,10 @@ int main(int argc, char** argv) {
     struct Process* processList[NUM_PROCESSES];// Array stores all processes for simulation
     for (int i = 0; i < NUM_PROCESSES; i++) {
 
-        struct Process* newOne = initilizer_Process();
+        processList[i] = initilizer_Process();
+
+        //DEBUG
+        printf("%p\n",processList[i]);
 
         double r = drand48();// uniform dist [0.00,1.00)
         double x = -log(r) / LAMBDA;
@@ -41,35 +44,66 @@ int main(int argc, char** argv) {
             continue;
         }
 
-        newOne->ID = i + 1;// ID start from 1 and later for matching with A-Z
-        newOne->arrivalTime = (int) floor(x);
-        newOne->numCPU = (int) floor(r * 100) + 1;
-
-        // Initialize CPU burst time and I/O burst time
-        double tmp1[newOne->numCPU];
-        newOne->estCPUBurst=tmp1;
-        double tmp2[newOne->numCPU];
-        newOne->cpuBurstTime=tmp2;
-        double tmp3[newOne->numCPU];
-        newOne->ioBurstTime=tmp3;
-
-        // Random for CPU burst time
-        newOne->maxCPUTime = randomTime(newOne->cpuBurstTime, newOne->numCPU, MAX, LAMBDA);
-
-        // Random for IO burst time
-        randomTime(newOne->ioBurstTime, newOne->numCPU, MAX, LAMBDA);
-        newOne->ioBurstTime[newOne->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
-
-        //Estimate CPU burst time for SJF & SRT
-        newOne->estCPUBurst[0] = ceil(1 / LAMBDA);
-
-        processList[i] = newOne;
-    }
+        processList[i]->ID = i + 1;// ID start from 1 and later for matching with A-Z
+        processList[i]->arrivalTime = (int) floor(x);
+        processList[i]->numCPU = (int) floor(r * 100) + 1;
 
 #if 0
+        //DEBUG
+        printf("%d\n",processList[i]->ID);
+        printf("%d\n",processList[i]->arrivalTime);
+        printf("%d\n",processList[i]->numCPU);
+#endif
+
+        // Random for CPU burst time
+        processList[i]->maxCPUTime = randomTime(processList[i]->cpuBurstTime,processList[i]->numCPU, MAX, LAMBDA);
+
+        // Random for IO burst time
+        randomTime(processList[i]->ioBurstTime, processList[i]->numCPU, MAX, LAMBDA);
+        processList[i]->ioBurstTime[processList[i]->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
+
+        //Estimate CPU burst time for SJF & SRT
+        processList[i]->estCPUBurst[0] = ceil(1 / LAMBDA);
+
+        //processList[i] = processList[i];
+
+#if 0
+        //DEBUG
+        for(int j=0;j<processList[i]->numCPU;j++){
+            printf("%lf\n",processList[i]->cpuBurstTime[j]);
+        }
+#endif
+
+#if 1
+        //DEBUG
+        for(int j=0;j<processList[0]->numCPU;j++){
+            printf("%lf\n",processList[0]->cpuBurstTime[j]);
+        }
+#endif
+
+    }
+
+#if 1
+    //DEBUG
+    printf("???\n");
+    //DEBUG
+    printf("%p\n",processList[0]);
+    for(int i=0;i<processList[0]->numCPU;i++){
+        printf("%lf\n",processList[0]->cpuBurstTime[i]);
+    }
+#endif
+
+#if 1
+    //DEBUG
+    printf("%d\n",processList[0]->ID);
+    printf("%d\n",processList[0]->arrivalTime);
+    printf("%d\n",processList[0]->numCPU);
+#endif
+
     // FCFS Algo
     FCFS(processList,NUM_PROCESSES,CS_TIME);
 
+#if 0
     // SJF Algo
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 

@@ -129,7 +129,6 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
     for(int i=0;i<NUM_PROCESSES;i++){
         struct Process* curProcess=processList[i];
         curProcess->waitTimer=0;
-        curProcess->sumTurn=0;
         curProcess->sumWait=0;
     }
     free(readyQueue);
