@@ -165,6 +165,14 @@ void sortQueue(struct Queue* Q) {
 }
 
 /*
+ * Operating after every push
+ * when processes are arriving at the same time, sort by ID number
+ */
+void SQ(struct Queue* Q){
+    
+}
+
+/*
  * Check whether the readyQueue in right order
  */
 bool isRight(struct Process* temp[], int length) {
