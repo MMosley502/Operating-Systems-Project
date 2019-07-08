@@ -23,7 +23,9 @@ int main(int argc, char** argv) {
     int CS_TIME = atoi(argv[5]);
     double ALPHA = atof(argv[6]);
     double TIME_SLICE = atof(argv[7]);
-    char* RR_ADD = argv[8];
+    char* RR_ADD;
+    if(argc==8) RR_ADD="END";
+    else RR_ADD=argv[8];
 
     // Seed the random generator
     srand48(time(&SEED));
@@ -97,18 +99,16 @@ int main(int argc, char** argv) {
     printf("number of CPU bursts is %d\n",processList[0]->numCPU);
 #endif
 
-//    // SJF Algo
-//    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
-#if 0
+#if 1
     // FCFS Algo
-    FCFS(processList,NUM_PROCESSES,CS_TIME);
+    //FCFS(processList,NUM_PROCESSES,CS_TIME);
 
     // SJF Algo
-    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    //SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // SRT Algo
-    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    //SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // RR Algo
     RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);

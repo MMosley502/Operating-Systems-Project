@@ -33,6 +33,7 @@ struct Process {
     int numCPU;// number of CPU bursts
     int doneCPU;// number of CPU bursts done executing
     double nextInterest;//time point for next interesting event
+    bool preFlag;// flag to indicate preemption
 
     // Estimates
 //    double estCPUBurst[101];

@@ -28,6 +28,7 @@ struct Process* initilizer_Process() {
     newOne->numCS=0;
     newOne->numPre=0;
     newOne->sumWait=0.0;
+    newOne->preFlag=false;
 
     return newOne;
 }

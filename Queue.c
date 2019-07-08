@@ -63,13 +63,14 @@ void pushQueue(struct Queue* Q, struct Process* item) {
  */
 void pushFrontQueue(struct Queue* Q, struct Process* item){
     if (isFull(Q)) return;
-    //shift all elements in array
-    for(int i=Q->size-1;i>0;i++){
-        Q->array[i]=Q->array[i-1];
+    if(Q->front-1<0) {
+        Q->front=Q->capacity-1;
+        Q->array[Q->front] = item;
     }
-    //update
-    Q->front=0;
-    Q->array[Q->front]=item;
+    else {
+        Q->front--;
+        Q->array[Q->front] = item;
+    }
     Q->size++;
 }
 
@@ -110,10 +111,10 @@ void printQueue(struct Queue* Q){
     else{
         printf("[Q");
         if(Q->front>Q->rear){
-            for(int i = Q->front; i < Q->size; i++){
+            for(int i = Q->front; i < Q->capacity; i++){
                 printf(" %s", getProcessID(Q->array[i]->ID));
             }
-            for(int i = 0; i < Q->rear; i++){
+            for(int i = 0; i <= Q->rear; i++){
                 printf(" %s", getProcessID(Q->array[i]->ID));
             }
         }
