@@ -109,7 +109,7 @@ void printQueue(struct Queue* Q){
     }
     else{
         printf("[Q");
-        for(int i = 0; i < Q->size; i++){
+        for(int i = Q->front; i <= Q->rear; i++){
             printf(" %s", getProcessID(Q->array[i]->ID));
         }
         printf("]\n");
