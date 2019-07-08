@@ -11,6 +11,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
     //initializing ready queue
     struct Queue* readyQueue = initizlizeQueue(NUM_PROCESSES);
     int time=0;
+    bool cpuFlag=false; //false: cpu is vacant; true: cpu is not vacant
     while(1){
         if(time==0){
             printf("time %dms: Simulator started for FCFS [Q <empty>]\n",time);
@@ -42,7 +43,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 processList[i]->sumWait=time;
             }
             //process is doing CPU burst
-            if(processList[i]->state==READY && time==processList[i]->nextInterest && processList[i]==getFront(readyQueue)){
+            if(processList[i]->state==READY && time>=processList[i]->nextInterest && processList[i]==getFront(readyQueue) && cpuFlag==false){
                 //get the actual CPU burst time for the current process
                 int idx=processList[i]->doneCPU;
                 double burstTime=processList[i]->cpuBurstTime[idx];
@@ -55,12 +56,13 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 //when ready queue is not empty, update the next process interesting time
                 if(!isEmpty(readyQueue)){
                     struct Process* nextProcess=getFront(readyQueue);
-                    nextProcess->nextInterest=time+burstTime+CS_TIME/2.0+1;
+                    nextProcess->nextInterest=time+burstTime+CS_TIME/2.0;
                 }
                 //update
                 processList[i]->state=RUNNING;
                 processList[i]->nextInterest=time+burstTime;
                 processList[i]->numCS++;
+                cpuFlag=true;
                 //count wait time
                 processList[i]->waitTimer+=time-processList[i]->sumWait-CS_TIME/2.0;
             }
@@ -80,13 +82,13 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 }
                 else{
                     double ioTime=processList[i]->ioBurstTime[idx];
-                    int leftCPU=processList[i]->numCPU-processList[i]->doneCPU;// #of CPU left undone
-                    double finiIO=processList[i]->nextInterest+ioTime;// time when the process finishing IO
+                    int leftCPU=processList[i]->numCPU-processList[i]->doneCPU-1;// #of CPU left undone
+                    processList[i]->nextInterest=time+CS_TIME/2.0+ioTime;// time when the process finishing IO
                     printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
                            time,getProcessID(processList[i]->ID),leftCPU);
                     printQueue(readyQueue);
                     printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
-                           time,getProcessID(processList[i]->ID),finiIO);
+                           time,getProcessID(processList[i]->ID),processList[i]->nextInterest);
                     //print out ready queue
                     printQueue(readyQueue);
                     //update
@@ -95,6 +97,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     processList[i]->doneCPU++;
                     processList[i]->numCS++;
                 }
+                cpuFlag=false;
             }
             //process is finishing I/O
             if(processList[i]->state==BLOCKED && time==processList[i]->nextInterest){

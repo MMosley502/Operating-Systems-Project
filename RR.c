@@ -16,6 +16,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
     //initializing ready queue
     struct Queue* readyQueue = initizlizeQueue(NUM_PROCESSES);
     int time=0;
+    bool cpuFlag=false;
     while(1){
         if(time==0){
             printf("time %dms: Simulator started for RR [Q <empty>]\n",time);
@@ -47,7 +48,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processListCopy[i]->sumWait=time;
             }
             //process is doing CPU burst
-            if(processListCopy[i]->state==READY && time==processListCopy[i]->nextInterest && processListCopy[i]==getFront(readyQueue)){
+            if(processListCopy[i]->state==READY && time>=processListCopy[i]->nextInterest && processListCopy[i]==getFront(readyQueue) && cpuFlag==false){
                 //get the actual CPU burst time for the current process
                 int idx=processListCopy[i]->doneCPU;
                 double burstTime=processListCopy[i]->cpuBurstTime[idx];
@@ -67,6 +68,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 //update
                 processListCopy[i]->state=RUNNING;
                 processListCopy[i]->numCS++;
+                cpuFlag=true;
                 //preemption
                 if(!isEmpty(readyQueue) && burstTime>TIME_SLICE){
                     //update
@@ -76,7 +78,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     //when ready queue is not empty, update the next process interesting time
                     if(!isEmpty(readyQueue)){
                         struct Process* nextProcess=getFront(readyQueue);
-                        nextProcess->nextInterest=time+TIME_SLICE+CS_TIME/2.0+1;
+                        nextProcess->nextInterest=time+TIME_SLICE+CS_TIME/2.0;
                     }
                 }
                 else{
@@ -106,6 +108,8 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 printQueue(readyQueue);
                 //count wait time
                 processListCopy[i]->sumWait=time;
+                //update
+                cpuFlag=false;
             }
             //process is finising CPU burst
             if(processListCopy[i]->state==RUNNING && time==processListCopy[i]->nextInterest){
@@ -123,12 +127,14 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 }
                 else{
                     double ioTime=processListCopy[i]->ioBurstTime[idx];
-                    int leftCPU=processListCopy[i]->numCPU-processListCopy[i]->doneCPU;// #of CPU left undone
-                    double finiIO=processListCopy[i]->nextInterest+ioTime;// time when the process finishing IO
+                    int leftCPU=processListCopy[i]->numCPU-processListCopy[i]->doneCPU-1;// #of CPU left undone
+                    processListCopy[i]->nextInterest=time+CS_TIME/2.0+ioTime;// time when the process finishing IO
                     printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
                            time,getProcessID(processList[i]->ID),leftCPU);
+                    //print out ready queue
+                    printQueue(readyQueue);
                     printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
-                           time,getProcessID(processList[i]->ID),finiIO);
+                           time,getProcessID(processList[i]->ID),processListCopy[i]->nextInterest);
                     //print out ready queue
                     printQueue(readyQueue);
                     //update
@@ -137,6 +143,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     processListCopy[i]->doneCPU++;
                     processListCopy[i]->numCS++;
                 }
+                cpuFlag=false;
             }
             //process is finishing I/O
             if(processListCopy[i]->state==BLOCKED && time==processListCopy[i]->nextInterest){
