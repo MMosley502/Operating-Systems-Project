@@ -209,6 +209,32 @@ void sortQueue(struct Queue* Q) {
  */
 void SQ(struct Queue* Q){
     if (Q->size == 1 || Q->size == 0) return;
+
+    struct Process** copyQ = calloc(Q->capacity, sizeof(struct Process*));
+    int pos = 0;
+    if (Q->rear < Q->front) {
+        for (int i = Q->front; i < Q->capacity; i++) {
+            copyQ[pos++] = Q->array[i];
+        }
+        for (int i = 0; i <= Q->rear; i++) {
+            copyQ[pos++] = Q->array[i];
+        }
+    }
+    else {
+        for (int i = Q->front; i <= Q->rear; i++) {
+            copyQ[pos++] = Q->array[i];
+        }
+    }
+
+    qsort(copyQ,Q->size,sizeof(struct Process*),compareID);
+    for(int i=0;i<Q->size;i++){
+        Q->array[i]=copyQ[i];
+    }
+    Q->front=0;
+    Q->rear=pos-1;
+
+
+    free(copyQ);
 }
 
 /*

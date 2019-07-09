@@ -32,6 +32,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
             if(processList[i]->state==NOT_ENTERED && time==processList[i]->arrivalTime){
                 //add the arriving process into ready queue
                 pushQueue(readyQueue,processList[i]);
+                SQ(readyQueue);
                 printf("time %dms: Process %s arrived; added to ready queue ",
                         time,getProcessID(processList[i]->ID));
                 //print out ready queue
@@ -103,6 +104,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
             if(processList[i]->state==BLOCKED && time==processList[i]->nextInterest){
                 //add the current process into ready queue
                 pushQueue(readyQueue,processList[i]);
+                SQ(readyQueue);
                 printf("time %dms: Process %s completed I/O; added to ready queue ",
                         time,getProcessID(processList[i]->ID));
                 //print out ready queue

@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
     //FCFS(processList,NUM_PROCESSES,CS_TIME);
 
     // SJF Algo
-    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    //SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // SRT Algo
     //SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);

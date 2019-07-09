@@ -69,6 +69,7 @@ double randomTime(double Time[], int numCPU, int MAX, double LAMBDA);
 double estimateTime(struct Process* newOne, double ALPHA, int pos);
 bool allDone(struct Process* processList[], int NUM_PROCESSES);
 int compareTime(const void * a, const void * b);
+int compareID(const void * a, const void * b);
 void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
 bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time);
 
@@ -95,6 +96,7 @@ struct Process* getFront(struct Queue* Q);
 struct Process* getRear(struct Queue* Q);
 void printQueue(struct Queue* Q);
 void sortQueue(struct Queue* Q);
+void SQ(struct Queue* Q);
 bool isRight(struct Process* temp[], int length);
 
 // output.c
