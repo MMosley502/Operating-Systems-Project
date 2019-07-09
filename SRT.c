@@ -130,7 +130,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
 
-                if (isPreemptive(currentRunningPos, processListCopy, readyQueue, time)) {// Need to preempt the current running process
+                if (isPreemptive(currentRunningPos, processListCopy, readyQueue, time, NUM_PROCESSES)) {// Need to preempt the current running process
                     printf("time %dms: Process %s (tau %0.0fms) completed I/O; preempting %s ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst,
                            getProcessID(processListCopy[currentRunningPos]->ID));
