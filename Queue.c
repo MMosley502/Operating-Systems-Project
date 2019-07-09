@@ -134,24 +134,9 @@ void printQueue(struct Queue* Q){
 void sortQueue(struct Queue* Q) {
     if (Q->size == 1 || Q->size == 0) return;
 
-//    for (int j = 0; j < Q->capacity; j++) {
-//        if (Q->array[j]) {
-//            printf("!Q array %d,  ID is %d\n", j, Q->array[j]->ID);
-//        } else {
-//            printf("!Q array %d NULL\n", j);
-//        }
-//    }
-
     struct Process** copyQ = calloc(Q->capacity, sizeof(struct Process*));
     int pos = 0;
     if (Q->rear < Q->front) {
-//        for (int i = 0; i < Q->capacity; i++){
-//            if (Q->array[i]) {
-//                copyQ[pos] = Q->array[i];
-//                pos++;
-//            }
-//            Q->array[i] = NULL;
-//        }
         for (int i = Q->front; i < Q->capacity; i++) {
             copyQ[pos++] = Q->array[i];
         }
@@ -165,41 +150,38 @@ void sortQueue(struct Queue* Q) {
         }
     }
 
-    qsort(copyQ,Q->size,sizeof(struct Process*),compareTime);
-    for(int i=0;i<Q->size;i++){
-        Q->array[i]=copyQ[i];
+    struct Process* change;
+    // bubble sort
+    // Reference: https://www.geeksforgeeks.org/bubble-sort/
+    // Sort burst time
+    for (int i = 0; i < Q->size - 1; i++) {
+        for (int k = 0; k < Q->size - i - 1; k++) {
+            if (copyQ[k]->nextEstBurst > copyQ[k+1]->nextEstBurst) {
+                change = copyQ[k];
+                copyQ[k] = copyQ[k+1];
+                copyQ[k+1] = change;
+            }
+        }
     }
-    Q->front=0;
-    Q->rear=pos-1;
+    // Sort ID
+    for (int i = 0; i < Q->size - 1; i++) {
+        for (int k = 0; k < Q->size - i - 1; k++) {
+            if ((copyQ[k]->nextEstBurst == copyQ[k+1]->nextEstBurst) && (copyQ[k]->ID > copyQ[k+1]->ID)) {
+                change = copyQ[k];
+                copyQ[k] = copyQ[k+1];
+                copyQ[k+1] = change;
+            }
+        }
+    }
 
-//    int start = Q->front;
-//    int end = Q->rear;
-//    struct Process* temp[Q->size];
-//    int temp_pos = 0;
-//    for (int i = start; i <= end; i++) {
-//        temp[temp_pos] = Q->array[i];
-//        temp_pos++;
-//    }
-//    // Sort by estBurst time
-//    qsort(temp, Q->size, sizeof(struct Process*), compareTime);
-//    struct Process* change;
-//    while (1) {
-//        for (int i = 0; i < Q->size - 1; i++) {
-//            if ((temp[i]->nextEstBurst == temp[i + 1]->nextEstBurst) && (temp[i]->ID > temp[i + 1]->ID)) {
-//                change = temp[i];
-//                temp[i] = temp[i + 1];
-//                temp[i + 1] = change;
-//            }
-//        }
-//        if (isRight(temp, Q->size)) {
-//            break;
-//        }
-//    }
-//    temp_pos = 0;
-//    for (int i = start; i <= end; i++) {
-//        Q->array[i] = temp[temp_pos];
-//        temp_pos++;
-//    }
+
+    for(int i = 0; i < Q->size; i++){
+        Q->array[i] = copyQ[i];
+    }
+    Q->front = 0;
+    Q->rear = pos-1;
+
+
     free(copyQ);
 }
 
@@ -226,7 +208,32 @@ void SQ(struct Queue* Q){
         }
     }
 
-    qsort(copyQ,Q->size,sizeof(struct Process*),compareID);
+//    qsort(copyQ,Q->size,sizeof(struct Process*),compareID);
+    ////////////////////////////////////////////////////////////////
+    struct Process* change;
+    // bubble sort
+    // Sort burst time
+    for (int i = 0; i < Q->size - 1; i++) {
+        for (int k = 0; k < Q->size - i - 1; k++) {
+            if (copyQ[k]->nextEstBurst > copyQ[k+1]->nextEstBurst) {
+                change = copyQ[k];
+                copyQ[k] = copyQ[k+1];
+                copyQ[k+1] = change;
+            }
+        }
+    }
+    // Sort ID
+    for (int i = 0; i < Q->size - 1; i++) {
+        for (int k = 0; k < Q->size - i - 1; k++) {
+            if ((copyQ[k]->nextEstBurst == copyQ[k+1]->nextEstBurst) && (copyQ[k]->ID > copyQ[k+1]->ID)) {
+                change = copyQ[k];
+                copyQ[k] = copyQ[k+1];
+                copyQ[k+1] = change;
+            }
+        }
+    }
+    ////////////////////////////////////////////////////////////////
+
     for(int i=0;i<Q->size;i++){
         Q->array[i]=copyQ[i];
     }
@@ -240,16 +247,4 @@ void SQ(struct Queue* Q){
 void freeQueue(struct Queue* Q){
     free(Q->array);
     free(Q);
-}
-
-/*
- * Check whether the readyQueue in right order
- */
-bool isRight(struct Process* temp[], int length) {
-    for (int i = 0; i < length - 1; i++) {
-        if ((temp[i]->nextEstBurst > temp[i + 1]->nextEstBurst) ||
-        ((temp[i]->nextEstBurst == temp[i + 1]->nextEstBurst) && (temp[i]->ID > temp[i + 1]->ID))) {
-            return false;
-        }
-    }
 }
