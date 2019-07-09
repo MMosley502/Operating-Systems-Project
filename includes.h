@@ -70,6 +70,7 @@ double estimateTime(struct Process* newOne, double ALPHA, int pos);
 bool allDone(struct Process* processList[], int NUM_PROCESSES);
 int compareTime(const void * a, const void * b);
 int compareID(const void * a, const void * b);
+int compareArrival(const void * a, const void * b);
 void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
 bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time);
 
@@ -100,7 +101,6 @@ void SQ(struct Queue* Q);
 bool isRight(struct Process* temp[], int length);
 
 // output.c
-int compareArrival(const void * a, const void * b);
 void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
 void outEPS(struct Process* processList[], int NUM_PROCESSES);
 char* getProcessID(int numberID);
