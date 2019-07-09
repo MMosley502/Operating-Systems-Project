@@ -73,7 +73,7 @@ int compareTime(const void * a, const void * b);
 int compareID(const void * a, const void * b);
 int compareArrival(const void * a, const void * b);
 void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
-bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time);
+bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time, int NUM_PROCESSES);
 void restore(struct Process* processList[], int NUM_PROCESSES);
 
 // SJF.c
