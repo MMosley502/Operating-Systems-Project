@@ -134,6 +134,27 @@ void printQueue(struct Queue* Q){
 void sortQueue(struct Queue* Q) {
     if (Q->size == 1 || Q->size == 0) return;
 
+//    for (int j = 0; j < Q->capacity; j++) {
+//        if (Q->array[j]) {
+//            printf("!Q array %d,  ID is %d\n", j, Q->array[j]->ID);
+//        } else {
+//            printf("!Q array %d NULL\n", j);
+//        }
+//    }
+
+    struct Process** copyQ = calloc(Q->capacity, sizeof(struct Process*));
+    int pos = 0;
+    if (Q->rear < Q->front) {
+        for (int i = 0; i < Q->capacity; i++){
+            if (Q->array[i]) {
+                copyQ[pos] = Q->array[i];
+                pos++;
+            }
+            Q->array[i] = NULL;
+        }
+        memcpy(Q->array, copyQ, sizeof(Q->capacity));
+    }
+
     int start = Q->front;
     int end = Q->rear;
     struct Process* temp[Q->size];
@@ -162,6 +183,7 @@ void sortQueue(struct Queue* Q) {
         Q->array[i] = temp[temp_pos];
         temp_pos++;
     }
+    free(copyQ);
 }
 
 /*
