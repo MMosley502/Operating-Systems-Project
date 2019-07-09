@@ -91,7 +91,11 @@ int compareTime(const void * a, const void * b) {
     struct Process left = *(struct Process*)a;
     struct Process right = *(struct Process*)b;
     if (left.nextEstBurst < right.nextEstBurst) return -1;
-    if (left.nextEstBurst == right.nextEstBurst) return 0;
+    if (left.nextEstBurst == right.nextEstBurst){
+        if(left.ID == right.ID) return 0;
+        if(left.ID > right.ID) return 1;
+        if(left.ID <= right.ID) return -1;
+    }
     if (left.nextEstBurst > right.nextEstBurst) return 1;
 }
 
