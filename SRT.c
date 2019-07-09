@@ -151,6 +151,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
                     preemptionCounter++;
                     CSCounter++;
+                    currentRunningPos = -1;// Avoid the same process will be preempted and added to readyQ twice
 
                 } else {
                     printf("time %dms: Process %s (tau %fms) completed I/O; added to ready queue ",
