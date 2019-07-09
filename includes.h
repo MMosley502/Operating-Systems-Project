@@ -100,6 +100,7 @@ void sortQueue(struct Queue* Q);
 void SQ(struct Queue* Q);
 bool isRight(struct Process* temp[], int length);
 void freeQueue(struct Queue* Q);
+void advQueue(struct Queue* Q);
 
 // output.c
 void outEachProcess(struct Process* processList[], int NUM_PROCESSES);

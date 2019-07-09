@@ -29,21 +29,22 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
             break;
         }
         for(int i=0;i<NUM_PROCESSES;i++){
-            //process is arriving
+            /*-----------process is arriving-----------*/
             if(processList[i]->state==NOT_ENTERED && time==processList[i]->arrivalTime){
                 //add the arriving process into ready queue
                 pushQueue(readyQueue,processList[i]);
-                SQ(readyQueue);
-                printf("time %dms: Process %s arrived; added to ready queue ",
-                       time,getProcessID(processList[i]->ID));
-                //print out ready queue
-                printQueue(readyQueue);
-                //update the next interesting event time for the process
-                processList[i]->nextInterest=time+CS_TIME/2.0;
+                //updates
+                if(isEmpty(readyQueue)) processList[i]->nextInterest=time+CS_TIME/2.0;
+                else processList[i]->nextInterest=time+CS_TIME;
                 processList[i]->state=READY;
                 //count wait time
                 processList[i]->sumWait=time;
+                //output
+                printf("time %dms: Process %s arrived; added to ready queue ",
+                       time,getProcessID(processList[i]->ID));
+                printQueue(readyQueue);
             }
+
             //process is doing CPU burst
             if(processList[i]->state==READY && time>=processList[i]->nextInterest && processList[i]==getFront(readyQueue) && cpuFlag==false){
                 //get the actual CPU burst time for the current process
@@ -94,7 +95,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 //add to the ready queue
                 if(strcmp(RR_ADD,"BEGINNING")==0) pushFrontQueue(readyQueue,processList[i]);
                 else if(strcmp(RR_ADD,"END")==0) pushQueue(readyQueue,processList[i]);
-                SQ(readyQueue);
+                //SQ(readyQueue);
                 processList[i]->state=READY;
                 processList[i]->nextInterest=time+CS_TIME;
                 processList[i]->numCS++;
@@ -148,7 +149,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
             if(processList[i]->state==BLOCKED && time==processList[i]->nextInterest){
                 //add the current process into ready queue
                 pushQueue(readyQueue,processList[i]);
-                SQ(readyQueue);
+                //SQ(readyQueue);
                 printf("time %dms: Process %s completed I/O; added to ready queue ",
                        time,getProcessID(processList[i]->ID));
                 //print out ready queue
