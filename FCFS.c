@@ -63,7 +63,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                 int idx=processList[i]->doneCPU;
                 double burstTime=processList[i]->cpuBurstTime[idx];
                 //output
-                printf("time %dms: Process %s started using the CPU for %0.4lfms burst ",
+                printf("time %dms: Process %s started using the CPU for %0.0fms burst ",
                        time,getProcessID(processList[i]->ID),burstTime);
                 printQueue(readyQueue);
                 //when ready queue is not empty, update the next process interesting time
@@ -104,7 +104,7 @@ void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME){
                     printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
                            time,getProcessID(processList[i]->ID),leftCPU);
                     printQueue(readyQueue);
-                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
+                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %0.0fms ",
                            time,getProcessID(processList[i]->ID),processList[i]->nextInterest);
                     printQueue(readyQueue);
                     //update

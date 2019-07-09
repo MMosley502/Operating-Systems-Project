@@ -67,11 +67,11 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 //output
                 //when the process is not preempted in the ready queue
                 if(processList[i]->preFlag==false){
-                    printf("time %dms: Process %s started using the CPU for %lfms burst ",
+                    printf("time %dms: Process %s started using the CPU for %0.0lfms burst ",
                            time,getProcessID(processList[i]->ID),burstTime);
                 }
                 else{
-                    printf("time %dms: Process %s started using the CPU with %lfms burst remaining ",
+                    printf("time %dms: Process %s started using the CPU with %0.0lfms burst remaining ",
                             time,getProcessID(processList[i]->ID),burstTime);
                 }
                 printQueue(readyQueue);
@@ -116,7 +116,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 }
                 //output
                 int idx=processList[i]->doneCPU;
-                printf("time %dms: Time slice expired; process %s preempted with %lfms to go ",
+                printf("time %dms: Time slice expired; process %s preempted with %0.0lfms to go ",
                        time,getProcessID(processList[i]->ID),processList[i]->cpuBurstTime[idx]);
                 printQueue(readyQueue);
                 //count wait time
@@ -146,7 +146,7 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
                            time,getProcessID(processList[i]->ID),leftCPU);
                     printQueue(readyQueue);
-                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %lfms ",
+                    printf("time %dms: Process %s switching out of CPU; will block on I/O until time %0.0lfms ",
                            time,getProcessID(processList[i]->ID),processList[i]->nextInterest);
                     printQueue(readyQueue);
                     //update
