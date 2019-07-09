@@ -28,7 +28,8 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
         //////////////////algo terminating//////////////////
         //if all process done with their CPU bursts, break out of the loop
         if (allDone(processList, NUM_PROCESSES)) {
-            printf("time %dms: Simulator ended for FCFS ", time);
+            time++;
+            printf("time %dms: Simulator ended for RR ", time);
             printQueue(readyQueue);
             break;
         }
