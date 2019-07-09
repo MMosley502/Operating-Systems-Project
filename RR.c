@@ -184,6 +184,6 @@ void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TI
         curProcess->waitTimer=0;
         curProcess->sumWait=0;
     }
-    free(readyQueue);
+    freeQueue(readyQueue);
 }
 
