@@ -46,9 +46,9 @@ void printAnalysis(char* algo, struct Process* processList[], int NUM_PROCESSES,
     double aveWait = computeAveWait(processList, NUM_PROCESSES);
     double aveTurnAround = computeAveTurnAround(processList, CSCounter, NUM_PROCESSES, CS_TIME);
     printf("Algorithm %s\n", algo);
-    printf("-- average CPU burst time: %lf ms\n", aveBurst);
-    printf("-- average wait time: %lf ms\n", aveWait);
-    printf("-- average turnaround time: %lf ms\n", aveTurnAround);
+    printf("-- average CPU burst time: %0.3f ms\n", aveBurst);
+    printf("-- average wait time: %0.3f ms\n", aveWait);
+    printf("-- average turnaround time: %0.3f ms\n", aveTurnAround);
     printf("-- total number of context switches: %d\n", CSCounter);
     printf("-- total number of preemptions: %d\n", preemptionCounter);
 }

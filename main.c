@@ -32,6 +32,7 @@ int main(int argc, char** argv) {
 
     // Generate processes array
     struct Process* processList[NUM_PROCESSES];// Array stores all processes for simulation
+
     for (int i = 0; i < NUM_PROCESSES; i++) {
 
         processList[i] = initilizer_Process();
@@ -56,6 +57,11 @@ int main(int argc, char** argv) {
 
         // Random for CPU burst time
         processList[i]->maxCPUTime = randomTime(processList[i]->cpuBurstTime,processList[i]->numCPU, MAX, LAMBDA);
+
+        //copy CPU burst array for restoring
+        for(int q=0;q<101;q++){
+            processList[i]->cpuBurstTimeCopy[q]=processList[i]->cpuBurstTime[q];
+        }
 
         // Random for IO burst time
         randomTime(processList[i]->ioBurstTime, processList[i]->numCPU, MAX, LAMBDA);
@@ -102,16 +108,16 @@ int main(int argc, char** argv) {
 
 #if 1
     // FCFS Algo
-    //FCFS(processList,NUM_PROCESSES,CS_TIME);
+    FCFS(processList,NUM_PROCESSES,CS_TIME);
 
     // SJF Algo
-    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    //SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // SRT Algo
     //SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // RR Algo
-    //RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
+    RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
 
     freeProcessList(processList, NUM_PROCESSES);
 #endif

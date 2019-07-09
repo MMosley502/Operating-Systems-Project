@@ -50,6 +50,7 @@ struct Process {
     int numPre;// number of preemption
   
     double cpuBurstTime[101];// Actual CPU burst time
+    double cpuBurstTimeCopy[101];// copy of CPU burst time array for restoring
     double ioBurstTime[101];//Actual I/O burst time
 };
 
@@ -73,6 +74,7 @@ int compareID(const void * a, const void * b);
 int compareArrival(const void * a, const void * b);
 void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
 bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time);
+void restore(struct Process* processList[], int NUM_PROCESSES);
 
 // SJF.c
 void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);

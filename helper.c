@@ -157,3 +157,21 @@ bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], stru
     }
     return false;
 }
+
+/*
+ * Restoring process, preparing for another algorithm
+ */
+void restore(struct Process* processList[], int NUM_PROCESSES){
+    for(int i=0;i<NUM_PROCESSES;i++){
+        struct Process* curProcess=processList[i];
+        curProcess->state=NOT_ENTERED;
+        curProcess->nextInterest=0;
+        curProcess->doneCPU=0;
+        curProcess->waitTimer=0;
+        curProcess->sumWait=0;
+        curProcess->numCS=0;
+        for(int q=0;q<101;q++){
+            processList[i]->cpuBurstTime[q]=processList[i]->cpuBurstTimeCopy[q];
+        }
+    }
+}
