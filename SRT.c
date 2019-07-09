@@ -23,11 +23,6 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     printQueue(readyQueue);// Empty Queue
 
     //================================================================
-    // Sort the process by arrival time
-    qsort(processListCopy, NUM_PROCESSES, sizeof(struct Process*), compareArrival);
-
-
-    //================================================================
     // Implementation
     while (1) {
         //if all process done with their CPU bursts, break out of the loop
@@ -174,5 +169,5 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     }
     printAnalysis("SRT", processListCopy, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
     restore(processList, NUM_PROCESSES);
-    free(readyQueue);
+    freeQueue(readyQueue);
 }

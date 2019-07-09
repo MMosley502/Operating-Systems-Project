@@ -80,55 +80,6 @@ bool allDone(struct Process* processList[], int NUM_PROCESSES){
     return true;
 }
 
-
-
-/*
- * Helper function for comparing the length of CPU burst time of each process
- * Apply to qsort() to sort array by CPU burst time
- * qsort(array, size of array, sizeof(struct process*), compareTime);
- * Reference: http://www.cplusplus.com/reference/cstdlib/qsort/
- */
-int compareTime(const void * a, const void * b) {
-    struct Process left = *(struct Process*)a;
-    struct Process right = *(struct Process*)b;
-    if (left.nextEstBurst < right.nextEstBurst) return -1;
-    if (left.nextEstBurst == right.nextEstBurst){
-        if(left.ID == right.ID) return 0;
-        if(left.ID > right.ID) return 1;
-        if(left.ID < right.ID) return -1;
-    }
-    if (left.nextEstBurst > right.nextEstBurst) return 1;
-}
-
-/*
- * Helper function for comparing the ID of each process
- * Apply to qsort() to sort array by CPU burst time
- * qsort(array, size of array, sizeof(struct process*), compareTime);
- * Reference: http://www.cplusplus.com/reference/cstdlib/qsort/
- */
-int compareID(const void* a, const void * b) {
-    struct Process left = *(struct Process*)a;
-    struct Process right = *(struct Process*)b;
-    if (left.ID < right.ID) return -1;
-    if (left.ID == right.ID) return 0;
-    if (left.ID > right.ID) return 1;
-}
-
-/*
- * Helper function for comparing the arriving time of each process
- * Apply to qsort() to sort array by arriving time
- * qsort(array, size of array, sizeof(struct process*), compareTime);
- * Reference: http://www.cplusplus.com/reference/cstdlib/qsort/
- */
-int compareArrival(const void * a, const void * b) {
-    struct Process left = *(struct Process*)a;
-    struct Process right = *(struct Process*)b;
-    if (left.arrivalTime < right.arrivalTime) return -1;
-    if (left.arrivalTime == right.arrivalTime) return 0;
-    if (left.arrivalTime > right.arrivalTime) return 1;
-}
-
-
 /*
  * Free the dynamic memeory of Process List
  */

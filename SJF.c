@@ -26,10 +26,6 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     printf("time %dms: Simulator started for SJF ", time);
     printQueue(readyQueue);// Empty Queue
 
-    //================================================================
-    // Sort the process by arrival time
-    qsort(processListCopy, NUM_PROCESSES, sizeof(struct Process*), compareArrival);
-
 
     //================================================================
     // Implementation
@@ -131,5 +127,5 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     }
     printAnalysis("SJF", processListCopy, NUM_PROCESSES, CSCounter, 0, CS_TIME);
     restore(processList, NUM_PROCESSES);
-    free(readyQueue);
+    freeQueue(readyQueue);
 }
