@@ -6,11 +6,23 @@
 
 #IncludeRegexTransform: 
 
+/mnt/d/RPI/2019Summer/Operating-Systems-Project/FCFS.c
+includes.h
+/mnt/d/RPI/2019Summer/Operating-Systems-Project/includes.h
+
 /mnt/d/RPI/2019Summer/Operating-Systems-Project/Queue.c
 includes.h
 /mnt/d/RPI/2019Summer/Operating-Systems-Project/includes.h
 
+/mnt/d/RPI/2019Summer/Operating-Systems-Project/RR.c
+includes.h
+/mnt/d/RPI/2019Summer/Operating-Systems-Project/includes.h
+
 /mnt/d/RPI/2019Summer/Operating-Systems-Project/SJF.c
+includes.h
+/mnt/d/RPI/2019Summer/Operating-Systems-Project/includes.h
+
+/mnt/d/RPI/2019Summer/Operating-Systems-Project/SRT.c
 includes.h
 /mnt/d/RPI/2019Summer/Operating-Systems-Project/includes.h
 

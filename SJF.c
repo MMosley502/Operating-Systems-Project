@@ -10,16 +10,16 @@
  * @Arg: Alpha constant
  * Implementing Shortest Job First Algorithm
  */
-void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA) {
+void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA) {
     // Error check
     if (!processList || CS_TIME < 0 || ALPHA < 0) {
         return;
     }
     outEPS(processList, NUM_PROCESSES);
     //================================================================
-    struct Process* processListCopy[NUM_PROCESSES];// Copy the process array, avoid any change to processlist
+    struct Process *processListCopy[NUM_PROCESSES];// Copy the process array, avoid any change to processlist
     memcpy(processListCopy, processList, sizeof(processListCopy));
-    struct Queue* readyQueue = initizlizeQueue(MAXPROCESS);
+    struct Queue *readyQueue = initizlizeQueue(MAXPROCESS);
     int time = 0;
     int CSCounter = 0;
     bool CPU_Flag = false;// flag the status of CPU. false is available, true is occupied
@@ -31,7 +31,7 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     // Implementation
     while (1) {
         //if all process done with their CPU bursts, break out of the loop
-        if(allDone(processListCopy, NUM_PROCESSES)) {
+        if (allDone(processListCopy, NUM_PROCESSES)) {
             //break out of the loop and finishes SJF
             printf("time %dms: Simulator ended for SJF ", time);
             printQueue(readyQueue);
@@ -90,7 +90,8 @@ void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     printQueue(readyQueue);
                     double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
                     processListCopy[i]->nextEstBurst = nextEstimate;
-                    printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, nextEstimate, getProcessID(processListCopy[i]->ID));
+                    printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, nextEstimate,
+                           getProcessID(processListCopy[i]->ID));
                     printQueue(readyQueue);
                     printf("time %dms: Process %s switching out of CPU; will block on I/O until time %0.0fms ",
                            time, getProcessID(processListCopy[i]->ID), finiIO);

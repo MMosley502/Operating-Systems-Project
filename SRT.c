@@ -4,16 +4,16 @@
 
 #include "includes.h"
 
-void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA) {
+void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA) {
     // Error check
     if (!processList || CS_TIME < 0 || ALPHA < 0) {
         return;
     }
     outEPS(processList, NUM_PROCESSES);
     //================================================================
-    struct Process* processListCopy[NUM_PROCESSES];// Copy the process array, avoid any change to processlist
+    struct Process *processListCopy[NUM_PROCESSES];// Copy the process array, avoid any change to processlist
     memcpy(processListCopy, processList, sizeof(processListCopy));
-    struct Queue* readyQueue = initizlizeQueue(MAXPROCESS);
+    struct Queue *readyQueue = initizlizeQueue(MAXPROCESS);
     int time = 0;
     int preemptionCounter = 0;
     int CSCounter = 0;
@@ -26,7 +26,7 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
     // Implementation
     while (1) {
         //if all process done with their CPU bursts, break out of the loop
-        if(allDone(processListCopy, NUM_PROCESSES)){
+        if (allDone(processListCopy, NUM_PROCESSES)) {
             //break out of the loop and finishes SJF
             printf("time %dms: Simulator ended for SRT ", time);
             printQueue(readyQueue);
@@ -107,7 +107,8 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     printQueue(readyQueue);
                     double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
                     processListCopy[i]->nextEstBurst = nextEstimate;
-                    printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, nextEstimate, getProcessID(processListCopy[i]->ID));
+                    printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, nextEstimate,
+                           getProcessID(processListCopy[i]->ID));
                     printQueue(readyQueue);
                     printf("time %dms: Process %s switching out of CPU; will block on I/O until time %0.0fms ",
                            time, getProcessID(processListCopy[i]->ID), finiIO);
@@ -125,7 +126,8 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
 
-                if (isPreemptive(currentRunningPos, processListCopy, readyQueue, time, NUM_PROCESSES)) {// Need to preempt the current running process
+                if (isPreemptive(currentRunningPos, processListCopy, readyQueue, time,
+                                 NUM_PROCESSES)) {// Need to preempt the current running process
                     printf("time %dms: Process %s (tau %0.0fms) completed I/O; preempting %s ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst,
                            getProcessID(processListCopy[currentRunningPos]->ID));
@@ -133,7 +135,8 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
                     CPU_Flag = false;// Stop the CPU running
                     processListCopy[currentRunningPos]->state = PREEMPTIVE;// Change the status of current process
                     double remaining = processListCopy[currentRunningPos]->nextActualBurst -
-                            (time - processListCopy[currentRunningPos]->burstStart);// update the remaining burst time;
+                                       (time -
+                                        processListCopy[currentRunningPos]->burstStart);// update the remaining burst time;
                     processListCopy[currentRunningPos]->nextActualBurst = remaining;
                     processListCopy[currentRunningPos]->oldEstBurst = processListCopy[currentRunningPos]->nextEstBurst;
                     processListCopy[currentRunningPos]->nextEstBurst = remaining;

@@ -11,8 +11,8 @@
  * @Return: A pointer to struct Process
  * Need to free memory
  */
-struct Process* initilizer_Process() {
-    struct Process* newOne = calloc(1, sizeof(struct Process));
+struct Process *initilizer_Process() {
+    struct Process *newOne = calloc(1, sizeof(struct Process));
 
     newOne->ID = -1;
     newOne->state = NOT_ENTERED;
@@ -20,16 +20,17 @@ struct Process* initilizer_Process() {
     newOne->numCPU = 0;// number of CPU bursts
     newOne->doneCPU = 0;// number of CPU bursts done executing
     newOne->nextInterest = 0.0;//time point for next interesting event
+    newOne->initialEstBurst = 0.0;
     newOne->nextEstBurst = 0.0;
     newOne->nextActualBurst = 0.0;
     newOne->oldEstBurst = 0.0;
     newOne->burstStart = 0.0;
     newOne->waitTimer = 0.0;// wait time counter
     newOne->burstTimer = 0.0;
-    newOne->numCS=0;
-    newOne->numPre=0;
-    newOne->sumWait=0.0;
-    newOne->preFlag=false;
+    newOne->numCS = 0;
+    newOne->numPre = 0;
+    newOne->sumWait = 0.0;
+    newOne->preFlag = false;
 
     return newOne;
 }
@@ -56,11 +57,12 @@ double randomTime(double Time[], int numCPU, int MAX, double LAMBDA) {
     }
     return counter;
 }
+
 ///*
 // * Function for estimate the CPU burst time by alpha
 // * For SJF & SRT
 // */
-double estimateTime(struct Process* newOne, double ALPHA, int pos) {
+double estimateTime(struct Process *newOne, double ALPHA, int pos) {
     // Current estimate time and actual time to calculate the next estimate time
     double result = ALPHA * newOne->cpuBurstTime[pos] +
                     (1 - ALPHA) * newOne->nextEstBurst;
@@ -72,10 +74,11 @@ double estimateTime(struct Process* newOne, double ALPHA, int pos) {
 /*
  * Function to indicate all the process done with their bursts
  */
-bool allDone(struct Process* processList[], int NUM_PROCESSES){
-    for(int i=0;i<NUM_PROCESSES;i++){
-        if(processList[i]->doneCPU!=processList[i]->numCPU ||
-        processList[i]->state!=TERMINATED) return false;
+bool allDone(struct Process *processList[], int NUM_PROCESSES) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        if (processList[i]->doneCPU != processList[i]->numCPU ||
+            processList[i]->state != TERMINATED)
+            return false;
     }
     return true;
 }
@@ -83,8 +86,8 @@ bool allDone(struct Process* processList[], int NUM_PROCESSES){
 /*
  * Free the dynamic memeory of Process List
  */
-void freeProcessList(struct Process* processList[], int NUM_PROCESSES) {
-    for (int i = 0 ; i < NUM_PROCESSES; i++) {
+void freeProcessList(struct Process *processList[], int NUM_PROCESSES) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
         if (processList[i]) {
             free(processList[i]);
         }
@@ -98,16 +101,18 @@ void freeProcessList(struct Process* processList[], int NUM_PROCESSES) {
  * If yes, skip the current preemption.
  * @Return: True if will be preemptive
  */
-bool isPreemptive(int currentRunningPos, struct Process* processListCopy[],
-                  struct Queue* readyQueue, int time, int NUM_PROCESSES) {
+bool isPreemptive(int currentRunningPos, struct Process *processListCopy[],
+                  struct Queue *readyQueue, int time, int NUM_PROCESSES) {
     if (currentRunningPos == -1) {// No running process
         return false;
     }
-    struct Process* current = processListCopy[currentRunningPos];
-    struct Process* first = getFront(readyQueue);// current running process comparing with the first one in the readyQueue
+    struct Process *current = processListCopy[currentRunningPos];
+    struct Process *first = getFront(
+            readyQueue);// current running process comparing with the first one in the readyQueue
     double remainingTime = current->nextActualBurst - (time - current->burstStart);
     if (remainingTime > first->nextEstBurst) {
-        for (int i = 0; i < NUM_PROCESSES; i++) {// Check whether any other process will complete I/O at the same time and has the shorter nextEstBurst
+        for (int i = 0; i <
+                        NUM_PROCESSES; i++) {// Check whether any other process will complete I/O at the same time and has the shorter nextEstBurst
             if (processListCopy[i]->state == BLOCKED && time == processListCopy[i]->nextInterest
                 && processListCopy[i]->nextEstBurst < first->nextEstBurst) {
                 return false;
@@ -121,17 +126,19 @@ bool isPreemptive(int currentRunningPos, struct Process* processListCopy[],
 /*
  * Restoring process, preparing for another algorithm
  */
-void restore(struct Process* processList[], int NUM_PROCESSES){
-    for(int i=0;i<NUM_PROCESSES;i++){
-        struct Process* curProcess=processList[i];
-        curProcess->state=NOT_ENTERED;
-        curProcess->nextInterest=0;
-        curProcess->doneCPU=0;
-        curProcess->waitTimer=0;
-        curProcess->sumWait=0;
-        curProcess->numCS=0;
-        for(int q=0;q<101;q++){
-            processList[i]->cpuBurstTime[q]=processList[i]->cpuBurstTimeCopy[q];
+void restore(struct Process *processList[], int NUM_PROCESSES) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
+        struct Process *curProcess = processList[i];
+        curProcess->state = NOT_ENTERED;
+        curProcess->nextInterest = 0;
+        curProcess->doneCPU = 0;
+        curProcess->waitTimer = 0;
+        curProcess->burstTimer = 0;
+        curProcess->sumWait = 0;
+        curProcess->numCS = 0;
+        curProcess->nextEstBurst = curProcess->initialEstBurst;
+        for (int q = 0; q < 101; q++) {
+            processList[i]->cpuBurstTime[q] = processList[i]->cpuBurstTimeCopy[q];
         }
     }
 }

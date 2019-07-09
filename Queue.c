@@ -23,13 +23,13 @@ struct Queue {
 /*
  * Initializing an empty queue
  */
-struct Queue* initizlizeQueue(unsigned int capacity) {
-    struct Queue* Q = calloc(1, sizeof(struct Queue));
+struct Queue *initizlizeQueue(unsigned int capacity) {
+    struct Queue *Q = calloc(1, sizeof(struct Queue));
     Q->capacity = capacity;
     Q->front = 0;// the index of front
     Q->rear = capacity - 1;// the index of rear
     Q->size = 0;
-    Q->array = calloc(capacity, sizeof(struct Process*));
+    Q->array = calloc(capacity, sizeof(struct Process *));
 
     return Q;
 }
@@ -37,21 +37,21 @@ struct Queue* initizlizeQueue(unsigned int capacity) {
 /*
  * Whether the queue is empty
  */
-bool isEmpty(struct Queue* Q) {
+bool isEmpty(struct Queue *Q) {
     return Q->size == 0;
 }
 
 /*
  * Whether the queue is full
  */
-bool isFull(struct Queue* Q) {
+bool isFull(struct Queue *Q) {
     return Q->size == Q->capacity;
 }
 
 /*
  * Add a process to the end of queue
  */
-void pushQueue(struct Queue* Q, struct Process* item) {
+void pushQueue(struct Queue *Q, struct Process *item) {
     if (isFull(Q)) return;
     Q->rear = (Q->rear + 1) % (Q->capacity);
     Q->array[Q->rear] = item;
@@ -61,13 +61,12 @@ void pushQueue(struct Queue* Q, struct Process* item) {
 /*
  * Add a process to the front of queue
  */
-void pushFrontQueue(struct Queue* Q, struct Process* item){
+void pushFrontQueue(struct Queue *Q, struct Process *item) {
     if (isFull(Q)) return;
-    if(Q->front-1<0) {
-        Q->front=Q->capacity-1;
+    if (Q->front - 1 < 0) {
+        Q->front = Q->capacity - 1;
         Q->array[Q->front] = item;
-    }
-    else {
+    } else {
         Q->front--;
         Q->array[Q->front] = item;
     }
@@ -77,9 +76,9 @@ void pushFrontQueue(struct Queue* Q, struct Process* item){
 /*
  * Remove a process from the head of queue
  */
-struct Process* popQueue(struct Queue* Q) {
+struct Process *popQueue(struct Queue *Q) {
     if (isEmpty(Q)) return NULL;
-    struct Process* item = Q->array[Q->front];
+    struct Process *item = Q->array[Q->front];
     Q->front = (Q->front + 1) % (Q->capacity);
     Q->size--;
     return item;
@@ -88,7 +87,7 @@ struct Process* popQueue(struct Queue* Q) {
 /*
  * Get the front process
  */
-struct Process* getFront(struct Queue* Q) {
+struct Process *getFront(struct Queue *Q) {
     if (isEmpty(Q)) return NULL;
     return Q->array[Q->front];
 }
@@ -96,7 +95,7 @@ struct Process* getFront(struct Queue* Q) {
 /*
  * Get the rear process
  */
-struct Process* getRear(struct Queue* Q) {
+struct Process *getRear(struct Queue *Q) {
     if (isEmpty(Q)) return NULL;
     return Q->array[Q->rear];
 }
@@ -104,22 +103,20 @@ struct Process* getRear(struct Queue* Q) {
 /*
  * Print out the queue
  */
-void printQueue(struct Queue* Q){
-    if (isEmpty(Q)){
+void printQueue(struct Queue *Q) {
+    if (isEmpty(Q)) {
         printf("[Q <empty>]\n");
-    }
-    else{
+    } else {
         printf("[Q");
-        if(Q->front>Q->rear){
-            for(int i = Q->front; i < Q->capacity; i++){
+        if (Q->front > Q->rear) {
+            for (int i = Q->front; i < Q->capacity; i++) {
                 printf(" %s", getProcessID(Q->array[i]->ID));
             }
-            for(int i = 0; i <= Q->rear; i++){
+            for (int i = 0; i <= Q->rear; i++) {
                 printf(" %s", getProcessID(Q->array[i]->ID));
             }
-        }
-        else{
-            for(int i = Q->front; i <= Q->rear; i++){
+        } else {
+            for (int i = Q->front; i <= Q->rear; i++) {
                 printf(" %s", getProcessID(Q->array[i]->ID));
             }
         }
@@ -131,10 +128,10 @@ void printQueue(struct Queue* Q){
  * Operating after every push
  * sort the Queue by estBurstTime, if the estBurstTime are same, sort by ID number
  */
-void sortQueue(struct Queue* Q) {
+void sortQueue(struct Queue *Q) {
     if (Q->size == 1 || Q->size == 0) return;
 
-    struct Process** copyQ = calloc(Q->capacity, sizeof(struct Process*));
+    struct Process **copyQ = calloc(Q->capacity, sizeof(struct Process *));
     int pos = 0;
     if (Q->rear < Q->front) {
         for (int i = Q->front; i < Q->capacity; i++) {
@@ -143,108 +140,48 @@ void sortQueue(struct Queue* Q) {
         for (int i = 0; i <= Q->rear; i++) {
             copyQ[pos++] = Q->array[i];
         }
-    }
-    else {
+    } else {
         for (int i = Q->front; i <= Q->rear; i++) {
             copyQ[pos++] = Q->array[i];
         }
     }
 
-    struct Process* change;
+    struct Process *change;
     // bubble sort
     // Reference: https://www.geeksforgeeks.org/bubble-sort/
     // Sort burst time
     for (int i = 0; i < Q->size - 1; i++) {
         for (int k = 0; k < Q->size - i - 1; k++) {
-            if (copyQ[k]->nextEstBurst > copyQ[k+1]->nextEstBurst) {
+            if (copyQ[k]->nextEstBurst > copyQ[k + 1]->nextEstBurst) {
                 change = copyQ[k];
-                copyQ[k] = copyQ[k+1];
-                copyQ[k+1] = change;
+                copyQ[k] = copyQ[k + 1];
+                copyQ[k + 1] = change;
             }
         }
     }
     // Sort ID
     for (int i = 0; i < Q->size - 1; i++) {
         for (int k = 0; k < Q->size - i - 1; k++) {
-            if ((copyQ[k]->nextEstBurst == copyQ[k+1]->nextEstBurst) && (copyQ[k]->ID > copyQ[k+1]->ID)) {
+            if ((copyQ[k]->nextEstBurst == copyQ[k + 1]->nextEstBurst) && (copyQ[k]->ID > copyQ[k + 1]->ID)) {
                 change = copyQ[k];
-                copyQ[k] = copyQ[k+1];
-                copyQ[k+1] = change;
+                copyQ[k] = copyQ[k + 1];
+                copyQ[k + 1] = change;
             }
         }
     }
 
 
-    for(int i = 0; i < Q->size; i++){
+    for (int i = 0; i < Q->size; i++) {
         Q->array[i] = copyQ[i];
     }
     Q->front = 0;
-    Q->rear = pos-1;
+    Q->rear = pos - 1;
 
 
     free(copyQ);
 }
 
-/*
- * Operating after every push
- * when processes are arriving at the same time, sort by ID number
- */
-void SQ(struct Queue* Q){
-    if (Q->size == 1 || Q->size == 0) return;
-
-    struct Process** copyQ = calloc(Q->capacity, sizeof(struct Process*));
-    int pos = 0;
-    if (Q->rear < Q->front) {
-        for (int i = Q->front; i < Q->capacity; i++) {
-            copyQ[pos++] = Q->array[i];
-        }
-        for (int i = 0; i <= Q->rear; i++) {
-            copyQ[pos++] = Q->array[i];
-        }
-    }
-    else {
-        for (int i = Q->front; i <= Q->rear; i++) {
-            copyQ[pos++] = Q->array[i];
-        }
-    }
-
-//    qsort(copyQ,Q->size,sizeof(struct Process*),compareID);
-    ////////////////////////////////////////////////////////////////
-    struct Process* change;
-    // bubble sort
-    // Sort burst time
-    for (int i = 0; i < Q->size - 1; i++) {
-        for (int k = 0; k < Q->size - i - 1; k++) {
-            if (copyQ[k]->nextEstBurst > copyQ[k+1]->nextEstBurst) {
-                change = copyQ[k];
-                copyQ[k] = copyQ[k+1];
-                copyQ[k+1] = change;
-            }
-        }
-    }
-    // Sort ID
-    for (int i = 0; i < Q->size - 1; i++) {
-        for (int k = 0; k < Q->size - i - 1; k++) {
-            if ((copyQ[k]->nextEstBurst == copyQ[k+1]->nextEstBurst) && (copyQ[k]->ID > copyQ[k+1]->ID)) {
-                change = copyQ[k];
-                copyQ[k] = copyQ[k+1];
-                copyQ[k+1] = change;
-            }
-        }
-    }
-    ////////////////////////////////////////////////////////////////
-
-    for(int i=0;i<Q->size;i++){
-        Q->array[i]=copyQ[i];
-    }
-    Q->front=0;
-    Q->rear=pos-1;
-
-
-    free(copyQ);
-}
-
-void freeQueue(struct Queue* Q){
+void freeQueue(struct Queue *Q) {
     free(Q->array);
     free(Q);
 }
@@ -253,18 +190,17 @@ void freeQueue(struct Queue* Q){
  * advance processes' next interesting time by 1, when they are in the queue
  * except for the first process
  */
-void advQueue(struct Queue* Q){
+void advQueue(struct Queue *Q) {
     if (Q->size == 1 || Q->size == 0) return;
 
-    if(Q->rear<Q->front){
-        for(int i=Q->front+1;i<Q->capacity;i++){
-            struct Process* curProcess=Q->array[i];
+    if (Q->rear < Q->front) {
+        for (int i = Q->front + 1; i < Q->capacity; i++) {
+            struct Process *curProcess = Q->array[i];
             curProcess->nextInterest++;
         }
-    }
-    else{
-        for(int i=Q->front+1;i<=Q->rear;i++){
-            struct Process* curProcess=Q->array[i];
+    } else {
+        for (int i = Q->front + 1; i <= Q->rear; i++) {
+            struct Process *curProcess = Q->array[i];
             curProcess->nextInterest++;
         }
     }

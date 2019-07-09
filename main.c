@@ -14,7 +14,7 @@
  * @Arg7: parameter@t_slice for RR
  * @Arg8: parameter@rr_add for RR
  */
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     // Input arguments
     time_t SEED = atol(argv[1]);
     double LAMBDA = atof(argv[2]);
@@ -23,15 +23,15 @@ int main(int argc, char** argv) {
     int CS_TIME = atoi(argv[5]);
     double ALPHA = atof(argv[6]);
     double TIME_SLICE = atof(argv[7]);
-    char* RR_ADD;
-    if(argc==8) RR_ADD="END";
-    else RR_ADD=argv[8];
+    char *RR_ADD;
+    if (argc == 8) RR_ADD = "END";
+    else RR_ADD = argv[8];
 
     // Seed the random generator
     srand48(time(&SEED));
 
     // Generate processes array
-    struct Process* processList[NUM_PROCESSES];// Array stores all processes for simulation
+    struct Process *processList[NUM_PROCESSES];// Array stores all processes for simulation
 
     for (int i = 0; i < NUM_PROCESSES; i++) {
 
@@ -48,19 +48,12 @@ int main(int argc, char** argv) {
         processList[i]->arrivalTime = (int) floor(x);
         processList[i]->numCPU = (int) floor(r * 100) + 1;
 
-#if 0
-        //DEBUG
-        printf("ID is %d\n",processList[i]->ID);
-        printf("Arrival time is %d\n",processList[i]->arrivalTime);
-        printf("num of CPU is %d\n",processList[i]->numCPU);
-#endif
-
         // Random for CPU burst time
-        processList[i]->maxCPUTime = randomTime(processList[i]->cpuBurstTime,processList[i]->numCPU, MAX, LAMBDA);
+        processList[i]->maxCPUTime = randomTime(processList[i]->cpuBurstTime, processList[i]->numCPU, MAX, LAMBDA);
 
         //copy CPU burst array for restoring
-        for(int q=0;q<101;q++){
-            processList[i]->cpuBurstTimeCopy[q]=processList[i]->cpuBurstTime[q];
+        for (int q = 0; q < 101; q++) {
+            processList[i]->cpuBurstTimeCopy[q] = processList[i]->cpuBurstTime[q];
         }
 
         // Random for IO burst time
@@ -69,55 +62,23 @@ int main(int argc, char** argv) {
 
         //Estimate CPU burst time for SJF & SRT
         processList[i]->nextEstBurst = ceil(1 / LAMBDA);
+        processList[i]->initialEstBurst = ceil(1 / LAMBDA);
 
-        //processList[i] = processList[i];
-
-#if 0
-        //DEBUG
-        for(int j=0;j<processList[i]->numCPU;j++){
-            printf("%lf\n",processList[i]->cpuBurstTime[j]);
-        }
-#endif
-
-#if 0
-        //DEBUG
-        for(int j=0;j<processList[0]->numCPU;j++){
-            printf("%lf\n",processList[0]->cpuBurstTime[j]);
-        }
-#endif
 
     }
-
-#if 0
-    //DEBUG
-    printf("???\n");
-    //DEBUG
-    printf("%p\n",processList[0]);
-    for(int i=0;i<processList[0]->numCPU;i++){
-        printf("%d CPU burst time is %lf\n",i, processList[0]->cpuBurstTime[i]);
-    }
-#endif
-
-#if 0
-    //DEBUG
-    printf("ID is %d\n",processList[0]->ID);
-    printf("Arrival time is %d\n",processList[0]->arrivalTime);
-    printf("number of CPU bursts is %d\n",processList[0]->numCPU);
-#endif
-
 
 #if 1
     // FCFS Algo
-    FCFS(processList,NUM_PROCESSES,CS_TIME);
+    FCFS(processList, NUM_PROCESSES, CS_TIME);
 
     // SJF Algo
-    //SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // SRT Algo
-    //SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // RR Algo
-    RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
+    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD);
 
     freeProcessList(processList, NUM_PROCESSES);
 #endif

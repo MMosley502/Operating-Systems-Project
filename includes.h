@@ -5,6 +5,7 @@
 #ifndef OPERATING_SYSTEMS_PROJECT_INCLUDES_H
 #define OPERATING_SYSTEMS_PROJECT_INCLUDES_H
 #define MAXPROCESS 26
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,7 +21,9 @@
 #include <limits.h>
 
 // Enumeration
-enum Process_Status {NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPTIVE, TERMINATED};
+enum Process_Status {
+    NOT_ENTERED, READY, RUNNING, BLOCKED, PREEMPTIVE, TERMINATED
+};
 
 //================================================================
 // Structures
@@ -36,6 +39,7 @@ struct Process {
     bool preFlag;// flag to indicate preemption
 
     // Estimates
+    double initialEstBurst;
     double nextEstBurst;
     double nextActualBurst;
     double oldEstBurst;
@@ -48,7 +52,7 @@ struct Process {
     double sumWait;// sum of wait time
     int numCS;// number of context switches
     int numPre;// number of preemption
-  
+
     double cpuBurstTime[101];// Actual CPU burst time
     double cpuBurstTimeCopy[101];// copy of CPU burst time array for restoring
     double ioBurstTime[101];//Actual I/O burst time
@@ -60,56 +64,79 @@ struct Queue {
     int rear;
     int size;
     unsigned int capacity;
-    struct Process** array;
+    struct Process **array;
 };
+
 //================================================================
 // Function prototype
 // helper.c
-struct Process* initilizer_Process();
+struct Process *initilizer_Process();
+
 double randomTime(double Time[], int numCPU, int MAX, double LAMBDA);
-double estimateTime(struct Process* newOne, double ALPHA, int pos);
-bool allDone(struct Process* processList[], int NUM_PROCESSES);
-int compareID(const void * a, const void * b);
-void freeProcessList(struct Process* processList[], int NUM_PROCESSES);
-bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time, int NUM_PROCESSES);
-void restore(struct Process* processList[], int NUM_PROCESSES);
+
+double estimateTime(struct Process *newOne, double ALPHA, int pos);
+
+bool allDone(struct Process *processList[], int NUM_PROCESSES);
+
+void freeProcessList(struct Process *processList[], int NUM_PROCESSES);
+
+bool isPreemptive(int currentRunningPos, struct Process *processListCopy[], struct Queue *readyQueue, int time,
+                  int NUM_PROCESSES);
+
+void restore(struct Process *processList[], int NUM_PROCESSES);
 
 // SJF.c
-void SJF(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
+void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
 
 // SRT.c
-void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
+void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
 
 //FCFS.c
-void FCFS(struct Process* processList[], int NUM_PROCESSES, int CS_TIME);
+void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME);
 
 // RR.c
-void RR(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char* RR_ADD);
+void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char *RR_ADD);
 
 // Queue.c
-struct Queue* initizlizeQueue(unsigned int capacity);
-bool isEmpty(struct Queue* Q);
-bool isFull(struct Queue* Q);
-void pushQueue(struct Queue* Q, struct Process* item);
-void pushFrontQueue(struct Queue* Q, struct Process* item);
-struct Process* popQueue(struct Queue* Q);
-struct Process* getFront(struct Queue* Q);
-struct Process* getRear(struct Queue* Q);
-void printQueue(struct Queue* Q);
-void sortQueue(struct Queue* Q);
-void SQ(struct Queue* Q);
-void freeQueue(struct Queue* Q);
-void advQueue(struct Queue* Q);
+struct Queue *initizlizeQueue(unsigned int capacity);
+
+bool isEmpty(struct Queue *Q);
+
+bool isFull(struct Queue *Q);
+
+void pushQueue(struct Queue *Q, struct Process *item);
+
+void pushFrontQueue(struct Queue *Q, struct Process *item);
+
+struct Process *popQueue(struct Queue *Q);
+
+struct Process *getFront(struct Queue *Q);
+
+struct Process *getRear(struct Queue *Q);
+
+void printQueue(struct Queue *Q);
+
+void sortQueue(struct Queue *Q);
+
+void freeQueue(struct Queue *Q);
+
+void advQueue(struct Queue *Q);
 
 // output.c
-void outEachProcess(struct Process* processList[], int NUM_PROCESSES);
-void outEPS(struct Process* processList[], int NUM_PROCESSES);
-char* getProcessID(int numberID);
-void printAnalysis(char* algo, struct Process* processList[], int NUM_PROCESSES, int CSCounter,
+void outEachProcess(struct Process *processList[], int NUM_PROCESSES);
+
+void outEPS(struct Process *processList[], int NUM_PROCESSES);
+
+char *getProcessID(int numberID);
+
+void printAnalysis(char *algo, struct Process *processList[], int NUM_PROCESSES, int CSCounter,
                    int preemptionCounter, int CS_TIME);
-double computeAveBurst(struct Process* processList[], int NUM_PROCESSES);
-double computeAveWait(struct Process* processList[], int NUM_PROCESSES);
-double computeAveTurnAround(struct Process* processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME);
+
+double computeAveBurst(struct Process *processList[], int NUM_PROCESSES);
+
+double computeAveWait(struct Process *processList[], int NUM_PROCESSES);
+
+double computeAveTurnAround(struct Process *processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME);
 
 
 #endif //OPERATING_SYSTEMS_PROJECT_INCLUDES_H

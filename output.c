@@ -7,8 +7,8 @@
 
 //output each process in the process list
 // Print as the ascending order of process ID
-void outEachProcess(struct Process* processList[], int NUM_PROCESSES) {
-    for(int i = 0;i < NUM_PROCESSES; i++) {
+void outEachProcess(struct Process *processList[], int NUM_PROCESSES) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
         printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts\n",
                getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU);
     }
@@ -17,8 +17,8 @@ void outEachProcess(struct Process* processList[], int NUM_PROCESSES) {
 //output each process in the process list for SJF and SRT
 // Print extra estimate time
 // Print as the ascending order of process ID
-void outEPS(struct Process* processList[], int NUM_PROCESSES) {
-    for(int i = 0;i < NUM_PROCESSES; i++) {
+void outEPS(struct Process *processList[], int NUM_PROCESSES) {
+    for (int i = 0; i < NUM_PROCESSES; i++) {
         printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %0.0fms)\n",
                getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
                processList[i]->nextEstBurst);
@@ -28,8 +28,8 @@ void outEPS(struct Process* processList[], int NUM_PROCESSES) {
 /*
  * Converting the Process ID from number to alpabetic
  */
-char* getProcessID(int numberID) {
-    char* Alphabetic[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
+char *getProcessID(int numberID) {
+    char *Alphabetic[26] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
                             "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     return Alphabetic[numberID - 1];
 }
@@ -40,7 +40,7 @@ char* getProcessID(int numberID) {
  * If any argument is not applied to a specific algo
  * Just give 0
  */
-void printAnalysis(char* algo, struct Process* processList[], int NUM_PROCESSES, int CSCounter,
+void printAnalysis(char *algo, struct Process *processList[], int NUM_PROCESSES, int CSCounter,
                    int preemptionCounter, int CS_TIME) {
     double aveBurst = computeAveBurst(processList, NUM_PROCESSES);
     double aveWait = computeAveWait(processList, NUM_PROCESSES);
@@ -53,7 +53,7 @@ void printAnalysis(char* algo, struct Process* processList[], int NUM_PROCESSES,
     printf("-- total number of preemptions: %d\n", preemptionCounter);
 }
 
-double computeAveWait(struct Process* processList[], int NUM_PROCESSES) {
+double computeAveWait(struct Process *processList[], int NUM_PROCESSES) {
     double sum = 0;
     for (int i = 0; i < NUM_PROCESSES; i++) {
         sum += processList[i]->waitTimer;
@@ -62,7 +62,7 @@ double computeAveWait(struct Process* processList[], int NUM_PROCESSES) {
 }
 
 
-double computeAveBurst(struct Process* processList[], int NUM_PROCESSES) {
+double computeAveBurst(struct Process *processList[], int NUM_PROCESSES) {
     double sum = 0;
     for (int i = 0; i < NUM_PROCESSES; i++) {
         sum += processList[i]->maxCPUTime;
@@ -70,7 +70,7 @@ double computeAveBurst(struct Process* processList[], int NUM_PROCESSES) {
     return sum / NUM_PROCESSES;
 }
 
-double computeAveTurnAround(struct Process* processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
+double computeAveTurnAround(struct Process *processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
     double sum = 0;
     for (int i = 0; i < NUM_PROCESSES; i++) {
         sum += processList[i]->waitTimer;
