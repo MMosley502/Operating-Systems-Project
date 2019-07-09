@@ -36,9 +36,9 @@ struct Process {
     bool preFlag;// flag to indicate preemption
 
     // Estimates
-//    double estCPUBurst[101];
     double nextEstBurst;
     double nextActualBurst;
+    double oldEstBurst;
 
     // Counters
     double burstStart;
@@ -98,7 +98,6 @@ struct Process* getRear(struct Queue* Q);
 void printQueue(struct Queue* Q);
 void sortQueue(struct Queue* Q);
 void SQ(struct Queue* Q);
-bool isRight(struct Process* temp[], int length);
 void freeQueue(struct Queue* Q);
 void advQueue(struct Queue* Q);
 

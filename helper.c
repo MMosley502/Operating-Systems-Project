@@ -22,6 +22,7 @@ struct Process* initilizer_Process() {
     newOne->nextInterest = 0.0;//time point for next interesting event
     newOne->nextEstBurst = 0.0;
     newOne->nextActualBurst = 0.0;
+    newOne->oldEstBurst = 0.0;
     newOne->burstStart = 0.0;
     newOne->waitTimer = 0.0;// wait time counter
     newOne->burstTimer = 0.0;
@@ -149,7 +150,7 @@ bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], stru
         return false;
     }
     struct Process* current = processListCopy[currentRunningPos];
-    struct Process* first = getFront(readyQueue);
+    struct Process* first = getFront(readyQueue);// current running process comparing with the first one in the readyQueue
     double remainingTime = current->nextActualBurst - (time - current->burstStart);
     if (remainingTime > first->nextEstBurst) {
         return true;// New process is shorter
