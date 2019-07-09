@@ -237,6 +237,11 @@ void SQ(struct Queue* Q){
     free(copyQ);
 }
 
+void freeQueue(struct Queue* Q){
+    free(Q->array);
+    free(Q);
+}
+
 /*
  * Check whether the readyQueue in right order
  */

@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
 #if 1
     // FCFS Algo
-    //FCFS(processList,NUM_PROCESSES,CS_TIME);
+    FCFS(processList,NUM_PROCESSES,CS_TIME);
 
     // SJF Algo
     //SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
