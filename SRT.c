@@ -173,5 +173,6 @@ void SRT(struct Process* processList[], int NUM_PROCESSES, int CS_TIME, double A
         time++;
     }
     printAnalysis("SRT", processListCopy, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
+    restore(processList, NUM_PROCESSES);
     free(readyQueue);
 }
