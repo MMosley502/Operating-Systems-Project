@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
 #if 1
     // FCFS Algo
-    FCFS(processList,NUM_PROCESSES,CS_TIME);
+    //FCFS(processList,NUM_PROCESSES,CS_TIME);
 
     // SJF Algo
     //SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
     //SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
 
     // RR Algo
-    //RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
+    RR(processList,NUM_PROCESSES,CS_TIME, TIME_SLICE, RR_ADD);
 
     freeProcessList(processList, NUM_PROCESSES);
 #endif
