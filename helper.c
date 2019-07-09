@@ -143,9 +143,12 @@ void freeProcessList(struct Process* processList[], int NUM_PROCESSES) {
 /*
  * Function for comparing the current running process and the first process at the readyQueue
  * Deciding which one has the shorter burst time and has the priority to use CPU
+ * Check whether any other process will complete I/O at the same time and has the shorter nextEstBurst
+ * If yes, skip the current preemption.
  * @Return: True if will be preemptive
  */
-bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], struct Queue* readyQueue, int time) {
+bool isPreemptive(int currentRunningPos, struct Process* processListCopy[],
+                  struct Queue* readyQueue, int time, int NUM_PROCESSES) {
     if (currentRunningPos == -1) {// No running process
         return false;
     }
@@ -153,7 +156,13 @@ bool isPreemptive(int currentRunningPos, struct Process* processListCopy[], stru
     struct Process* first = getFront(readyQueue);// current running process comparing with the first one in the readyQueue
     double remainingTime = current->nextActualBurst - (time - current->burstStart);
     if (remainingTime > first->nextEstBurst) {
-        return true;// New process is shorter
+        for (int i = 0; i < NUM_PROCESSES; i++) {// Check whether any other process will complete I/O at the same time and has the shorter nextEstBurst
+            if (processListCopy[i]->state == BLOCKED && time == processListCopy[i]->nextInterest
+                && processListCopy[i]->nextEstBurst < first->nextEstBurst) {
+                return false;
+            }
+        }
+        return true;
     }
     return false;
 }
