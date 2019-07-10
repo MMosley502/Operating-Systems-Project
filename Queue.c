@@ -180,9 +180,9 @@ void sortQueue(struct Queue *Q) {
     for (int j = 0; j < Q->size; j++) {
         if (copyQ[j]->inCS) {
             mark = j;
-            checkQ[0] = copyQ[j];
         }
     }
+    //there is a process doing cs in the queue
     if (mark != -1) {
         int counter = 1;
         for (int j = 0; j < Q->size; j++) {
@@ -190,12 +190,18 @@ void sortQueue(struct Queue *Q) {
                 checkQ[counter] = copyQ[j];
                 counter++;
             }
+            else{
+                checkQ[0] = copyQ[j];
+            }
+        }
+        for (int i = 0; i < Q->size; i++) {
+            Q->array[i] = checkQ[i];
         }
     }
-
-
-    for (int i = 0; i < Q->size; i++) {
-        Q->array[i] = checkQ[i];
+    else{
+        for (int i = 0; i < Q->size; i++) {
+            Q->array[i] = copyQ[i];
+        }
     }
     Q->front = 0;
     Q->rear = pos - 1;

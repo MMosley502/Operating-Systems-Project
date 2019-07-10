@@ -32,6 +32,8 @@ struct Process *initilizer_Process() {
     newOne->sumWait = 0.0;
     newOne->preFlag = false;
     newOne->inCS = false;
+    newOne->end = 0;
+    newOne->maxIOTime = 0;
 
     return newOne;
 }

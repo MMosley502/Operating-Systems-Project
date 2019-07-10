@@ -89,6 +89,8 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f
                     processList[i]->state = TERMINATED;
                     processList[i]->doneCPU++;
                     processList[i]->numCS++;
+                    //count turnaround time
+                    processList[i]->end=time;
                     //output
                     printf("time %dms: Process %s terminated ",
                            time, getProcessID(processList[i]->ID));

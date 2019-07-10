@@ -78,13 +78,20 @@ double computeAveBurst(struct Process *processList[], int NUM_PROCESSES) {
 }
 
 double computeAveTurnAround(struct Process *processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
+//    double sum = 0;
+//    int sumCPU = 0;
+//    for (int i = 0; i < NUM_PROCESSES; i++) {
+//        sum += processList[i]->waitTimer;
+//        sum += processList[i]->maxCPUTime;
+//        sumCPU += processList[i]->numCPU;
+//    }
+//    sum += (CSCounter * (CS_TIME /2.0));// Total turnaround time
+//    return sum / sumCPU;
     double sum = 0;
     int sumCPU = 0;
-    for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->waitTimer;
-        sum += processList[i]->maxCPUTime;
+    for(int i=0;i<NUM_PROCESSES;i++){
+        sum += processList[i]->end - processList[i]->arrivalTime - processList[i]->maxIOTime + CS_TIME/2.0;
         sumCPU += processList[i]->numCPU;
     }
-    sum += (CSCounter * (CS_TIME /2.0));// Total turnaround time
     return sum / sumCPU;
 }

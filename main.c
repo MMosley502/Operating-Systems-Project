@@ -49,13 +49,17 @@ int main(int argc, char **argv) {
         //Random for CPU and I/O burst time
         for(int p=0;p<processList[i]->numCPU;p++){
             processList[i]->cpuBurstTime[p]=ceil(randomNumber(MAX,LAMBDA));
-            if(p<processList[i]->numCPU-1) processList[i]->ioBurstTime[p]=ceil(randomNumber(MAX,LAMBDA));
+            processList[i]->maxCPUTime+=processList[i]->cpuBurstTime[p];
+
+            if(p<processList[i]->numCPU-1){
+                processList[i]->ioBurstTime[p]=ceil(randomNumber(MAX,LAMBDA));
+                processList[i]->maxIOTime+=processList[i]->ioBurstTime[p];
+            }
         }
 
         //copy CPU burst array for restoring
         for (int q = 0; q < 101; q++) {
             processList[i]->cpuBurstTimeCopy[q] = processList[i]->cpuBurstTime[q];
-            processList[i]->maxCPUTime+=processList[i]->cpuBurstTime[q];
         }
 
         //Estimate CPU burst time for SJF & SRT
@@ -80,23 +84,23 @@ int main(int argc, char **argv) {
     }
 
 #if 1
-    // FCFS Algo
-    FCFS(processList, NUM_PROCESSES, CS_TIME, f);
-    printf("\n");
-    fflush(stdout);
+//    // FCFS Algo
+//    FCFS(processList, NUM_PROCESSES, CS_TIME, f);
+//    printf("\n");
+//    fflush(stdout);
 
     // SJF Algo
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
     printf("\n");
     fflush(stdout);
 
-    // SRT Algo
-    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
-    printf("\n");
-    fflush(stdout);
-
-    // RR Algo
-    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD, f);
+//    // SRT Algo
+//    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
+//    printf("\n");
+//    fflush(stdout);
+//
+//    // RR Algo
+//    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD, f);
 
     freeProcessList(processList, NUM_PROCESSES);
 #endif

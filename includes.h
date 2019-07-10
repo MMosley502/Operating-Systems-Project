@@ -34,6 +34,7 @@ struct Process {
     int ID;// from 1 to 26
     enum Process_Status state;
     int arrivalTime;
+    int end;
     int numCPU;// number of CPU bursts
     int doneCPU;// number of CPU bursts done executing
     double nextInterest;//time point for next interesting event
@@ -51,6 +52,7 @@ struct Process {
     double waitTimer;// wait time counter
     double burstTimer;// burst time counter
     double maxCPUTime;// sum of all CPU burst time
+    double maxIOTime;// sum of all IO burst time
     double sumWait;// sum of wait time
     int numCS;// number of context switches
     int numPre;// number of preemption
