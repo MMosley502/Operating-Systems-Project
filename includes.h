@@ -86,6 +86,8 @@ bool isPreemptive(int currentRunningPos, struct Process *processListCopy[], stru
 
 void restore(struct Process *processList[], int NUM_PROCESSES);
 
+double randomNumber(int MAX, double LAMBDA );
+
 // SJF.c
 void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA, FILE* f);
 

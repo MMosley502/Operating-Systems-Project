@@ -28,8 +28,13 @@ int main(int argc, char **argv) {
     if (argc == 8) RR_ADD = "END";
     else RR_ADD = argv[8];
 
+#if 1
+    //DEBUG
+    printf("seed is %ld\n",SEED);
+#endif
+
     // Seed the random generator
-    srand48(time(&SEED));
+    srand48(SEED);
 
     // Generate processes array
     struct Process *processList[NUM_PROCESSES];// Array stores all processes for simulation
@@ -37,34 +42,25 @@ int main(int argc, char **argv) {
     for (int i = 0; i < NUM_PROCESSES; i++) {
 
         processList[i] = initilizer_Process();
-
-        double r = drand48();// uniform dist [0.00,1.00)
-        double x = -log(r) / LAMBDA;
-        if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
-            i--;
-            continue;
-        }
-
         processList[i]->ID = i + 1;// ID start from 1 and later for matching with A-Z
-        processList[i]->arrivalTime = (int) floor(x);
-        processList[i]->numCPU = (int) floor(r * 100) + 1;
+        processList[i]->arrivalTime = floor(randomNumber(MAX,LAMBDA));
+        processList[i]->numCPU = (int) floor(drand48() * 100) + 1;
 
-        // Random for CPU burst time
-        processList[i]->maxCPUTime = randomTime(processList[i]->cpuBurstTime, processList[i]->numCPU, MAX, LAMBDA);
+        //Random for CPU and I/O burst time
+        for(int p=0;p<processList[i]->numCPU;p++){
+            processList[i]->cpuBurstTime[p]=ceil(randomNumber(MAX,LAMBDA));
+            if(p<processList[i]->numCPU-1) processList[i]->ioBurstTime[p]=ceil(randomNumber(MAX,LAMBDA));
+        }
 
         //copy CPU burst array for restoring
         for (int q = 0; q < 101; q++) {
             processList[i]->cpuBurstTimeCopy[q] = processList[i]->cpuBurstTime[q];
+            processList[i]->maxCPUTime+=processList[i]->cpuBurstTime[q];
         }
-
-        // Random for IO burst time
-        randomTime(processList[i]->ioBurstTime, processList[i]->numCPU, MAX, LAMBDA);
-        processList[i]->ioBurstTime[processList[i]->numCPU - 1] = 0;// Last CPU burst doesn't have IO burst time
 
         //Estimate CPU burst time for SJF & SRT
         processList[i]->nextEstBurst = ceil(1 / LAMBDA);
         processList[i]->initialEstBurst = ceil(1 / LAMBDA);
-
 
     }
 

@@ -35,6 +35,19 @@ struct Process *initilizer_Process() {
     return newOne;
 }
 
+double randomNumber(int MAX, double LAMBDA ){
+    while(1){
+        double r = drand48();// uniform dist [0.00,1.00)
+        double x = -log(r) / LAMBDA;
+        if (x > MAX) {/* avoid values that are far down the "long tail" of the distribution */
+            continue;
+        }
+        else{
+            return x;
+        }
+    }
+}
+
 /*
  * @Arg: The pointer points the array storing Burst Time in a struct
  * @Arg: The number of CPU bursts
