@@ -84,7 +84,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     processListCopy[i]->doneCPU++;
                     double ioTime = processListCopy[i]->ioBurstTime[idx];
                     int leftCPU = processListCopy[i]->numCPU - processListCopy[i]->doneCPU;// #of CPU left undone
-                    double finiIO = processListCopy[i]->nextInterest + ioTime;// time when the process finishing IO
+                    double finiIO = processListCopy[i]->nextInterest + ioTime + CS_TIME / 2.0;// time when the process finishing IO
                     if (time <= 999) {
                         printf("time %dms: Process %s (tau %0.0fms) completed a CPU burst; %d bursts to go ",
                                time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst, leftCPU);
@@ -103,7 +103,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     }
                     //update status
                     processListCopy[i]->state = BLOCKED;
-                    processListCopy[i]->nextInterest = time + ioTime;
+                    processListCopy[i]->nextInterest = time + ioTime + CS_TIME / 2.0;
                 }
                 CPU_Flag = false;// Release the CPU
             }
