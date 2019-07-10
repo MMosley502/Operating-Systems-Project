@@ -79,12 +79,18 @@ int main(int argc, char **argv) {
 #if 1
     // FCFS Algo
     FCFS(processList, NUM_PROCESSES, CS_TIME, f);
+    printf("\n");
+    fflush(stdout);
 
     // SJF Algo
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
+    printf("\n");
+    fflush(stdout);
 
     // SRT Algo
     SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
+    printf("\n");
+    fflush(stdout);
 
     // RR Algo
     RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD, f);
