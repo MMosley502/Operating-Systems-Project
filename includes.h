@@ -48,6 +48,7 @@ struct Process {
     double oldEstBurst;
 
     // Counters
+    double readyStart;
     double burstStart;
     double waitTimer;// wait time counter
     double burstTimer;// burst time counter
