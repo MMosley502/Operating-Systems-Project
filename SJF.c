@@ -44,10 +44,15 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     fflush(stdout);
                     printQueue(readyQueue);
                 }
-                processListCopy[i]->nextInterest = time + CS_TIME / 2.0;// Entering CPU time
+                if (CPU_Flag == false) {
+                    processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
+                } else {
+                    processListCopy[i]->nextInterest = time + CS_TIME;
+                }
                 processListCopy[i]->state = READY;
                 CSCounter++;
             }
+
 
             // CPU burst
             // Make sure only the first one in the readyQueue can enter the CPU burst
@@ -57,6 +62,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 double waitTime = time - processListCopy[i]->nextInterest;
                 int idx = processListCopy[i]->doneCPU;
                 double burstTime = processListCopy[i]->cpuBurstTime[idx];
+                getFront(readyQueue)->inCS = false;
                 popQueue(readyQueue);
                 if (time <= 999) {
                     printf("time %dms: Process %s (tau %0.0fms) started using the CPU for %0.0fms burst ",
@@ -107,7 +113,8 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 }
                 CPU_Flag = false;// Release the CPU
                 if (!isEmpty(readyQueue)) {
-                    getFront(readyQueue)->nextInterest = time + CS_TIME / 2.0;
+                    getFront(readyQueue)->nextInterest = time + CS_TIME;
+                    getFront(readyQueue)->inCS = true;
                 }
             }
 
@@ -123,7 +130,11 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     printQueue(readyQueue);
                 }
                 processListCopy[i]->state = READY;
-                processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
+                if (CPU_Flag == true || (!isEmpty(readyQueue) && processListCopy[i] != getFront(readyQueue))) {
+                    processListCopy[i]->nextInterest = time + CS_TIME;
+                } else {
+                    processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
+                }
                 CSCounter++;
             }
 
