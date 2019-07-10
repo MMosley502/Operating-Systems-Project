@@ -58,27 +58,33 @@ void printAnalysis(char *algo, struct Process *processList[], int NUM_PROCESSES,
 
 double computeAveWait(struct Process *processList[], int NUM_PROCESSES) {
     double sum = 0;
+    int sumCPU = 0;
     for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->waitTimer/processList[i]->numCPU;
+        sum += processList[i]->waitTimer;
+        sumCPU += processList[i]->numCPU;
     }
-    return sum / NUM_PROCESSES;
+    return sum / sumCPU;
 }
 
 
 double computeAveBurst(struct Process *processList[], int NUM_PROCESSES) {
     double sum = 0;
+    int sumCPU = 0;
     for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->maxCPUTime/processList[i]->numCPU;
+        sum += processList[i]->maxCPUTime;
+        sumCPU += processList[i]->numCPU;
     }
-    return sum / NUM_PROCESSES;
+    return sum / sumCPU;
 }
 
 double computeAveTurnAround(struct Process *processList[], int CSCounter, int NUM_PROCESSES, int CS_TIME) {
     double sum = 0;
+    int sumCPU = 0;
     for (int i = 0; i < NUM_PROCESSES; i++) {
-        sum += processList[i]->waitTimer/processList[i]->numCPU;
-        sum += processList[i]->maxCPUTime/processList[i]->numCPU;
+        sum += processList[i]->waitTimer;
+        sum += processList[i]->maxCPUTime;
+        sumCPU += processList[i]->numCPU;
     }
     sum += (CSCounter * (CS_TIME /2.0));// Total turnaround time
-    return sum / NUM_PROCESSES;
+    return sum / sumCPU;
 }
