@@ -3,7 +3,7 @@
 // Ming Lu (lum8) & Yujue Wang (wangy66)
 #include "includes.h"
 
-void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME) {
+void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f) {
 
     //output each process in the process list
     outEachProcess(processList, NUM_PROCESSES);
@@ -169,7 +169,7 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME) {
     }
     CSCounter++;
     // No preemption in FCFS, just set as 0
-    printAnalysis("FCFS", processList, NUM_PROCESSES, CSCounter, 0, CS_TIME);
+    printAnalysis("FCFS", processList, NUM_PROCESSES, CSCounter, 0, CS_TIME, f);
 
 
     //restore

@@ -4,7 +4,7 @@
 
 #include "includes.h"
 
-void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char *RR_ADD) {
+void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char *RR_ADD, FILE* f) {
 
     //output each process in the process list
     outEachProcess(processList, NUM_PROCESSES);
@@ -215,7 +215,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
         preemptionCounter += processList[i]->numPre;
     }
     CSCounter++;
-    printAnalysis("RR", processList, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
+    printAnalysis("RR", processList, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME, f);
 
     //restore
     restore(processList, NUM_PROCESSES);

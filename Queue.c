@@ -191,23 +191,3 @@ void freeQueue(struct Queue *Q) {
     free(Q->array);
     free(Q);
 }
-
-/*
- * advance processes' next interesting time by 1, when they are in the queue
- * except for the first process
- */
-void advQueue(struct Queue *Q) {
-    if (Q->size == 1 || Q->size == 0) return;
-
-    if (Q->rear < Q->front) {
-        for (int i = Q->front + 1; i < Q->capacity; i++) {
-            struct Process *curProcess = Q->array[i];
-            curProcess->nextInterest++;
-        }
-    } else {
-        for (int i = Q->front + 1; i <= Q->rear; i++) {
-            struct Process *curProcess = Q->array[i];
-            curProcess->nextInterest++;
-        }
-    }
-}

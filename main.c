@@ -68,18 +68,26 @@ int main(int argc, char **argv) {
 
     }
 
+    //open a file for writing algorithm analysis
+    FILE *f = fopen("simout.txt", "w");
+    if (f == NULL)
+    {
+        printf("Error opening file\n");
+        exit(1);
+    }
+
 #if 1
     // FCFS Algo
-    FCFS(processList, NUM_PROCESSES, CS_TIME);
+    FCFS(processList, NUM_PROCESSES, CS_TIME, f);
 
     // SJF Algo
-    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
 
     // SRT Algo
-    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA);
+    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
 
     // RR Algo
-    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD);
+    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD, f);
 
     freeProcessList(processList, NUM_PROCESSES);
 #endif

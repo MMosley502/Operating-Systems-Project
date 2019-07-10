@@ -19,6 +19,7 @@
 #include <math.h>
 #include <time.h>
 #include <limits.h>
+#include <fcntl.h>
 
 // Enumeration
 enum Process_Status {
@@ -86,16 +87,16 @@ bool isPreemptive(int currentRunningPos, struct Process *processListCopy[], stru
 void restore(struct Process *processList[], int NUM_PROCESSES);
 
 // SJF.c
-void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
+void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA, FILE* f);
 
 // SRT.c
-void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA);
+void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA, FILE* f);
 
 //FCFS.c
-void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME);
+void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f);
 
 // RR.c
-void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char *RR_ADD);
+void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TIME_SLICE, char *RR_ADD, FILE* f);
 
 // Queue.c
 struct Queue *initizlizeQueue(unsigned int capacity);
@@ -120,8 +121,6 @@ void sortQueue(struct Queue *Q);
 
 void freeQueue(struct Queue *Q);
 
-void advQueue(struct Queue *Q);
-
 // output.c
 void outEachProcess(struct Process *processList[], int NUM_PROCESSES);
 
@@ -130,7 +129,7 @@ void outEPS(struct Process *processList[], int NUM_PROCESSES);
 char *getProcessID(int numberID);
 
 void printAnalysis(char *algo, struct Process *processList[], int NUM_PROCESSES, int CSCounter,
-                   int preemptionCounter, int CS_TIME);
+                   int preemptionCounter, int CS_TIME, FILE* f);
 
 double computeAveBurst(struct Process *processList[], int NUM_PROCESSES);
 

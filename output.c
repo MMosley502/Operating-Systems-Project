@@ -43,16 +43,17 @@ char *getProcessID(int numberID) {
  * Just give 0
  */
 void printAnalysis(char *algo, struct Process *processList[], int NUM_PROCESSES, int CSCounter,
-                   int preemptionCounter, int CS_TIME) {
+                   int preemptionCounter, int CS_TIME, FILE *f) {
     double aveBurst = computeAveBurst(processList, NUM_PROCESSES);
     double aveWait = computeAveWait(processList, NUM_PROCESSES);
     double aveTurnAround = computeAveTurnAround(processList, CSCounter, NUM_PROCESSES, CS_TIME);
-    printf("Algorithm %s\n", algo);
-    printf("-- average CPU burst time: %0.3f ms\n", aveBurst);
-    printf("-- average wait time: %0.3f ms\n", aveWait);
-    printf("-- average turnaround time: %0.3f ms\n", aveTurnAround);
-    printf("-- total number of context switches: %d\n", CSCounter);
-    printf("-- total number of preemptions: %d\n", preemptionCounter);
+
+    fprintf(f,"Algorithm %s\n", algo);
+    fprintf(f,"-- average CPU burst time: %0.3f ms\n", aveBurst);
+    fprintf(f,"-- average wait time: %0.3f ms\n", aveWait);
+    fprintf(f,"-- average turnaround time: %0.3f ms\n", aveTurnAround);
+    fprintf(f,"-- total number of context switches: %d\n", CSCounter);
+    fprintf(f,"-- total number of preemptions: %d\n", preemptionCounter);
 }
 
 double computeAveWait(struct Process *processList[], int NUM_PROCESSES) {

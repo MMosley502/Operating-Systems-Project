@@ -10,7 +10,7 @@
  * @Arg: Alpha constant
  * Implementing Shortest Job First Algorithm
  */
-void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA) {
+void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double ALPHA, FILE* f) {
     // Error check
     if (!processList || CS_TIME < 0 || ALPHA < 0) {
         return;
@@ -144,7 +144,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
         }
         time++;
     }
-    printAnalysis("SJF", processListCopy, NUM_PROCESSES, CSCounter, 0, CS_TIME);
+    printAnalysis("SJF", processListCopy, NUM_PROCESSES, CSCounter, 0, CS_TIME, f);
     restore(processList, NUM_PROCESSES);
     freeQueue(readyQueue);
 }
