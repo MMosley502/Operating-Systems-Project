@@ -35,10 +35,8 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f
                 //when cpu is occupied, current process next interesting time should plus previous process CS time
                 if (cpuFlag == false) {
                     processList[i]->nextInterest = time + CS_TIME / 2.0;
-                    processList[i]->sumWait = time + CS_TIME / 2.0;
                 } else {
                     processList[i]->nextInterest = time + CS_TIME;
-                    processList[i]->sumWait = time + CS_TIME;
                 }
                 processList[i]->state = READY;
                 //output
@@ -48,6 +46,7 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f
                     fflush(stdout);
                     printQueue(readyQueue);
                 }
+                processList[i]->sumWait = time;
             }
 
             /*-----------process is doing CPU burst-----------*/
@@ -76,7 +75,7 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f
                 processList[i]->numCS++;
                 cpuFlag = true;
                 //count wait time
-                processList[i]->waitTimer += time - processList[i]->sumWait;
+                processList[i]->waitTimer += time - processList[i]->sumWait - CS_TIME/2.0;
             }
 
 
@@ -139,12 +138,11 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f
                 //when cpu is occupied, current process next interesting time should plus previous process CS time
                 if (cpuFlag == true || (!isEmpty(readyQueue) && processList[i] != getFront(readyQueue))) {
                     processList[i]->nextInterest = time + CS_TIME;
-                    processList[i]->sumWait = time + CS_TIME;
                 } else {
                     processList[i]->nextInterest = time + CS_TIME / 2.0;
-                    processList[i]->sumWait = time + CS_TIME / 2.0;
                 }
                 processList[i]->state = READY;
+                processList[i]->sumWait = time;
             }
 
         }
@@ -167,7 +165,7 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, FILE* f
     for (int i = 0; i < NUM_PROCESSES; i++) {
         CSCounter += processList[i]->numCS;
     }
-    CSCounter++;
+    CSCounter=CSCounter/2;
     // No preemption in FCFS, just set as 0
     printAnalysis("FCFS", processList, NUM_PROCESSES, CSCounter, 0, CS_TIME, f);
 
