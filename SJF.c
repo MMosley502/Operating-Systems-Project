@@ -91,8 +91,8 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                         fflush(stdout);
                         printQueue(readyQueue);
                         double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
-                        processListCopy[i]->nextEstBurst = nextEstimate;
-                        printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, nextEstimate,
+                        processListCopy[i]->nextEstBurst = ceil(nextEstimate);
+                        printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, ceil(nextEstimate),
                                getProcessID(processListCopy[i]->ID));
                         fflush(stdout);
                         printQueue(readyQueue);
