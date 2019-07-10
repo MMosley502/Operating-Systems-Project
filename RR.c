@@ -45,19 +45,18 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 //when cpu is occupied, current process next interesting time should plus previous process CS time
                 if (cpuFlag == false) {
                     processList[i]->nextInterest = time + CS_TIME / 2.0;
-                    processList[i]->sumWait = time + CS_TIME / 2.0;
                 } else {
                     processList[i]->nextInterest = time + CS_TIME;
-                    processList[i]->sumWait = time + CS_TIME;
                 }
                 processList[i]->state = READY;
                 //output
-                //if (time <= 999) {
+                if (time <= 999) {
                     printf("time %dms: Process %s arrived; added to ready queue ",
                            time, getProcessID(processList[i]->ID));
                     fflush(stdout);
                     printQueue(readyQueue);
-                //}
+                }
+                processList[i]->sumWait = time;
             }
 
             /*-----------process is doing CPU burst-----------*/
@@ -70,7 +69,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 double burstTime = processList[i]->cpuBurstTime[idx];
                 //output
                 //when the process is not preempted in the ready queue
-                //if (time <= 999) {
+                if (time <= 999) {
                     if (processList[i]->preFlag == false) {
                         printf("time %dms: Process %s started using the CPU for %0.0lfms burst ",
                                time, getProcessID(processList[i]->ID), burstTime);
@@ -82,7 +81,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                         processList[i]->preFlag=false;
                     }
                     printQueue(readyQueue);
-                //}
+                }
                 //update
                 //preemption
                 if (burstTime > TIME_SLICE) {
@@ -101,7 +100,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processList[i]->numCS++;
                 cpuFlag = true;
                 //count wait time
-                processList[i]->waitTimer += time - processList[i]->sumWait;
+                processList[i]->waitTimer += time - processList[i]->sumWait - CS_TIME/2.0;
             }
 
             /*-----------process is preempted-----------*/
@@ -140,11 +139,11 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     processList[i]->nextInterest=time+processList[i]->cpuBurstTime[idx];
 
                     //output
-                    //if (time <= 999) {
+                    if (time <= 999) {
                     printf("time %dms: Time slice expired; no preemption because ready queue is empty ", time);
                     fflush(stdout);
                     printQueue(readyQueue);
-                    //}
+                    }
                 }
 
                 //count wait time
@@ -172,12 +171,11 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 //when cpu is occupied, current process next interesting time should plus previous process CS time
                 if (cpuFlag == true || (!isEmpty(readyQueue) && processList[i] != getFront(readyQueue))) {
                     processList[i]->nextInterest = time + CS_TIME;
-                    processList[i]->sumWait = time + CS_TIME;
                 } else {
                     processList[i]->nextInterest = time + CS_TIME / 2.0;
-                    processList[i]->sumWait = time + CS_TIME / 2.0;
                 }
                 processList[i]->state = READY;
+                processList[i]->sumWait = time;
             }
 
             /*-----------process is finishing CPU burst-----------*/
