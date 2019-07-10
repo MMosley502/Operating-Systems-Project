@@ -25,6 +25,14 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
             fflush(stdout);
         }
 
+//        for(int i=0;i<NUM_PROCESSES;i++){
+//            if(processList[i]->preFlag==true && time==processList[i]->nextInterest-CS_TIME/2.0){
+//                //add to the ready queue
+//                if (strcmp(RR_ADD, "BEGINNING") == 0) pushFrontQueue(readyQueue, processList[i]);
+//                else if (strcmp(RR_ADD, "END") == 0) pushQueue(readyQueue, processList[i]);
+//            }
+//        }
+
 
         //////////////////running start//////////////////
         for (int i = 0; i < NUM_PROCESSES; i++) {
@@ -44,12 +52,12 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 }
                 processList[i]->state = READY;
                 //output
-                if (time <= 999) {
+                //if (time <= 999) {
                     printf("time %dms: Process %s arrived; added to ready queue ",
                            time, getProcessID(processList[i]->ID));
                     fflush(stdout);
                     printQueue(readyQueue);
-                }
+                //}
             }
 
             /*-----------process is doing CPU burst-----------*/
@@ -62,7 +70,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 double burstTime = processList[i]->cpuBurstTime[idx];
                 //output
                 //when the process is not preempted in the ready queue
-                if (time <= 999) {
+                //if (time <= 999) {
                     if (processList[i]->preFlag == false) {
                         printf("time %dms: Process %s started using the CPU for %0.0lfms burst ",
                                time, getProcessID(processList[i]->ID), burstTime);
@@ -71,12 +79,13 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                         printf("time %dms: Process %s started using the CPU with %0.0lfms burst remaining ",
                                time, getProcessID(processList[i]->ID), burstTime);
                         fflush(stdout);
+                        processList[i]->preFlag=false;
                     }
                     printQueue(readyQueue);
-                }
+                //}
                 //update
                 //preemption
-                if (!isEmpty(readyQueue) && burstTime > TIME_SLICE) {
+                if (burstTime > TIME_SLICE) {
                     processList[i]->nextInterest = time + TIME_SLICE;
                     processList[i]->state = PREEMPTIVE;
                     processList[i]->cpuBurstTime[idx] = burstTime - TIME_SLICE;
@@ -98,30 +107,77 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
             /*-----------process is preempted-----------*/
             if (processList[i]->state == PREEMPTIVE && time == processList[i]->nextInterest) {
                 //add to the ready queue
-                if (strcmp(RR_ADD, "BEGINNING") == 0) pushFrontQueue(readyQueue, processList[i]);
-                else if (strcmp(RR_ADD, "END") == 0) pushQueue(readyQueue, processList[i]);
-                //update
-                processList[i]->state = READY;
-                processList[i]->nextInterest = time + CS_TIME;
-                processList[i]->numCS++;
-                processList[i]->numPre++;
-                cpuFlag = false;
-                processList[i]->preFlag = true;
-                //when ready queue is not empty, update the next process interesting time
-                if (!isEmpty(readyQueue)) {
-                    struct Process *nextProcess = getFront(readyQueue);
-                    nextProcess->nextInterest = time + CS_TIME;
-                }
-                //output
-                int idx = processList[i]->doneCPU;
-                if (time <= 999) {
+//                if (strcmp(RR_ADD, "BEGINNING") == 0) pushFrontQueue(readyQueue, processList[i]);
+//                else if (strcmp(RR_ADD, "END") == 0) pushQueue(readyQueue, processList[i]);
+                //when ready queue is empty, there is no need for preemption
+                if(!isEmpty(readyQueue)){
+                    //update
+                    processList[i]->state = BLOCKED;
+                    processList[i]->nextInterest = time + CS_TIME/2.0;
+                    processList[i]->numCS++;
+                    processList[i]->numPre++;
+                    cpuFlag = false;
+                    processList[i]->preFlag = true;
+                    //when ready queue is not empty, update the next process interesting time
+                    if (!isEmpty(readyQueue)) {
+                        struct Process *nextProcess = getFront(readyQueue);
+                        nextProcess->nextInterest = time + CS_TIME;
+                    }
+
+                    //output
+                    int idx = processList[i]->doneCPU;
+                    //if (time <= 999) {
                     printf("time %dms: Time slice expired; process %s preempted with %0.0lfms to go ",
                            time, getProcessID(processList[i]->ID), processList[i]->cpuBurstTime[idx]);
                     fflush(stdout);
                     printQueue(readyQueue);
+                    //}
                 }
+                else{
+                    //update
+                    processList[i]->state=RUNNING;
+                    int idx = processList[i]->doneCPU;
+                    processList[i]->nextInterest=time+processList[i]->cpuBurstTime[idx];
+
+                    //output
+                    //if (time <= 999) {
+                    printf("time %dms: Time slice expired; no preemption because ready queue is empty ", time);
+                    fflush(stdout);
+                    printQueue(readyQueue);
+                    //}
+                }
+
                 //count wait time
                 processList[i]->sumWait = time;
+            }
+
+            /*-----------process is finishing I/O-----------*/
+            if (processList[i]->state == BLOCKED && time == processList[i]->nextInterest) {
+                //add the current process into ready queue
+                if(processList[i]->preFlag==true){
+                    if (strcmp(RR_ADD, "BEGINNING") == 0) pushFrontQueue(readyQueue, processList[i]);
+                    else if (strcmp(RR_ADD, "END") == 0) pushQueue(readyQueue, processList[i]);
+                }
+                else{
+                    pushQueue(readyQueue, processList[i]);
+                    //output
+                    //if (time <= 999) {
+                    printf("time %dms: Process %s completed I/O; added to ready queue ",
+                           time, getProcessID(processList[i]->ID));
+                    fflush(stdout);
+                    printQueue(readyQueue);
+                    //}
+                }
+                //update
+                //when cpu is occupied, current process next interesting time should plus previous process CS time
+                if (cpuFlag == true || (!isEmpty(readyQueue) && processList[i] != getFront(readyQueue))) {
+                    processList[i]->nextInterest = time + CS_TIME;
+                    processList[i]->sumWait = time + CS_TIME;
+                } else {
+                    processList[i]->nextInterest = time + CS_TIME / 2.0;
+                    processList[i]->sumWait = time + CS_TIME / 2.0;
+                }
+                processList[i]->state = READY;
             }
 
             /*-----------process is finishing CPU burst-----------*/
@@ -144,7 +200,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     int leftCPU = processList[i]->numCPU - processList[i]->doneCPU - 1;// #of CPU left undone
                     processList[i]->nextInterest = time + CS_TIME / 2.0 + ioTime;// time when the process finishing IO
                     //output
-                    if (time <= 999) {
+                    //if (time <= 999) {
                         printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
                                time, getProcessID(processList[i]->ID), leftCPU);
                         fflush(stdout);
@@ -153,7 +209,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                                time, getProcessID(processList[i]->ID), processList[i]->nextInterest);
                         fflush(stdout);
                         printQueue(readyQueue);
-                    }
+                    //}
                     //update
                     processList[i]->state = BLOCKED;
                     processList[i]->nextInterest = time + CS_TIME / 2.0 + ioTime;
@@ -168,28 +224,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 cpuFlag = false;
             }
 
-            /*-----------process is finishing I/O-----------*/
-            if (processList[i]->state == BLOCKED && time == processList[i]->nextInterest) {
-                //add the current process into ready queue
-                pushQueue(readyQueue, processList[i]);
-                //output
-                if (time <= 999) {
-                    printf("time %dms: Process %s completed I/O; added to ready queue ",
-                           time, getProcessID(processList[i]->ID));
-                    fflush(stdout);
-                    printQueue(readyQueue);
-                }
-                //update
-                //when cpu is occupied, current process next interesting time should plus previous process CS time
-                if (cpuFlag == true || (!isEmpty(readyQueue) && processList[i] != getFront(readyQueue))) {
-                    processList[i]->nextInterest = time + CS_TIME;
-                    processList[i]->sumWait = time + CS_TIME;
-                } else {
-                    processList[i]->nextInterest = time + CS_TIME / 2.0;
-                    processList[i]->sumWait = time + CS_TIME / 2.0;
-                }
-                processList[i]->state = READY;
-            }
+
         }
         //////////////////algo terminating//////////////////
         //if all process done with their CPU bursts, break out of the loop
