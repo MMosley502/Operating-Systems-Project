@@ -68,6 +68,13 @@ int main(int argc, char **argv) {
 
     }
 
+#if 0
+    //DEBUG
+    for(int i=0;i<processList[0]->numCPU;i++){
+        printf("%0.0f\n",processList[0]->cpuBurstTime[i]);
+    }
+#endif
+
     //open a file for writing algorithm analysis
     FILE *f = fopen("simout.txt", "w");
     if (f == NULL)
