@@ -106,21 +106,27 @@ struct Process *getRear(struct Queue *Q) {
 void printQueue(struct Queue *Q) {
     if (isEmpty(Q)) {
         printf("[Q <empty>]\n");
+        fflush(stdout);
     } else {
         printf("[Q");
+        fflush(stdout);
         if (Q->front > Q->rear) {
             for (int i = Q->front; i < Q->capacity; i++) {
                 printf(" %s", getProcessID(Q->array[i]->ID));
+                fflush(stdout);
             }
             for (int i = 0; i <= Q->rear; i++) {
                 printf(" %s", getProcessID(Q->array[i]->ID));
+                fflush(stdout);
             }
         } else {
             for (int i = Q->front; i <= Q->rear; i++) {
                 printf(" %s", getProcessID(Q->array[i]->ID));
+                fflush(stdout);
             }
         }
         printf("]\n");
+        fflush(stdout);
     }
 }
 

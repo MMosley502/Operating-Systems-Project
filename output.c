@@ -11,6 +11,7 @@ void outEachProcess(struct Process *processList[], int NUM_PROCESSES) {
     for (int i = 0; i < NUM_PROCESSES; i++) {
         printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts\n",
                getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU);
+        fflush(stdout);
     }
 }
 
@@ -22,6 +23,7 @@ void outEPS(struct Process *processList[], int NUM_PROCESSES) {
         printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %0.0fms)\n",
                getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
                processList[i]->nextEstBurst);
+        fflush(stdout);
     }
 }
 
@@ -76,6 +78,6 @@ double computeAveTurnAround(struct Process *processList[], int CSCounter, int NU
         sum += processList[i]->waitTimer;
         sum += processList[i]->maxCPUTime;
     }
-    sum += (CSCounter * (CS_TIME / 2));// Total turnaround time
+    sum += (CSCounter * (CS_TIME / 2.0));// Total turnaround time
     return sum / NUM_PROCESSES;
 }

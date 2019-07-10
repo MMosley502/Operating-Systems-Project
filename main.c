@@ -15,6 +15,7 @@
  * @Arg8: parameter@rr_add for RR
  */
 int main(int argc, char **argv) {
+    setvbuf(stdout, NULL, _IONBF, 0);
     // Input arguments
     time_t SEED = atol(argv[1]);
     double LAMBDA = atof(argv[2]);
