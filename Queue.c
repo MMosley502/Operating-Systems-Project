@@ -138,6 +138,7 @@ void sortQueue(struct Queue *Q) {
     if (Q->size == 1 || Q->size == 0) return;
 
     struct Process **copyQ = calloc(Q->capacity, sizeof(struct Process *));
+    struct Process **checkQ = calloc(Q->capacity, sizeof(struct Process *));
     int pos = 0;
     if (Q->rear < Q->front) {
         for (int i = Q->front; i < Q->capacity; i++) {
@@ -175,16 +176,33 @@ void sortQueue(struct Queue *Q) {
             }
         }
     }
+    int mark = -1;
+    for (int j = 0; j < Q->size; j++) {
+        if (copyQ[j]->inCS) {
+            mark = j;
+            checkQ[0] = copyQ[j];
+        }
+    }
+    if (mark != -1) {
+        int counter = 1;
+        for (int j = 0; j < Q->size; j++) {
+            if (j != mark) {
+                checkQ[counter] = copyQ[j];
+                counter++;
+            }
+        }
+    }
 
 
     for (int i = 0; i < Q->size; i++) {
-        Q->array[i] = copyQ[i];
+        Q->array[i] = checkQ[i];
     }
     Q->front = 0;
     Q->rear = pos - 1;
 
 
     free(copyQ);
+    free(checkQ);
 }
 
 void freeQueue(struct Queue *Q) {
