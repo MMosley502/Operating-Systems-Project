@@ -20,18 +20,8 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME) {
 
         //////////////////time zero//////////////////
         if (time == 0) {
-            printf("time %dms: Simulator started for FCFS [Q <empty>]\n", time+2);
+            printf("time %dms: Simulator started for FCFS [Q <empty>]\n", time);
             fflush(stdout);
-        }
-
-        //////////////////algo terminating//////////////////
-        //if all process done with their CPU bursts, break out of the loop
-        if (allDone(processList, NUM_PROCESSES)) {
-            time++;
-            printf("time %dms: Simulator ended for FCFS ", time);
-            fflush(stdout);
-            printQueue(readyQueue);
-            break;
         }
 
         //////////////////running start//////////////////
@@ -158,7 +148,15 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME) {
             }
 
         }
-
+        //////////////////algo terminating//////////////////
+        //if all process done with their CPU bursts, break out of the loop
+        if (allDone(processList, NUM_PROCESSES)) {
+            time += CS_TIME / 2;
+            printf("time %dms: Simulator ended for FCFS ", time);
+            fflush(stdout);
+            printQueue(readyQueue);
+            break;
+        }
         time++;
 
     }
@@ -169,6 +167,7 @@ void FCFS(struct Process *processList[], int NUM_PROCESSES, int CS_TIME) {
     for (int i = 0; i < NUM_PROCESSES; i++) {
         CSCounter += processList[i]->numCS;
     }
+    CSCounter++;
     // No preemption in FCFS, just set as 0
     printAnalysis("FCFS", processList, NUM_PROCESSES, CSCounter, 0, CS_TIME);
 

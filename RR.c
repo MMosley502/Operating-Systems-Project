@@ -26,16 +26,6 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
         }
 
 
-        //////////////////algo terminating//////////////////
-        //if all process done with their CPU bursts, break out of the loop
-        if (allDone(processList, NUM_PROCESSES)) {
-            time++;
-            printf("time %dms: Simulator ended for RR ", time);
-            fflush(stdout);
-            printQueue(readyQueue);
-            break;
-        }
-
         //////////////////running start//////////////////
         for (int i = 0; i < NUM_PROCESSES; i++) {
 
@@ -201,6 +191,15 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 processList[i]->state = READY;
             }
         }
+        //////////////////algo terminating//////////////////
+        //if all process done with their CPU bursts, break out of the loop
+        if (allDone(processList, NUM_PROCESSES)) {
+            time += CS_TIME / 2;
+            printf("time %dms: Simulator ended for RR ", time);
+            fflush(stdout);
+            printQueue(readyQueue);
+            break;
+        }
         time++;
 
     }
@@ -215,6 +214,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
     for (int i = 0; i < NUM_PROCESSES; i++) {
         preemptionCounter += processList[i]->numPre;
     }
+    CSCounter++;
     printAnalysis("RR", processList, NUM_PROCESSES, CSCounter, preemptionCounter, CS_TIME);
 
     //restore

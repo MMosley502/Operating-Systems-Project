@@ -31,15 +31,6 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
     //================================================================
     // Implementation
     while (1) {
-        //if all process done with their CPU bursts, break out of the loop
-        if (allDone(processListCopy, NUM_PROCESSES)) {
-            //break out of the loop and finishes SJF
-            printf("time %dms: Simulator ended for SJF ", time);
-            fflush(stdout);
-            printQueue(readyQueue);
-            CSCounter++;//process removal time
-            break;
-        }
 
         for (int i = 0; i < NUM_PROCESSES; i++) {
             // Constructing readyQueue
@@ -140,6 +131,16 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 fflush(stdout);
                 printQueue(readyQueue);
             }
+        }
+        //if all process done with their CPU bursts, break out of the loop
+        if (allDone(processListCopy, NUM_PROCESSES)) {
+            //break out of the loop and finishes SJF
+            CSCounter++;//process removal time
+            time += CS_TIME / 2;
+            printf("time %dms: Simulator ended for SJF ", time);
+            fflush(stdout);
+            printQueue(readyQueue);
+            break;
         }
         time++;
     }
