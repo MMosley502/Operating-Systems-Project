@@ -106,6 +106,9 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     processListCopy[i]->nextInterest = time + ioTime + CS_TIME / 2.0;
                 }
                 CPU_Flag = false;// Release the CPU
+                if (!isEmpty(readyQueue)) {
+                    getFront(readyQueue)->nextInterest = time + CS_TIME / 2.0;
+                }
             }
 
             // Finish I/O
