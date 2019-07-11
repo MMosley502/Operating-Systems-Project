@@ -35,31 +35,6 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
 
 
         //////////////////running start//////////////////
-        for (int i = 0; i < NUM_PROCESSES; i++) {
-
-            /*-----------process is arriving-----------*/
-            if (processList[i]->state == NOT_ENTERED && time == processList[i]->arrivalTime) {
-                //add the arriving process into ready queue
-                pushQueue(readyQueue, processList[i]);
-                //updates
-                //when cpu is occupied, current process next interesting time should plus previous process CS time
-                if (cpuFlag == false) {
-                    processList[i]->nextInterest = time + CS_TIME / 2.0;
-                } else {
-                    processList[i]->nextInterest = time + CS_TIME;
-                }
-                processList[i]->state = READY;
-                //output
-                //if (time <= 999) {
-                printf("time %dms: Process %s arrived; added to ready queue ",
-                       time, getProcessID(processList[i]->ID));
-                fflush(stdout);
-                printQueue(readyQueue);
-                //}
-                processList[i]->sumWait = time;
-            }
-
-        }
 
         for (int i = 0; i < NUM_PROCESSES; i++) {
             /*-----------process is doing CPU burst-----------*/
@@ -72,7 +47,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 double burstTime = processList[i]->cpuBurstTime[idx];
                 //output
                 //when the process is not preempted in the ready queue
-                //if (time <= 999) {
+                if (time <= 999) {
                 if (processList[i]->preFlag == false) {
                     printf("time %dms: Process %s started using the CPU for %0.0lfms burst ",
                            time, getProcessID(processList[i]->ID), burstTime);
@@ -83,7 +58,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     fflush(stdout);
                 }
                 printQueue(readyQueue);
-                //}
+                }
                 if (processList[i]->preFlag == true) {
                     processList[i]->preFlag = false;
                 }
@@ -132,12 +107,12 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
 
                     //output
                     int idx = processList[i]->doneCPU;
-                    //if (time <= 999) {
+                    if (time <= 999) {
                     printf("time %dms: Time slice expired; process %s preempted with %0.0lfms to go ",
                            time, getProcessID(processList[i]->ID), processList[i]->cpuBurstTime[idx]);
                     fflush(stdout);
                     printQueue(readyQueue);
-                    //}
+                    }
                 } else {
                     //update
                     processList[i]->state = RUNNING;
@@ -145,11 +120,11 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     processList[i]->nextInterest = time + processList[i]->cpuBurstTime[idx];
 
                     //output
-                    //if (time <= 999) {
+                    if (time <= 999) {
                     printf("time %dms: Time slice expired; no preemption because ready queue is empty ", time);
                     fflush(stdout);
                     printQueue(readyQueue);
-                    //}
+                    }
                 }
 
                 //count wait time
@@ -186,12 +161,12 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 //else{
                 pushQueue(readyQueue, processList[i]);
                 //output
-                //if (time <= 999) {
+                if (time <= 999) {
                 printf("time %dms: Process %s completed I/O; added to ready queue ",
                        time, getProcessID(processList[i]->ID));
                 fflush(stdout);
                 printQueue(readyQueue);
-                //}
+                }
                 //}
                 //update
                 //when cpu is occupied, current process next interesting time should plus previous process CS time
@@ -228,7 +203,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     int leftCPU = processList[i]->numCPU - processList[i]->doneCPU - 1;// #of CPU left undone
                     processList[i]->nextInterest = time + CS_TIME / 2.0 + ioTime;// time when the process finishing IO
                     //output
-                    //if (time <= 999) {
+                    if (time <= 999) {
                     if (leftCPU == 1) {
                         printf("time %dms: Process %s completed a CPU burst; %d burst to go ",
                                time, getProcessID(processList[i]->ID), leftCPU);
@@ -242,7 +217,7 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                            time, getProcessID(processList[i]->ID), processList[i]->nextInterest);
                     fflush(stdout);
                     printQueue(readyQueue);
-                    //}
+                    }
                     //update
                     processList[i]->state = BLOCKED;
                     processList[i]->nextInterest = time + CS_TIME / 2.0 + ioTime;
@@ -256,6 +231,32 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                 }
                 cpuFlag = false;
             }
+        }
+
+        for (int i = 0; i < NUM_PROCESSES; i++) {
+
+            /*-----------process is arriving-----------*/
+            if (processList[i]->state == NOT_ENTERED && time == processList[i]->arrivalTime) {
+                //add the arriving process into ready queue
+                pushQueue(readyQueue, processList[i]);
+                //updates
+                //when cpu is occupied, current process next interesting time should plus previous process CS time
+                if (cpuFlag == false) {
+                    processList[i]->nextInterest = time + CS_TIME / 2.0;
+                } else {
+                    processList[i]->nextInterest = time + CS_TIME;
+                }
+                processList[i]->state = READY;
+                //output
+                if (time <= 999) {
+                    printf("time %dms: Process %s arrived; added to ready queue ",
+                           time, getProcessID(processList[i]->ID));
+                    fflush(stdout);
+                    printQueue(readyQueue);
+                }
+                processList[i]->sumWait = time;
+            }
+
         }
 
         //////////////////algo terminating//////////////////
