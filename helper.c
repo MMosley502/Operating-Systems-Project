@@ -127,16 +127,13 @@ void freeProcessList(struct Process *processList[], int NUM_PROCESSES) {
  */
 bool isPreemptive(int currentRunningPos, struct Process *processListCopy[],
                   struct Queue *readyQueue, int time) {
-    if (time == 627) {
-        printf("time breakpoint\n");
-    }
     if (currentRunningPos == -1 || isEmpty(readyQueue)) {// No running process
         return false;
     }
     struct Process *current = processListCopy[currentRunningPos];
     struct Process *first = getFront(readyQueue); // current running process comparing with the first one in the readyQueue
-    double remainingTime = current->oldEstBurst - (time - current->burstStart);
-    if (remainingTime < first->nextEstBurst) {
+    double remainingTime = current->nextEstBurst - (time - current->burstStart);
+    if (remainingTime <= first->nextEstBurst) {
         return false;
     }
     return true;
