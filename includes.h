@@ -40,6 +40,7 @@ struct Process {
     double nextInterest;//time point for next interesting event
     bool preFlag;// flag to indicate preemption
     bool inCS;
+    int finishIO;
 
     // Estimates
     double initialEstBurst;
