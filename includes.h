@@ -81,6 +81,8 @@ double randomTime(double Time[], int numCPU, int MAX, double LAMBDA);
 
 double estimateTime(struct Process *newOne, double ALPHA, int pos);
 
+double estimateTimeSRT(struct Process *newOne, double ALPHA, int pos);
+
 bool allDone(struct Process *processList[], int NUM_PROCESSES);
 
 void freeProcessList(struct Process *processList[], int NUM_PROCESSES);

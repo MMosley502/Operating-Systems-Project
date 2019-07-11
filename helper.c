@@ -86,6 +86,14 @@ double estimateTime(struct Process *newOne, double ALPHA, int pos) {
 
 }
 
+double estimateTimeSRT(struct Process *newOne, double ALPHA, int pos) {
+    // Current estimate time and actual time to calculate the next estimate time
+    double result = ALPHA * newOne->cpuBurstTime[pos] +
+                    (1 - ALPHA) * newOne->oldEstBurst;
+    return result;
+
+}
+
 
 /*
  * Function to indicate all the process done with their bursts
