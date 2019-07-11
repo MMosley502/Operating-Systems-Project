@@ -29,6 +29,9 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
     // Implementation
     while (1) {
 
+        if (time == 460) {
+            printf("time %d ms: time breakpoint\n", time);
+        }
 
         // CPU burst
         // Make sure only the first one in the readyQueue can enter the CPU burst
@@ -136,10 +139,6 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             }
         }
 
-        if (time == 405) {
-            printf("time %d ms: time breakpoint\n", time);
-        }
-
         ////////////////////Preemption Check///////////////////////
         if (isPreemptive(currentRunningPos, processListCopy, readyQueue,
                          time)) {// Need to preempt the current running process
@@ -168,7 +167,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             processListCopy[currentRunningPos]->nextActualBurst = remainingTime;
             int idx = processListCopy[currentRunningPos]->doneCPU;
             processListCopy[currentRunningPos]->cpuBurstTime[idx] = remainingTime;
-            processListCopy[currentRunningPos]->oldEstBurst = processListCopy[currentRunningPos]->nextEstBurst;
+//            processListCopy[currentRunningPos]->oldEstBurst = processListCopy[currentRunningPos]->nextEstBurst;
             processListCopy[currentRunningPos]->nextEstBurst = remainingTime;
             processListCopy[currentRunningPos]->nextInterest = time + CS_TIME / 2.0;
             currentRunningPos = -1;// Avoid the same process will be preempted and added to readyQ twice
