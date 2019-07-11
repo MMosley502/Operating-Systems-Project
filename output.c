@@ -9,9 +9,16 @@
 // Print as the ascending order of process ID
 void outEachProcess(struct Process *processList[], int NUM_PROCESSES) {
     for (int i = 0; i < NUM_PROCESSES; i++) {
-        printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts\n",
-               getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU);
-        fflush(stdout);
+        if(processList[i]->numCPU==1){
+            printf("Process %s [NEW] (arrival time %d ms) %d CPU burst\n",
+                   getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU);
+            fflush(stdout);
+        }
+        else{
+            printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts\n",
+                   getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU);
+            fflush(stdout);
+        }
     }
 }
 
@@ -20,10 +27,18 @@ void outEachProcess(struct Process *processList[], int NUM_PROCESSES) {
 // Print as the ascending order of process ID
 void outEPS(struct Process *processList[], int NUM_PROCESSES) {
     for (int i = 0; i < NUM_PROCESSES; i++) {
-        printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %0.0fms)\n",
-               getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
-               processList[i]->nextEstBurst);
-        fflush(stdout);
+        if(processList[i]->numCPU==1){
+            printf("Process %s [NEW] (arrival time %d ms) %d CPU burst (tau %0.0fms)\n",
+                   getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
+                   processList[i]->nextEstBurst);
+            fflush(stdout);
+        }
+        else{
+            printf("Process %s [NEW] (arrival time %d ms) %d CPU bursts (tau %0.0fms)\n",
+                   getProcessID(processList[i]->ID), processList[i]->arrivalTime, processList[i]->numCPU,
+                   processList[i]->nextEstBurst);
+            fflush(stdout);
+        }
     }
 }
 

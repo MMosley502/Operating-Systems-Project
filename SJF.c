@@ -108,6 +108,16 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             }
         }
 
+        for (int i = 0; i < NUM_PROCESSES; i++) {
+            // Termination
+            if (processListCopy[i]->state == TERMINATED && time == processListCopy[i]->nextInterest) {
+                printf("time %dms: Process %s terminated ",
+                       time, getProcessID(processListCopy[i]->ID));
+                fflush(stdout);
+                printQueue(readyQueue);
+                processListCopy[i]->end = time;
+            }
+        }
 
         for (int i = 0; i < NUM_PROCESSES; i++) {
             // Finish I/O
@@ -137,17 +147,6 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             if (!isEmpty(readyQueue)) {
                 getFront(readyQueue)->nextInterest = time + CS_TIME / 2.0;
                 getFront(readyQueue)->inCS = true;
-            }
-        }
-
-        for (int i = 0; i < NUM_PROCESSES; i++) {
-            // Termination
-            if (processListCopy[i]->state == TERMINATED && time == processListCopy[i]->nextInterest) {
-                printf("time %dms: Process %s terminated ",
-                       time, getProcessID(processListCopy[i]->ID));
-                fflush(stdout);
-                printQueue(readyQueue);
-                processListCopy[i]->end = time;
             }
         }
 
