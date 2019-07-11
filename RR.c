@@ -201,8 +201,14 @@ void RR(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double TI
                     processList[i]->nextInterest = time + CS_TIME / 2.0 + ioTime;// time when the process finishing IO
                     //output
                     //if (time <= 999) {
-                        printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
-                               time, getProcessID(processList[i]->ID), leftCPU);
+                        if(leftCPU==1){
+                            printf("time %dms: Process %s completed a CPU burst; %d burst to go ",
+                                   time, getProcessID(processList[i]->ID), leftCPU);
+                        }
+                        else{
+                            printf("time %dms: Process %s completed a CPU burst; %d bursts to go ",
+                                   time, getProcessID(processList[i]->ID), leftCPU);
+                        }
                         fflush(stdout);
                         printQueue(readyQueue);
                         printf("time %dms: Process %s switching out of CPU; will block on I/O until time %0.0lfms ",
