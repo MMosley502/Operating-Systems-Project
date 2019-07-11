@@ -90,6 +90,9 @@ void freeProcessList(struct Process *processList[], int NUM_PROCESSES);
 bool isPreemptive(int currentRunningPos, struct Process *processListCopy[], struct Queue *readyQueue, int time,
                   int NUM_PROCESSES);
 
+bool isPreemptiveRunning(int currentRunningPos, struct Process *processListCopy[],
+                         struct Queue *readyQueue, int time, int NUM_PROCESSES);
+
 void restore(struct Process *processList[], int NUM_PROCESSES);
 
 double randomNumber(int MAX, double LAMBDA );

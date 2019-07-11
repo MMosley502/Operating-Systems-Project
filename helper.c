@@ -146,6 +146,26 @@ bool isPreemptive(int currentRunningPos, struct Process *processListCopy[],
     }
     return false;
 }
+bool isPreemptiveRunning(int currentRunningPos, struct Process *processListCopy[],
+                  struct Queue *readyQueue, int time, int NUM_PROCESSES) {
+    if (currentRunningPos == -1 || isEmpty(readyQueue)) {// No running process
+        return false;
+    }
+    struct Process *current = processListCopy[currentRunningPos];
+    struct Process *first = getFront(
+            readyQueue);// current running process comparing with the first one in the readyQueue
+    double remainingTime = current->nextActualBurst - (time - current->burstStart);
+    if (remainingTime > first->nextEstBurst) {
+        for (int i = 0; i <
+                        NUM_PROCESSES; i++) {// Check the current running process
+            if (processListCopy[i]->state == RUNNING && processListCopy[i]->nextEstBurst < first->nextEstBurst) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
 
 /*
  * Restoring process, preparing for another algorithm
