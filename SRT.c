@@ -28,6 +28,9 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
     //================================================================
     // Implementation
     while (1) {
+        if (time == 404) {
+            printf("time %d ms: time breakpoint\n", time);
+        }
 
         // CPU burst
         // Make sure only the first one in the readyQueue can enter the CPU burst
@@ -175,6 +178,9 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
         }
         ////////////////////Preemption Check///////////////////////
 
+        if (!CPU_Flag && !isEmpty(readyQueue)) {
+            getFront(readyQueue)->inCS = true;
+        }
 
 
         if (CPU_Flag && releaseCPU == time) {
@@ -223,6 +229,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 CSCounter++;
             }
         }
+
 
         // Termination
         for (int i = 0; i < NUM_PROCESSES; i++) {
