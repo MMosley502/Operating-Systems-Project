@@ -20,8 +20,6 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
     struct Process *processListCopy[NUM_PROCESSES];// Copy the process array, avoid any change to processlist
     memcpy(processListCopy, processList, sizeof(processListCopy));
     struct Queue *readyQueue = initizlizeQueue(MAXPROCESS);
-    struct Queue *inQueue = initizlizeQueue(MAXPROCESS);
-    struct Queue *outQueue = initizlizeQueue(MAXPROCESS);
     int time = 0;
     int CSCounter = 0;
     int releaseCPU = 0;
@@ -47,7 +45,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 double burstTime = processListCopy[i]->cpuBurstTime[idx];
                 processListCopy[i]->inCS = false;
                 popQueue(readyQueue);
-                if (time < 3000) {
+                if (time < 999) {
                     printf("time %dms: Process %s (tau %0.0fms) started using the CPU for %0.0fms burst ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst, burstTime);
                     fflush(stdout);
@@ -76,13 +74,23 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     int leftCPU = processListCopy[i]->numCPU - processListCopy[i]->doneCPU;// #of CPU left undone
                     double finiIO = processListCopy[i]->nextInterest + ioTime +
                                     CS_TIME / 2.0;// time when the process finishing IO
-                    if (time < 3000) {
-                        printf("time %dms: Process %s (tau %0.0fms) completed a CPU burst; %d bursts to go ",
-                               time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst, leftCPU);
-                        fflush(stdout);
+                    if (time < 999) {
+                        if (leftCPU == 1) {
+                            printf("time %dms: Process %s (tau %0.0fms) completed a CPU burst; %d burst to go ",
+                                   time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst,
+                                   leftCPU);
+                            fflush(stdout);
+                        } else {
+                            printf("time %dms: Process %s (tau %0.0fms) completed a CPU burst; %d bursts to go ",
+                                   time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst,
+                                   leftCPU);
+                            fflush(stdout);
+                        }
                         printQueue(readyQueue);
-                        double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
-                        processListCopy[i]->nextEstBurst = ceil(nextEstimate);
+                    }
+                    double nextEstimate = estimateTime(processListCopy[i], ALPHA, idx);
+                    processListCopy[i]->nextEstBurst = ceil(nextEstimate);
+                    if (time < 999) {
                         printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, ceil(nextEstimate),
                                getProcessID(processListCopy[i]->ID));
                         fflush(stdout);
@@ -107,7 +115,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 // After finished I/O, re-entering readyQueue
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
-                if (time < 3000) {
+                if (time < 999) {
                     printf("time %dms: Process %s (tau %0.0fms) completed I/O; added to ready queue ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst);
                     fflush(stdout);
@@ -126,9 +134,6 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
 
         if (CPU_Flag && releaseCPU == time) {
             CPU_Flag = false;// Release the CPU
-            /////////////////////////////////
-//            printf("***time %dms: CPU release\n", time);
-            /////////////////////////////////
             if (!isEmpty(readyQueue)) {
                 getFront(readyQueue)->nextInterest = time + CS_TIME / 2.0;
                 getFront(readyQueue)->inCS = true;
@@ -152,7 +157,7 @@ void SJF(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             if (processListCopy[i]->state == NOT_ENTERED && time == processListCopy[i]->arrivalTime) {
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
-                if (time < 3000) {
+                if (time < 999) {
                     printf("time %dms: Process %s (tau %0.0fms) arrived; added to ready queue ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst);
                     fflush(stdout);
