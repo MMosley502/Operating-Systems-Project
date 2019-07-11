@@ -88,7 +88,7 @@ double estimateTime(struct Process *newOne, double ALPHA, int pos) {
 
 double estimateTimeSRT(struct Process *newOne, double ALPHA, int pos) {
     // Current estimate time and actual time to calculate the next estimate time
-    double result = ALPHA * newOne->cpuBurstTime[pos] +
+    double result = ALPHA * newOne->cpuBurstTimeCopy[pos] +
                     (1 - ALPHA) * newOne->oldEstBurst;
     return result;
 
@@ -126,46 +126,19 @@ void freeProcessList(struct Process *processList[], int NUM_PROCESSES) {
  * @Return: True if will be preemptive
  */
 bool isPreemptive(int currentRunningPos, struct Process *processListCopy[],
-                  struct Queue *readyQueue, int time, int NUM_PROCESSES) {
-    if (currentRunningPos == -1) {// No running process
-        return false;
-    }
-    struct Process *current = processListCopy[currentRunningPos];
-    struct Process *first = getFront(
-            readyQueue);// current running process comparing with the first one in the readyQueue
-    double remainingTime = current->nextActualBurst - (time - current->burstStart);
-    if (remainingTime > first->nextEstBurst) {
-        for (int i = 0; i <
-                        NUM_PROCESSES; i++) {// Check whether any other process will complete I/O at the same time and has the shorter nextEstBurst
-            if (processListCopy[i]->state == BLOCKED && time == processListCopy[i]->nextInterest
-                && processListCopy[i]->nextEstBurst < first->nextEstBurst) {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
-}
-bool isPreemptiveRunning(int currentRunningPos, struct Process *processListCopy[],
-                  struct Queue *readyQueue, int time, int NUM_PROCESSES) {
+                  struct Queue *readyQueue, int time) {
     if (currentRunningPos == -1 || isEmpty(readyQueue)) {// No running process
         return false;
     }
     struct Process *current = processListCopy[currentRunningPos];
-    struct Process *first = getFront(
-            readyQueue);// current running process comparing with the first one in the readyQueue
+    struct Process *first = getFront(readyQueue); // current running process comparing with the first one in the readyQueue
     double remainingTime = current->nextActualBurst - (time - current->burstStart);
-    if (remainingTime > first->nextEstBurst) {
-        for (int i = 0; i <
-                        NUM_PROCESSES; i++) {// Check the current running process
-            if (processListCopy[i]->state == RUNNING && processListCopy[i]->nextEstBurst < first->nextEstBurst) {
-                return false;
-            }
-        }
-        return true;
+    if (remainingTime < first->nextEstBurst) {
+        return false;
     }
-    return false;
+    return true;
 }
+
 
 /*
  * Restoring process, preparing for another algorithm
