@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
     if (argc == 8) RR_ADD = "END";
     else RR_ADD = argv[8];
 
-#if 1
+#if 0
     //DEBUG
     printf("seed is %ld\n",SEED);
 #endif
@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
 
         //Estimate CPU burst time for SJF & SRT
         processList[i]->nextEstBurst = ceil(1 / LAMBDA);
+        processList[i]->oldEstBurst = ceil(1 / LAMBDA);
         processList[i]->initialEstBurst = ceil(1 / LAMBDA);
 
     }
@@ -84,23 +85,23 @@ int main(int argc, char **argv) {
     }
 
 #if 1
-//    // FCFS Algo
-//    FCFS(processList, NUM_PROCESSES, CS_TIME, f);
-//    printf("\n");
-//    fflush(stdout);
+    // FCFS Algo
+    FCFS(processList, NUM_PROCESSES, CS_TIME, f);
+    printf("\n");
+    fflush(stdout);
 
     // SJF Algo
     SJF(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
     printf("\n");
     fflush(stdout);
 
-//    // SRT Algo
-//    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
-//    printf("\n");
-//    fflush(stdout);
-//
-//    // RR Algo
-//    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD, f);
+    // SRT Algo
+    SRT(processList, NUM_PROCESSES, CS_TIME, ALPHA, f);
+    printf("\n");
+    fflush(stdout);
+
+    // RR Algo
+    RR(processList, NUM_PROCESSES, CS_TIME, TIME_SLICE, RR_ADD, f);
 
     freeProcessList(processList, NUM_PROCESSES);
 #endif

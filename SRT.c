@@ -28,10 +28,6 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
     //================================================================
     // Implementation
     while (1) {
-//
-//        if (time == 460) {
-//            printf("time %d ms: time breakpoint\n", time);
-//        }
 
         // CPU burst
         // Make sure only the first one in the readyQueue can enter the CPU burst
@@ -46,7 +42,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 processListCopy[i]->nextActualBurst = burstTime;
                 processListCopy[i]->inCS = false;
                 popQueue(readyQueue);
-                if (time <= 1999) {
+                if (time <= 999) {
                     printf("time %dms: Process %s (tau %0.0fms) started using the CPU with %0.0fms burst remaining ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->oldEstBurst, burstTime);
                     fflush(stdout);
@@ -77,7 +73,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     int leftCPU = processListCopy[i]->numCPU - processListCopy[i]->doneCPU;// #of CPU left undone
                     double finiIO = processListCopy[i]->nextInterest + ioTime +
                                     CS_TIME / 2.0;// time when the process finishing IO
-                    if (time <= 1999) {
+                    if (time <= 999) {
                         if (leftCPU == 1) {
                             printf("time %dms: Process %s (tau %0.0fms) completed a CPU burst; %d burst to go ",
                                    time, getProcessID(processListCopy[i]->ID), processListCopy[i]->oldEstBurst,
@@ -95,7 +91,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     double nextEstimate = estimateTimeSRT(processListCopy[i], ALPHA, idx);
                     processListCopy[i]->nextEstBurst = ceil(nextEstimate);
                     processListCopy[i]->oldEstBurst = ceil(nextEstimate);
-                    if (time <= 1999) {
+                    if (time <= 999) {
                         printf("time %dms: Recalculated tau = %0.0fms for process %s ", time, ceil(nextEstimate),
                                getProcessID(processListCopy[i]->ID));
                         fflush(stdout);
@@ -121,7 +117,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
                 if (!isPreemptive(currentRunningPos, processListCopy, readyQueue, time)) {
-                    if (time <= 1999) {
+                    if (time <= 999) {
                         printf("time %dms: Process %s (tau %0.0fms) completed I/O; added to ready queue ",
                                time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst);
                         fflush(stdout);
@@ -135,6 +131,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                 } else {
                     processListCopy[i]->nextInterest = time + CS_TIME / 2.0;
                 }
+                processListCopy[i]->readyStart = time;
                 CSCounter++;
             }
         }
@@ -145,7 +142,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             double remainingTime = processListCopy[currentRunningPos]->nextActualBurst -
                                    (time - processListCopy[currentRunningPos]->burstStart);
             if (remainingTime < processListCopy[currentRunningPos]->nextActualBurst || time == getFront(readyQueue)->finishIO) { //preempt during burst
-                if (time <= 1999) {
+                if (time <= 999) {
                     printf("time %dms: Process %s (tau %0.0fms) completed I/O; preempting %s ",
                            time, getProcessID(getFront(readyQueue)->ID), getFront(readyQueue)->nextEstBurst,
                            getProcessID(processListCopy[currentRunningPos]->ID));
@@ -153,7 +150,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
                     printQueue(readyQueue);
                 }
             } else { // will preempt
-                if (time <= 1999) {
+                if (time <= 999) {
                     printf("time %dms: Process %s (tau %0.0fms) will preempt %s ",
                            time, getProcessID(getFront(readyQueue)->ID), getFront(readyQueue)->oldEstBurst,
                            getProcessID(processListCopy[currentRunningPos]->ID));
@@ -167,7 +164,6 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             processListCopy[currentRunningPos]->nextActualBurst = remainingTime;
             int idx = processListCopy[currentRunningPos]->doneCPU;
             processListCopy[currentRunningPos]->cpuBurstTime[idx] = remainingTime;
-//            processListCopy[currentRunningPos]->oldEstBurst = processListCopy[currentRunningPos]->nextEstBurst;
             processListCopy[currentRunningPos]->nextEstBurst -= (time - processListCopy[currentRunningPos]->burstStart);
             processListCopy[currentRunningPos]->nextInterest = time + CS_TIME / 2.0;
             currentRunningPos = -1;// Avoid the same process will be preempted and added to readyQ twice
@@ -187,9 +183,6 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
 
 
         if (CPU_Flag && releaseCPU == time) {
-            ////////////////
-//            printf("time %dms: CPU release\n", time);
-            ////////////////
             CPU_Flag = false;// Release the CPU
             if (!isEmpty(readyQueue)) {
                 getFront(readyQueue)->nextInterest = time + CS_TIME / 2.0;
@@ -203,6 +196,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
 //                    printf("time %dms: Preemptive process added into readyQueue\n", time);
                     ////////////////
                     processListCopy[i]->state = READY;
+                    processListCopy[i]->readyStart = time;
                     pushQueue(readyQueue, processListCopy[i]);
                     sortQueue(readyQueue);// Current running process will be at first
                 }
@@ -216,7 +210,7 @@ void SRT(struct Process *processList[], int NUM_PROCESSES, int CS_TIME, double A
             if (processListCopy[i]->state == NOT_ENTERED && time == processListCopy[i]->arrivalTime) {
                 pushQueue(readyQueue, processListCopy[i]);
                 sortQueue(readyQueue);
-                if (time < 1999) {
+                if (time < 999) {
                     printf("time %dms: Process %s (tau %0.0fms) arrived; added to ready queue ",
                            time, getProcessID(processListCopy[i]->ID), processListCopy[i]->nextEstBurst);
                     fflush(stdout);

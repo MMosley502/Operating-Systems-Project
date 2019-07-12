@@ -131,6 +131,7 @@ bool isPreemptive(int currentRunningPos, struct Process *processListCopy[],
         return false;
     }
     struct Process *current = processListCopy[currentRunningPos];
+    if (current->state != RUNNING) return false;
     struct Process *first = getFront(readyQueue); // current running process comparing with the first one in the readyQueue
     double remainingTime = current->nextEstBurst - (time - current->burstStart);
     if (remainingTime <= first->nextEstBurst) {

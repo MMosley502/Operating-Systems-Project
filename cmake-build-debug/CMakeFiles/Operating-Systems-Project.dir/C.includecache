@@ -57,6 +57,8 @@ time.h
 -
 limits.h
 -
+fcntl.h
+-
 
 /mnt/d/RPI/2019Summer/Operating-Systems-Project/main.c
 includes.h
